@@ -1,12 +1,52 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SKILLS_DATA } from '@/constants/skills';
+import { SKILLS_DATA, FloatingStack } from '@/constants/skills';
 import { TechLogos } from '@/components/icons/TechLogos';
 
 gsap.registerPlugin(ScrollTrigger);
+
+function TechLogoDisplay({
+  stack,
+  skill,
+}: {
+  stack: FloatingStack;
+  skill: (typeof SKILLS_DATA)[0];
+}) {
+  const [imgError, setImgError] = useState(false);
+  const LogoComponent = TechLogos[stack.logoKey];
+
+  if (stack.iconSrc && !imgError) {
+    return (
+      <img
+        src={stack.iconSrc}
+        alt={stack.name}
+        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain transition-transform duration-300 group-hover:scale-110"
+        onError={() => setImgError(true)}
+      />
+    );
+  }
+
+  if (LogoComponent) {
+    return (
+      <LogoComponent
+        size={32}
+        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 transition-transform duration-300 group-hover:scale-110"
+      />
+    );
+  }
+
+  return (
+    <span
+      className="font-mono text-xs sm:text-sm font-bold"
+      style={{ color: skill.fallbackTextColor }}
+    >
+      {stack.name.slice(0, 2).toUpperCase()}
+    </span>
+  );
+}
 
 // ── Timing & Scrub Controls ──────────────────────────────────────────────────
 const SCROLL_DISTANCE_PER_SKILL = 1300; // Pixels of scroll travel allocated per skill
@@ -96,11 +136,9 @@ export default function SkillsSection() {
             {skill.title}
           </h2>
 
-          {/* ── Scattered Floating Stack Boxes ──────────────────────────────── */}
+          {/* ── Scattered Floating Stack Boxes (Logo-Only & Enlarged) ───────── */}
           <div className="absolute inset-0 pointer-events-none">
             {skill.stacks.map((stack, sIdx) => {
-              const LogoComponent = TechLogos[stack.logoKey];
-
               return (
                 <div
                   key={sIdx}
@@ -111,40 +149,28 @@ export default function SkillsSection() {
                   }}
                 >
                   <div
-                    className="group flex items-center gap-2.5 sm:gap-3 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-110 cursor-pointer backdrop-blur-sm"
+                    className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl sm:rounded-3xl border shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-125 cursor-pointer backdrop-blur-md"
                     style={{
                       background: skill.boxBg,
                       borderColor: skill.boxBorder,
+                      color: skill.boxTextColor,
                     }}
+                    title={stack.name}
+                    aria-label={stack.name}
                   >
-                    {/* SVG / PNG Tech Logo Container */}
+                    <TechLogoDisplay stack={stack} skill={skill} />
+
+                    {/* Subtle Hover Tooltip Label */}
                     <div
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center border relative overflow-hidden flex-shrink-0"
+                      className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-lg border text-[11px] font-mono whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none shadow-md z-30 transform translate-y-1 group-hover:translate-y-0"
                       style={{
-                        background: skill.iconBg,
-                        borderColor: skill.iconBorder,
+                        background: skill.boxBg,
+                        borderColor: skill.boxBorder,
                         color: skill.boxTextColor,
                       }}
                     >
-                      {LogoComponent ? (
-                        <LogoComponent size={18} className="transition-transform duration-200 group-hover:scale-110" />
-                      ) : (
-                        <span
-                          className="font-mono text-[10px] font-bold"
-                          style={{ color: skill.fallbackTextColor }}
-                        >
-                          {stack.name.slice(0, 2).toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Stack Name Label */}
-                    <span
-                      className="text-xs sm:text-sm font-semibold tracking-tight whitespace-nowrap"
-                      style={{ color: skill.boxTextColor }}
-                    >
                       {stack.name}
-                    </span>
+                    </div>
                   </div>
                 </div>
               );

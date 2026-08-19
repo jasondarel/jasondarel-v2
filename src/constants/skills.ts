@@ -45,7 +45,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'React.js',
         logoKey: 'react',
-        iconSrc: '/images/stacks/react.png',
         pos: { top: '14%', left: '8%' },
         animationClass: 'animate-float-1',
         delay: '0s',
@@ -53,7 +52,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Next.js',
         logoKey: 'nextjs',
-        iconSrc: '/images/stacks/nextjs.png',
         pos: { top: '25%', left: '16%' },
         animationClass: 'animate-float-2',
         delay: '0.4s',
@@ -61,7 +59,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'TypeScript',
         logoKey: 'typescript',
-        iconSrc: '/images/stacks/typescript.png',
         pos: { top: '48%', left: '6%' },
         animationClass: 'animate-float-3',
         delay: '0.8s',
@@ -69,7 +66,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'JavaScript',
         logoKey: 'javascript',
-        iconSrc: '/images/stacks/javascript.png',
         pos: { top: '60%', left: '14%' },
         animationClass: 'animate-float-1',
         delay: '1.2s',
@@ -79,7 +75,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Tailwind CSS',
         logoKey: 'tailwind',
-        iconSrc: '/images/stacks/tailwind.png',
         pos: { top: '14%', right: '8%' },
         animationClass: 'animate-float-2',
         delay: '0.3s',
@@ -87,7 +82,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Bootstrap',
         logoKey: 'bootstrap',
-        iconSrc: '/images/stacks/bootstrap.png',
         pos: { top: '26%', right: '16%' },
         animationClass: 'animate-float-3',
         delay: '0.7s',
@@ -95,7 +89,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'HTML',
         logoKey: 'html',
-        iconSrc: '/images/stacks/html5.png',
         pos: { bottom: '26%', right: '14%' },
         animationClass: 'animate-float-1',
         delay: '1.1s',
@@ -103,7 +96,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'CSS',
         logoKey: 'css',
-        iconSrc: '/images/stacks/css3.png',
         pos: { bottom: '14%', right: '6%' },
         animationClass: 'animate-float-2',
         delay: '1.5s',
@@ -117,10 +109,10 @@ export const SKILLS_DATA: SkillItem[] = [
     title: 'Backend',
     bg: 'var(--accent)',                    // #464642 (Maximum dark tone)
     titleColor: 'var(--surface-0)',          // #fbfbf9 (Light text)
-    boxBg: 'rgba(255, 255, 255, 0.08)',     // Translucent dark-mode box
-    boxBorder: 'rgba(255, 255, 255, 0.16)', // Soft light border
-    boxTextColor: 'var(--surface-0)',       // Light text
-    iconBg: 'rgba(255, 255, 255, 0.12)',    // Light icon badge
+    boxBg: 'rgba(255, 255, 255, 0.08)',     // Sleek frosted glass
+    boxBorder: 'rgba(255, 255, 255, 0.16)', // Soft bright outline
+    boxTextColor: 'var(--surface-0)',       // Crisp light text
+    iconBg: 'rgba(255, 255, 255, 0.12)',
     iconBorder: 'rgba(255, 255, 255, 0.2)',
     fallbackTextColor: 'var(--surface-0)',
     stacks: [
@@ -128,7 +120,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Node.js',
         logoKey: 'nodejs',
-        iconSrc: '/images/stacks/nodejs.png',
         pos: { top: '10%', left: '8%' },
         animationClass: 'animate-float-1',
         delay: '0.2s',
@@ -136,7 +127,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Express.js',
         logoKey: 'express',
-        iconSrc: '/images/stacks/express.png',
         pos: { top: '22%', left: '15%' },
         animationClass: 'animate-float-2',
         delay: '0.5s',
@@ -146,7 +136,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Python',
         logoKey: 'python',
-        iconSrc: '/images/stacks/python.png',
         pos: { bottom: '32%', left: '5%' },
         animationClass: 'animate-float-3',
         delay: '0.9s',
@@ -154,7 +143,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Flask',
         logoKey: 'flask',
-        iconSrc: '/images/stacks/flask.png',
         pos: { bottom: '18%', left: '12%' },
         animationClass: 'animate-float-1',
         delay: '1.3s',
@@ -162,7 +150,6 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Java',
         logoKey: 'java',
-        iconSrc: '/images/stacks/java.png',
         pos: { bottom: '8%', left: '22%' },
         animationClass: 'animate-float-2',
         delay: '0.4s',
@@ -172,32 +159,28 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Laravel',
         logoKey: 'laravel',
-        iconSrc: '/images/stacks/laravel.png',
-        pos: { top: '10%', right: '14%' },
+        pos: { top: '8%', right: '15%' },
         animationClass: 'animate-float-3',
         delay: '0.8s',
       },
       {
         name: 'PHP',
         logoKey: 'php',
-        iconSrc: '/images/stacks/php.png',
-        pos: { top: '20%', right: '5%' },
+        pos: { top: '16%', right: '6%' },
         animationClass: 'animate-float-1',
         delay: '1.0s',
       },
       {
         name: 'C#',
         logoKey: 'csharp',
-        iconSrc: '/images/stacks/csharp.png',
-        pos: { top: '34%', right: '16%' },
+        pos: { top: '28%', right: '16%' },
         animationClass: 'animate-float-2',
         delay: '1.4s',
       },
       {
         name: '.NET',
         logoKey: 'dotnet',
-        iconSrc: '/images/stacks/dotnet.png',
-        pos: { top: '44%', right: '6%' },
+        pos: { top: '38%', right: '7%' },
         animationClass: 'animate-float-3',
         delay: '0.6s',
       },
@@ -206,40 +189,37 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'PostgreSQL',
         logoKey: 'postgresql',
-        iconSrc: '/images/stacks/postgresql.png',
-        pos: { bottom: '34%', right: '5%' },
+        pos: { bottom: '38%', right: '16%' },
         animationClass: 'animate-float-1',
         delay: '1.1s',
       },
       {
         name: 'MySQL',
         logoKey: 'mysql',
-        iconSrc: '/images/stacks/mysql.png',
-        pos: { bottom: '22%', right: '15%' },
+        pos: { bottom: '26%', right: '6%' },
         animationClass: 'animate-float-2',
         delay: '0.3s',
       },
       {
         name: 'MariaDB',
         logoKey: 'mariadb',
-        iconSrc: '/images/stacks/mariadb.png',
-        pos: { bottom: '10%', right: '6%' },
+        iconSrc: '/images/stacks/mariadb.svg',
+        pos: { bottom: '16%', right: '16%' },
         animationClass: 'animate-float-3',
         delay: '0.7s',
       },
       {
         name: 'SQL Server',
         logoKey: 'sqlserver',
-        iconSrc: '/images/stacks/sqlserver.png',
-        pos: { bottom: '8%', right: '22%' },
+        pos: { bottom: '8%', right: '6%' },
         animationClass: 'animate-float-1',
         delay: '1.2s',
       },
       {
         name: 'Prisma',
         logoKey: 'prisma',
-        iconSrc: '/images/stacks/prisma.png',
-        pos: { bottom: '12%', left: '46%' },
+        iconSrc: '/images/stacks/prisma.svg',
+        pos: { bottom: '8%', right: '24%' },
         animationClass: 'animate-float-2',
         delay: '0.9s',
       },
@@ -263,33 +243,36 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'Git',
         logoKey: 'git',
-        iconSrc: '/images/stacks/git.png',
-        pos: { top: '18%', left: '10%' },
+        pos: { top: '12%', left: '8%' },
         animationClass: 'animate-float-1',
         delay: '0.1s',
       },
       {
         name: 'GitHub Actions',
         logoKey: 'github',
-        iconSrc: '/images/stacks/github.png',
-        pos: { top: '32%', left: '18%' },
+        pos: { top: '24%', left: '18%' },
         animationClass: 'animate-float-2',
-        delay: '0.6s',
+        delay: '0.5s',
+      },
+      {
+        name: 'GitLab',
+        logoKey: 'gitlab',
+        pos: { top: '38%', left: '9%' },
+        animationClass: 'animate-float-3',
+        delay: '0.9s',
       },
       {
         name: 'Figma',
         logoKey: 'figma',
-        iconSrc: '/images/stacks/figma.png',
-        pos: { bottom: '18%', left: '14%' },
-        animationClass: 'animate-float-3',
-        delay: '1.0s',
+        pos: { bottom: '14%', left: '12%' },
+        animationClass: 'animate-float-1',
+        delay: '1.2s',
       },
 
       // ── Cluster 2: DevOps, Messaging & APIs (Right Side) ───
       {
         name: 'Docker',
         logoKey: 'docker',
-        iconSrc: '/images/stacks/docker.png',
         pos: { top: '18%', right: '10%' },
         animationClass: 'animate-float-1',
         delay: '0.4s',
@@ -297,18 +280,16 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'RabbitMQ',
         logoKey: 'rabbitmq',
-        iconSrc: '/images/stacks/rabbitmq.png',
-        pos: { top: '32%', right: '18%' },
+        pos: { top: '34%', right: '18%' },
         animationClass: 'animate-float-2',
         delay: '0.8s',
       },
       {
         name: 'Postman',
         logoKey: 'postman',
-        iconSrc: '/images/stacks/postman.png',
-        pos: { bottom: '18%', right: '14%' },
+        pos: { bottom: '16%', right: '12%' },
         animationClass: 'animate-float-3',
-        delay: '1.2s',
+        delay: '1.4s',
       },
     ],
   },
