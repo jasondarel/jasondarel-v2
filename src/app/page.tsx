@@ -2,18 +2,18 @@
 
 import { useLenis } from '@/lib/useLenis';
 import AboutSection from '@/components/AboutSection';
-import HorizontalPinSection from '@/components/HorizontalPinSection';
 import SkillsSection from '@/components/SkillsSection';
+import ExperienceSection from '@/components/ExperienceSection';
 
 /**
  * Home (App.tsx equivalent)
  *
  * Page layout in order:
- *   1. Intro        — normal scroll, full viewport height
- *   2. AboutSection — pinned scroll with 'About Me' text fade in/out animation
- *   3. HorizontalPinSection — pins + scrolls panels left-to-right, then releases
- *   4. SkillsSection — pins + bottom-up flooding color reveal across Frontend, Backend, Tools
- *   5. Outro        — normal scroll, full viewport height
+ *   1. Intro            — normal scroll, full viewport height
+ *   2. AboutSection     — pinned scroll with 'About Me' text fade in/out animation
+ *   3. SkillsSection    — pins + bottom-up flooding color reveal across Frontend, Backend, Tools
+ *   4. ExperienceSection — pins + scrolls experience panels left-to-right with center scroll lock
+ *   5. Outro            — normal scroll, full viewport height
  *
  * useLenis() is called at the page root so Lenis wraps the entire document.
  * All GSAP ScrollTrigger logic lives inside each section component.
@@ -101,19 +101,19 @@ export default function Home() {
        */}
       <AboutSection />
 
-      {/* ── 3. HORIZONTAL PIN SECTION ─────────────────────────────────────── */}
-      {/*
-       * Panels scroll left-to-right while section is pinned.
-       * See src/components/HorizontalPinSection.tsx for ScrollTrigger config.
-       */}
-      <HorizontalPinSection />
-
-      {/* ── 4. SKILLS SECTION (FLOODING COLOR REVEAL) ────────────────────── */}
+      {/* ── 3. SKILLS SECTION (FLOODING COLOR REVEAL) ────────────────────── */}
       {/*
        * Flooding bottom-up reveal with inverted color scheme across Frontend, Backend, Tools.
        * See src/components/SkillsSection.tsx for ScrollTrigger config.
        */}
       <SkillsSection />
+
+      {/* ── 4. EXPERIENCE HORIZONTAL PIN SECTION ──────────────────────────── */}
+      {/*
+       * Pinned 3-panel experience timeline with center-panel scroll lock.
+       * See src/components/ExperienceSection.tsx for ScrollTrigger config.
+       */}
+      <ExperienceSection />
 
       {/* ── 5. OUTRO ─────────────────────────────────────────────────────── */}
       <section

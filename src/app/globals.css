@@ -177,4 +177,18 @@ html.lenis, html.lenis body {
   animation: floatDrift 5.5s ease-in-out infinite;
 }
 
+/* ── Horizontal Scroll Cue Animation ────────────────────────────────────────── */
+@keyframes bounceX {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+
+.animate-bounce-x {
+  animation: bounceX 1.5s ease-in-out infinite;
+}
+
 

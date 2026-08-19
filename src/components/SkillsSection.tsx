@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SKILLS_DATA, FloatingStack, SkillItem } from '@/constants/skills';
+import { SKILLS_DATA } from '@/constants/skills';
 import { TechLogos } from '@/components/icons/TechLogos';
 
 gsap.registerPlugin(ScrollTrigger);
