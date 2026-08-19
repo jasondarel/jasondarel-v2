@@ -26,8 +26,8 @@ export default function Home() {
     <main>
       {/* ── 1. INTRO HERO ─────────────────────────────────────────────────── */}
       <section
-        className="relative flex h-screen flex-col items-center justify-center px-6 text-center border-b select-none"
-        style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}
+        className="relative flex h-screen flex-col items-center justify-center px-6 text-center select-none"
+        style={{ background: 'var(--surface-0)' }}
         aria-label="Intro section"
       >
         {/* Subtle Top Header Meta */}

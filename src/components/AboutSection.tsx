@@ -1,36 +1,79 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * AboutSection
- *
- * How it works:
- *  - Outer section is pinned when it hits the top of the viewport.
- *  - As the user scrolls:
- *      1. Section starts blank/clean with 'About Me' hidden (opacity: 0).
- *      2. 'About Me' fades in at the center of the viewport at large scale.
- *      3. Heading shrinks down to scale 1.0 and translates to the left column.
- *      4. Paragraph text on the right smoothly fades in and slides into position.
- *      5. Holds in place for comfortable reading.
- *  - Once scroll finishes, the pin releases and normal scroll / horizontal section continues.
+ * Recognizable international translations for rapid skimming:
+ * Skims rapidly across ~8 languages in ~1.2 seconds, then settles back on "About Me".
  */
+const SKIM_LANGUAGES = [
+  'About Me',
+  'À Propos',
+  'Sobre Mí',
+  'Über Mich',
+  'Tentang Saya',
+  'Chi Sono',
+  'Over Mij',
+  'Sobre Mim',
+  'Om Mig',
+  'About Me',
+];
 
 // ── Sensitivity & Timing Controls ───────────────────────────────────────────
-const SCROLL_DISTANCE = 1800; // Scroll travel in px for smooth multi-step choreography
-const SCRUB_SMOOTHING = 1.0;  // Inertia smoothing on scroll scrub
+const SCROLL_DISTANCE = 1150; // Balanced scroll distance
+const SCRUB_SMOOTHING = 0.8;  // Snappy scrub response
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const headingWrapperRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
   const bioRef = useRef<HTMLDivElement>(null);
 
+  const [displayText, setDisplayText] = useState('About Me');
+  const isAnimatingRef = useRef(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // ── Rapid Skim Effect (skims through languages once in ~1.2s total) ───────
+  const triggerRapidSkim = useCallback(() => {
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
+
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    let step = 0;
+    const totalSteps = SKIM_LANGUAGES.length;
+    const stepDuration = 130; // 130ms * 9 steps = ~1.17s total
+
+    intervalRef.current = setInterval(() => {
+      step++;
+      if (step < totalSteps) {
+        setDisplayText(SKIM_LANGUAGES[step]);
+      } else {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        setDisplayText('About Me');
+        if (textRef.current) {
+          gsap.set(textRef.current, { y: 0, scale: 1, opacity: 1 });
+        }
+        isAnimatingRef.current = false;
+      }
+    }, stepDuration);
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  // ── GSAP ScrollTrigger intro & pinning timeline ───────────────────────────
   useEffect(() => {
     const section = sectionRef.current;
     const container = containerRef.current;
@@ -66,11 +109,23 @@ export default function AboutSection() {
           pin: true,
           scrub: SCRUB_SMOOTHING,
           invalidateOnRefresh: true,
+          onEnter: () => {
+            triggerRapidSkim();
+          },
+          onLeaveBack: () => {
+            // When user scrolls back up to the top, reset so it replays on next scroll down
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
+            isAnimatingRef.current = false;
+            setDisplayText('About Me');
+          },
         },
       });
 
-      // 1. Initial state: 'About Me' hidden at center with scale 1.8
-      // 2. Fade in at center
+      // 1. Initial state: heading hidden at center with scale 1.8
+      // 2. Fast fade in at center
       tl.fromTo(
         heading,
         {
@@ -82,7 +137,7 @@ export default function AboutSection() {
         },
         {
           opacity: 1,
-          duration: 0.8,
+          duration: 0.5,
           ease: 'power1.out',
         }
       )
@@ -91,7 +146,7 @@ export default function AboutSection() {
           x: 0,
           y: 0,
           scale: 1,
-          duration: 1.2,
+          duration: 0.8,
           ease: 'power2.inOut',
         })
         // 4. Paragraph fades in and slides into place on the right side
@@ -99,22 +154,81 @@ export default function AboutSection() {
           bio,
           {
             opacity: 0,
-            x: 40,
+            x: 30,
           },
           {
             opacity: 1,
             x: 0,
-            duration: 1.0,
+            duration: 0.6,
             ease: 'power2.out',
           },
-          '-=0.2'
+          '-=0.25'
         )
-        // 5. Resting hold phase so the user can comfortably read before unpinning
-        .to({}, { duration: 1.5 });
+        // 5. Balanced reading pause hold before switching
+        .to({}, { duration: 0.65 });
+
+      // ── 6. Anti-Overscroll Barrier at Fully-Loaded Cap Position ────────────
+      // When scrolling down from above, scroll momentum is capped at the fully
+      // loaded state (tl.scrollTrigger.end). The user must initiate a separate,
+      // subsequent scroll gesture to release into the next section.
+      let capArmed = true;
+      let idleTimer: ReturnType<typeof setTimeout> | null = null;
+
+      const handleWheelOrTouch = () => {
+        const lenis = (window as any).__lenis;
+        if (!lenis || !tl.scrollTrigger) return;
+        const capPos = tl.scrollTrigger.end;
+
+        // If user is resting at the cap position, disarm so the new scroll gesture can proceed
+        if (Math.abs(lenis.scroll - capPos) <= 4 || lenis.scroll > capPos) {
+          capArmed = false;
+        }
+
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          if (!lenis || !tl.scrollTrigger) return;
+          if (Math.abs(lenis.scroll - capPos) <= 4 || lenis.scroll > capPos) {
+            capArmed = false;
+          }
+        }, 150);
+      };
+
+      const handleLenisScroll = () => {
+        const lenis = (window as any).__lenis;
+        if (!lenis || !tl.scrollTrigger) return;
+
+        const capPos = tl.scrollTrigger.end;
+
+        // If user scrolls back up above the cap, re-arm the barrier
+        if (lenis.scroll < capPos - 50) {
+          capArmed = true;
+        }
+
+        // Clamp momentum at the fully loaded cap position
+        if (capArmed && lenis.targetScroll > capPos && lenis.scroll <= capPos) {
+          lenis.targetScroll = capPos;
+        }
+      };
+
+      const lenis = (window as any).__lenis;
+      if (lenis) {
+        lenis.on('scroll', handleLenisScroll);
+      }
+      window.addEventListener('wheel', handleWheelOrTouch, { passive: true });
+      window.addEventListener('touchmove', handleWheelOrTouch, { passive: true });
+
+      return () => {
+        if (idleTimer) clearTimeout(idleTimer);
+        if (lenis) {
+          lenis.off('scroll', handleLenisScroll);
+        }
+        window.removeEventListener('wheel', handleWheelOrTouch);
+        window.removeEventListener('touchmove', handleWheelOrTouch);
+      };
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [triggerRapidSkim]);
 
   return (
     <section
@@ -131,15 +245,28 @@ export default function AboutSection() {
         {/* Left Column: Heading Anchor */}
         <div
           ref={headingWrapperRef}
-          className="md:col-span-5 flex items-center justify-center md:justify-start"
+          className="md:col-span-5 flex flex-col items-center md:items-start justify-center"
         >
-          <h2
+          <div
             ref={headingRef}
-            className="text-5xl sm:text-7xl md:text-8xl font-black leading-none tracking-tighter will-change-transform select-none opacity-0"
-            style={{ color: 'var(--accent)' }}
+            className="flex flex-col items-center md:items-start will-change-transform select-none opacity-0"
           >
-            About Me
-          </h2>
+            {/* Dynamic Rapid Skimming Headline */}
+            <h2
+              className={`font-black leading-none tracking-tighter min-h-[1.15em] flex items-center cursor-default ${
+                displayText === 'Tentang Saya'
+                  ? 'text-3xl sm:text-5xl md:text-5xl lg:text-6xl'
+                  : 'text-4xl sm:text-6xl md:text-7xl lg:text-8xl'
+              }`}
+              style={{ color: 'var(--accent)' }}
+              onMouseEnter={triggerRapidSkim}
+              title="About Me"
+            >
+              <span ref={textRef} className="inline-block whitespace-nowrap">
+                {displayText}
+              </span>
+            </h2>
+          </div>
         </div>
 
         {/* Right Column: Bio Paragraph */}

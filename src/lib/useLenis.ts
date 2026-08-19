@@ -32,6 +32,7 @@ export function useLenis() {
     });
 
     lenisRef.current = lenis;
+    (window as any).__lenis = lenis;
 
     // ── 2. Sync ScrollTrigger with Lenis ─────────────────────────────────────
     // Each time Lenis scrolls, notify ScrollTrigger so pinned sections
@@ -52,6 +53,7 @@ export function useLenis() {
     return () => {
       gsap.ticker.remove(onTick);
       lenis.destroy();
+      (window as any).__lenis = null;
     };
   }, []);
 

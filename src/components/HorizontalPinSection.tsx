@@ -31,8 +31,8 @@ const panels = [
 
 // ── Sensitivity & Timing Controls ───────────────────────────────────────────
 // Adjust these values to fine-tune scroll speed and responsiveness:
-const DISTANCE_MULTIPLIER = 1.0; // Factor to lengthen scroll distance (e.g. 1.2 = 20% slower/less sensitive)
-const SCRUB_SMOOTHING = 1.0;     // Seconds of inertia smoothing on scroll scrub (higher = softer/smoother)
+const DISTANCE_MULTIPLIER = 1.15; // Balanced scroll travel
+const SCRUB_SMOOTHING = 0.8;      // Seconds of inertia smoothing on scroll scrub
 
 export default function HorizontalPinSection() {
   const sectionRef  = useRef<HTMLDivElement>(null);
@@ -43,27 +43,34 @@ export default function HorizontalPinSection() {
     const track   = trackRef.current;
     if (!section || !track) return;
 
-    // ── ScrollTrigger: horizontal pin ────────────────────────────────────────
+    // ── ScrollTrigger: horizontal pin with Panel 1 & Panel 4 holds ────────────
     const ctx = gsap.context(() => {
       const totalWidth     = track.scrollWidth;   // sum of all panel widths
       const viewportWidth  = window.innerWidth;
       const travelDistance = totalWidth - viewportWidth; // px to translate
 
-      gsap.to(track, {
-        // Translate the track leftward by the calculated distance
-        x: -travelDistance,
-        ease: 'none', // linear — scrub handles easing
-
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start:   'top top',           // pin when section hits top of viewport
-          end:     () => `+=${travelDistance * DISTANCE_MULTIPLIER}`, // scroll distance required to complete
+          end:     () => `+=${(travelDistance + viewportWidth * 0.6) * DISTANCE_MULTIPLIER}`, // scroll distance required to complete
           pin:     true,                // keep section fixed while scrolling
           scrub:   SCRUB_SMOOTHING,     // smooth inertia
           invalidateOnRefresh: true,    // recalculate on window resize
-          // markers: true,             // ← uncomment to debug trigger positions
         },
       });
+
+      tl
+        // 1. Initial stationary hold on Panel 1 before sliding begins (halved)
+        .to({}, { duration: 0.35 })
+        // 2. Smoothly translate track across panels 1 -> 2 -> 3 -> 4
+        .to(track, {
+          x: -travelDistance,
+          duration: 2.4,
+          ease: 'none',
+        })
+        // 3. Final stationary hold on Panel 4 before unpinning to next section (halved)
+        .to({}, { duration: 0.35 });
     }, section);
 
     return () => ctx.revert();
