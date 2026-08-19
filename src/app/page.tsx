@@ -22,21 +22,74 @@ export default function Home() {
 
   return (
     <main>
-      {/* ── 1. INTRO ──────────────────────────────────────────────────────── */}
+      {/* ── 1. INTRO HERO ─────────────────────────────────────────────────── */}
       <section
-        className="flex h-screen flex-col items-center justify-center bg-neutral-950 border-b border-neutral-800"
+        className="relative flex h-screen flex-col items-center justify-center px-6 text-center border-b select-none"
+        style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}
         aria-label="Intro section"
       >
-        <p className="mb-3 text-xs uppercase tracking-[0.3em] text-neutral-500">
-          Scroll Experiments
-        </p>
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-none tracking-tight text-center">
-          Jason<br />
-          <span className="text-neutral-500">Darel</span>
-        </h1>
-        <p className="mt-8 text-sm text-neutral-600 font-mono">
-          ↓ scroll to see horizontal pin &amp; layer crossfade
-        </p>
+        {/* Subtle Top Header Meta */}
+        <div className="absolute top-8 left-8 right-8 flex items-center justify-between pointer-events-none">
+          <span
+            className="text-xs uppercase tracking-[0.3em] font-mono"
+            style={{ color: 'var(--muted)' }}
+          >
+            Portfolio &amp; Archive
+          </span>
+          <span
+            className="text-xs font-mono"
+            style={{ color: 'var(--muted)' }}
+          >
+            2026
+          </span>
+        </div>
+
+        {/* Center Intro Block */}
+        <div className="max-w-4xl flex flex-col items-center">
+          <p
+            className="mb-4 text-xs font-mono uppercase tracking-[0.35em]"
+            style={{ color: 'var(--muted)' }}
+          >
+            Hello, I am
+          </p>
+
+          <h1
+            className="text-6xl sm:text-8xl md:text-9xl font-black leading-[0.9] tracking-tighter mb-5"
+            style={{ color: 'var(--accent)' }}
+          >
+            Jason Darel
+          </h1>
+
+          <p
+            className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight mb-4"
+            style={{ color: 'var(--foreground)' }}
+          >
+            Full-Stack Developer
+          </p>
+
+          <p
+            className="max-w-xl text-sm sm:text-base font-light leading-relaxed"
+            style={{ color: 'var(--muted)' }}
+          >
+            Crafting minimal, high-performance web applications, scalable architectures, and interactive digital experiences.
+          </p>
+        </div>
+
+        {/* Bottom Minimalist Scroll Icon */}
+        <div
+          className="absolute bottom-8 flex flex-col items-center pointer-events-none"
+          aria-label="Scroll down indicator"
+        >
+          <div
+            className="w-6 h-10 rounded-full border-2 flex justify-center pt-2"
+            style={{ borderColor: 'var(--accent)' }}
+          >
+            <span
+              className="w-1.5 h-2.5 rounded-full animate-scroll-wheel"
+              style={{ background: 'var(--accent)' }}
+            />
+          </div>
+        </div>
       </section>
 
       {/* ── 2. HORIZONTAL PIN SECTION ─────────────────────────────────────── */}
@@ -53,18 +106,28 @@ export default function Home() {
        */}
       <LayerCrossfadeSection />
 
-      {/* ── 4. OUTRO ──────────────────────────────────────────────────────── */}
+      {/* ── 4. OUTRO ─────────────────────────────────────────────────────── */}
       <section
-        className="flex h-screen flex-col items-center justify-center bg-neutral-950 border-t border-neutral-800"
+        className="flex h-screen flex-col items-center justify-center border-t"
+        style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}
         aria-label="Outro section"
       >
-        <p className="text-xs uppercase tracking-[0.3em] text-neutral-500 mb-4">
+        <p
+          className="text-xs uppercase tracking-[0.3em] mb-4 select-none"
+          style={{ color: 'var(--muted)' }}
+        >
           End of scroll
         </p>
-        <p className="text-3xl font-bold text-white">
+        <p
+          className="text-3xl font-bold"
+          style={{ color: 'var(--accent)' }}
+        >
           Normal scroll resumed ✓
         </p>
-        <p className="mt-4 text-sm text-neutral-600 font-mono text-center max-w-sm">
+        <p
+          className="mt-4 text-sm font-mono text-center max-w-sm"
+          style={{ color: 'var(--muted)' }}
+        >
           Replace intro, outro, panels, and layers with real content —<br />
           the scroll rig stays intact.
         </p>

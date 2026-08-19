@@ -22,14 +22,17 @@ gsap.registerPlugin(ScrollTrigger);
  * edit the JSX inside the `.panels-track` div.  The trigger math is panel-count-agnostic.
  */
 
-// ── Placeholder panel data ────────────────────────────────────────────────────
-// Replace items here to use real content/images later.
 const panels = [
-  { id: 1, bg: 'bg-violet-900',  label: '01' },
-  { id: 2, bg: 'bg-indigo-900',  label: '02' },
-  { id: 3, bg: 'bg-sky-900',     label: '03' },
-  { id: 4, bg: 'bg-teal-900',    label: '04' },
+  { id: 1, bg: 'var(--surface-0)', label: '01' },
+  { id: 2, bg: 'var(--surface-1)', label: '02' },
+  { id: 3, bg: 'var(--surface-2)', label: '03' },
+  { id: 4, bg: 'var(--surface-3)', label: '04' },
 ];
+
+// ── Sensitivity & Timing Controls ───────────────────────────────────────────
+// Adjust these values to fine-tune scroll speed and responsiveness:
+const DISTANCE_MULTIPLIER = 1.0; // Factor to lengthen scroll distance (e.g. 1.2 = 20% slower/less sensitive)
+const SCRUB_SMOOTHING = 1.0;     // Seconds of inertia smoothing on scroll scrub (higher = softer/smoother)
 
 export default function HorizontalPinSection() {
   const sectionRef  = useRef<HTMLDivElement>(null);
@@ -54,9 +57,9 @@ export default function HorizontalPinSection() {
         scrollTrigger: {
           trigger: section,
           start:   'top top',           // pin when section hits top of viewport
-          end:     () => `+=${travelDistance}`, // scroll as far as we need to travel
+          end:     () => `+=${travelDistance * DISTANCE_MULTIPLIER}`, // scroll distance required to complete
           pin:     true,                // keep section fixed while scrolling
-          scrub:   true,                // tie animation progress to scroll position
+          scrub:   SCRUB_SMOOTHING,     // smooth inertia
           invalidateOnRefresh: true,    // recalculate on window resize
           // markers: true,             // ← uncomment to debug trigger positions
         },
@@ -73,11 +76,15 @@ export default function HorizontalPinSection() {
      */
     <section
       ref={sectionRef}
-      className="relative h-screen overflow-hidden bg-neutral-950"
+      className="relative h-screen overflow-hidden"
+      style={{ background: 'var(--surface-1)' }}
       aria-label="Horizontal scroll section"
     >
       {/* Label */}
-      <p className="absolute top-6 left-8 z-10 text-xs uppercase tracking-widest text-neutral-500 select-none">
+      <p
+        className="absolute top-6 left-8 z-10 text-xs uppercase tracking-widest select-none"
+        style={{ color: 'var(--muted)' }}
+      >
         Horizontal Scroll
       </p>
 
@@ -94,19 +101,25 @@ export default function HorizontalPinSection() {
         {panels.map((panel) => (
           <div
             key={panel.id}
-            className={`
-              relative flex-shrink-0 flex items-center justify-center
-              w-screen h-full ${panel.bg}
-              border-r border-neutral-800
-            `}
+            className="relative flex-shrink-0 flex items-center justify-center w-screen h-full"
+            style={{
+              background: panel.bg,
+              borderRight: '1px solid var(--border)',
+            }}
           >
             {/* Large number — clearly visible during animation testing */}
-            <span className="text-[20vw] font-black text-white/10 select-none leading-none">
+            <span
+              className="text-[20vw] font-black select-none leading-none"
+              style={{ color: 'var(--accent)', opacity: 0.07 }}
+            >
               {panel.label}
             </span>
 
             {/* Swap-point label */}
-            <p className="absolute bottom-8 left-8 text-sm text-white/30 font-mono">
+            <p
+              className="absolute bottom-8 left-8 text-sm font-mono"
+              style={{ color: 'var(--muted)' }}
+            >
               panel {panel.label} — swap for real content
             </p>
           </div>

@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -13,16 +8,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jasondarel V2 — Scroll Experiments",
+  title: "Jason Darel — Full-Stack Developer",
   description:
-    "Smooth-scroll experiments: horizontal pin, layer crossfade — powered by Lenis, GSAP, and ScrollTrigger.",
+    "Portfolio & interactive scroll experiments powered by Next.js, Lenis, and GSAP.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      className={`${geistMono.variable} antialiased`}
     >
       <body>{children}</body>
     </html>
