@@ -3,7 +3,7 @@
 import { useLenis } from '@/lib/useLenis';
 import AboutSection from '@/components/AboutSection';
 import HorizontalPinSection from '@/components/HorizontalPinSection';
-import LayerCrossfadeSection from '@/components/LayerCrossfadeSection';
+import SkillsSection from '@/components/SkillsSection';
 
 /**
  * Home (App.tsx equivalent)
@@ -12,7 +12,7 @@ import LayerCrossfadeSection from '@/components/LayerCrossfadeSection';
  *   1. Intro        — normal scroll, full viewport height
  *   2. AboutSection — pinned scroll with 'About Me' text fade in/out animation
  *   3. HorizontalPinSection — pins + scrolls panels left-to-right, then releases
- *   4. LayerCrossfadeSection — pins + crossfades stacked layers, then releases
+ *   4. SkillsSection — pins + bottom-up flooding color reveal across Frontend, Backend, Tools
  *   5. Outro        — normal scroll, full viewport height
  *
  * useLenis() is called at the page root so Lenis wraps the entire document.
@@ -108,12 +108,12 @@ export default function Home() {
        */}
       <HorizontalPinSection />
 
-      {/* ── 4. LAYER CROSSFADE SECTION ────────────────────────────────────── */}
+      {/* ── 4. SKILLS SECTION (FLOODING COLOR REVEAL) ────────────────────── */}
       {/*
-       * Stacked layers crossfade in sequence while section is pinned.
-       * See src/components/LayerCrossfadeSection.tsx for ScrollTrigger config.
+       * Flooding bottom-up reveal with inverted color scheme across Frontend, Backend, Tools.
+       * See src/components/SkillsSection.tsx for ScrollTrigger config.
        */}
-      <LayerCrossfadeSection />
+      <SkillsSection />
 
       {/* ── 5. OUTRO ─────────────────────────────────────────────────────── */}
       <section
