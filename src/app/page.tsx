@@ -1,6 +1,7 @@
 'use client';
 
 import { useLenis } from '@/lib/useLenis';
+import AboutSection from '@/components/AboutSection';
 import HorizontalPinSection from '@/components/HorizontalPinSection';
 import LayerCrossfadeSection from '@/components/LayerCrossfadeSection';
 
@@ -9,9 +10,10 @@ import LayerCrossfadeSection from '@/components/LayerCrossfadeSection';
  *
  * Page layout in order:
  *   1. Intro        — normal scroll, full viewport height
- *   2. HorizontalPinSection — pins + scrolls panels left-to-right, then releases
- *   3. LayerCrossfadeSection — pins + crossfades stacked layers, then releases
- *   4. Outro        — normal scroll, full viewport height
+ *   2. AboutSection — pinned scroll with 'About Me' text fade in/out animation
+ *   3. HorizontalPinSection — pins + scrolls panels left-to-right, then releases
+ *   4. LayerCrossfadeSection — pins + crossfades stacked layers, then releases
+ *   5. Outro        — normal scroll, full viewport height
  *
  * useLenis() is called at the page root so Lenis wraps the entire document.
  * All GSAP ScrollTrigger logic lives inside each section component.
@@ -68,7 +70,7 @@ export default function Home() {
           </p>
 
           <p
-            className="max-w-xl text-sm sm:text-base font-light leading-relaxed"
+            className="max-w-xl text-sm sm:text-base font-normal leading-relaxed"
             style={{ color: 'var(--muted)' }}
           >
             Crafting minimal, high-performance web applications, scalable architectures, and interactive digital experiences.
@@ -92,21 +94,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 2. HORIZONTAL PIN SECTION ─────────────────────────────────────── */}
+      {/* ── 2. ABOUT ME PINNED SECTION ───────────────────────────────────── */}
+      {/*
+       * Pinned section with 'About Me' text fading in from left and fading out to right.
+       * See src/components/AboutSection.tsx for ScrollTrigger config.
+       */}
+      <AboutSection />
+
+      {/* ── 3. HORIZONTAL PIN SECTION ─────────────────────────────────────── */}
       {/*
        * Panels scroll left-to-right while section is pinned.
        * See src/components/HorizontalPinSection.tsx for ScrollTrigger config.
        */}
       <HorizontalPinSection />
 
-      {/* ── 3. LAYER CROSSFADE SECTION ────────────────────────────────────── */}
+      {/* ── 4. LAYER CROSSFADE SECTION ────────────────────────────────────── */}
       {/*
        * Stacked layers crossfade in sequence while section is pinned.
        * See src/components/LayerCrossfadeSection.tsx for ScrollTrigger config.
        */}
       <LayerCrossfadeSection />
 
-      {/* ── 4. OUTRO ─────────────────────────────────────────────────────── */}
+      {/* ── 5. OUTRO ─────────────────────────────────────────────────────── */}
       <section
         className="flex h-screen flex-col items-center justify-center border-t"
         style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}
