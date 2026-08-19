@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
+/* ── Design tokens ──────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080808;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,15 +13,22 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+html {
+  /* Lenis overrides scroll behaviour — keep native scroll-behavior as auto */
+  scroll-behavior: auto;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  /* Prevent any unintended horizontal scrollbar during horizontal pin animation */
+  overflow-x: hidden;
+}
+
+/* ── Utility ────────────────────────────────────────────────────────────────── */
+/* Lenis adds `data-lenis-scroll` to html — ensure it doesn't fight body overflow */
+html.lenis, html.lenis body {
+  height: auto;
 }
