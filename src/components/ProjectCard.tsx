@@ -120,7 +120,7 @@ export default function ProjectCard({
 
   return (
     <div
-      className={`group/card relative w-[190px] h-[266px] select-none [perspective:1200px] ${
+      className={`group/card relative w-[200px] h-[280px] select-none [perspective:1200px] ${
         interactive ? 'cursor-pointer' : 'cursor-default pointer-events-none'
       } ${className}`}
       style={style}

@@ -9,26 +9,25 @@ import ProjectCard from '@/components/ProjectCard';
 gsap.registerPlugin(ScrollTrigger);
 
 // ── Target Coordinates for 4-Column Grid (relative to stage center) ─────────
-// Cards 190×266px. Section = 820px. Stage ≈ 820-173 = 647px, center at 323px from stage top.
-// Row1 center y=-150, Row2 center y=+150. Gap = 150-(-150)-266 = 34px. No overlap.
-// Top of row1 from stage top: 323-150-133=40px ✓. Bottom of row2: 323+150+133=606px ✓
+// Cards 200×280px. Section = 710px. Eliminates empty vertical space.
+// Row1 center y=-146, Row2 center y=+146. Clean 12px row gap, perfectly snug.
 const GRID_COORDINATES = [
-  { x: -315, y: -150, rotation: 0 }, // Card 0: Row 1, Col 0
-  { x: -105, y: -150, rotation: 0 }, // Card 1: Row 1, Col 1
-  { x: 105,  y: -150, rotation: 0 }, // Card 2: Row 1, Col 2
-  { x: 315,  y: -150, rotation: 0 }, // Card 3: Row 1, Col 3
-  { x: -105, y: 150,  rotation: 0 }, // Card 4: Row 2, Col 1 (centered)
-  { x: 105,  y: 150,  rotation: 0 }, // Card 5: Row 2, Col 2 (centered)
+  { x: -330, y: -146, rotation: 0 }, // Card 0: Row 1, Col 0
+  { x: -110, y: -146, rotation: 0 }, // Card 1: Row 1, Col 1
+  { x: 110,  y: -146, rotation: 0 }, // Card 2: Row 1, Col 2
+  { x: 330,  y: -146, rotation: 0 }, // Card 3: Row 1, Col 3
+  { x: -110, y: 146,  rotation: 0 }, // Card 4: Row 2, Col 1 (centered)
+  { x: 110,  y: 146,  rotation: 0 }, // Card 5: Row 2, Col 2 (centered)
 ];
 
 // ── Fan Coordinates (centered in the stage) ─────────────────────────────
 const FAN_COORDINATES = [
-  { x: -145, y: 0, rotation: -20 },
-  { x: -85,  y: -12, rotation: -12 },
-  { x: -28,  y: -18, rotation: -4  },
-  { x: 28,   y: -18, rotation: 4   },
-  { x: 85,   y: -12, rotation: 12  },
-  { x: 145,  y: 0,   rotation: 20  },
+  { x: -150, y: 0,   rotation: -20 },
+  { x: -90,  y: -10, rotation: -12 },
+  { x: -30,  y: -15, rotation: -4  },
+  { x: 30,   y: -15, rotation: 4   },
+  { x: 90,   y: -10, rotation: 12  },
+  { x: 150,  y: 0,   rotation: 20  },
 ];
 
 export default function ProjectsSection() {
@@ -124,14 +123,14 @@ export default function ProjectsSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative border-t overflow-hidden md:h-[820px] px-6 sm:px-10 md:px-14 flex flex-col justify-between select-none"
+      className="relative border-t overflow-hidden md:h-[710px] px-6 sm:px-10 md:px-14 flex flex-col justify-between select-none"
       style={{
         background: 'var(--background)',
         borderColor: 'var(--border)',
       }}
       aria-label="Projects Section"
     >
-      <div className="max-w-7xl mx-auto w-full h-full flex flex-col justify-between py-6">
+      <div className="max-w-7xl mx-auto w-full h-full flex flex-col justify-between pt-5 pb-4">
         {/* ── Section Header ───────────────────────────────────────────────── */}
         <div
           className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-3 border-b flex-shrink-0"
