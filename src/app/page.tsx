@@ -4,6 +4,7 @@ import { useLenis } from '@/lib/useLenis';
 import AboutSection from '@/components/AboutSection';
 import SkillsSection from '@/components/SkillsSection';
 import ExperienceSection from '@/components/ExperienceSection';
+import ProjectsSection from '@/components/ProjectsSection';
 
 /**
  * Home (App.tsx equivalent)
@@ -13,7 +14,8 @@ import ExperienceSection from '@/components/ExperienceSection';
  *   2. AboutSection     — pinned scroll with 'About Me' text fade in/out animation
  *   3. SkillsSection    — pins + bottom-up flooding color reveal across Frontend, Backend, Tools
  *   4. ExperienceSection — pins + scrolls experience panels left-to-right with center scroll lock
- *   5. Outro            — normal scroll, full viewport height
+ *   5. ProjectsSection  — multi-layered parallax depth stream with differential scroll speeds
+ *   6. Outro            — normal scroll, full viewport height
  *
  * useLenis() is called at the page root so Lenis wraps the entire document.
  * All GSAP ScrollTrigger logic lives inside each section component.
@@ -115,7 +117,14 @@ export default function Home() {
        */}
       <ExperienceSection />
 
-      {/* ── 5. OUTRO ─────────────────────────────────────────────────────── */}
+      {/* ── 5. PROJECTS PARALLAX DEPTH SECTION ───────────────────────────── */}
+      {/*
+       * Multi-layered parallax depth stream with differential scroll velocities.
+       * See src/components/ProjectsSection.tsx for ScrollTrigger config.
+       */}
+      <ProjectsSection />
+
+      {/* ── 6. OUTRO ─────────────────────────────────────────────────────── */}
       <section
         className="flex h-screen flex-col items-center justify-center border-t"
         style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}
