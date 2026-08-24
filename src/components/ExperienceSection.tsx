@@ -39,15 +39,11 @@ export default function ExperienceSection() {
     if (!section || !track) return;
 
     const ctx = gsap.context(() => {
-      const totalWidth = track.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      const travelDistance = totalWidth - viewportWidth;
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: () => `+=${(travelDistance + viewportWidth * 1.5) * DISTANCE_MULTIPLIER}`,
+          end: () => `+=${section.offsetHeight * 3 * DISTANCE_MULTIPLIER}`,
           pin: true,
           scrub: SCRUB_SMOOTHING,
           invalidateOnRefresh: true,
@@ -81,7 +77,7 @@ export default function ExperienceSection() {
         .to({}, { duration: 0.5 })
         // 2. Smooth transition from Panel 1 -> Panel 2 (Center Panel)
         .to(track, {
-          x: () => -viewportWidth,
+          xPercent: -(100 / 3),
           duration: 1.0,
           ease: 'power2.inOut',
         })
@@ -89,7 +85,7 @@ export default function ExperienceSection() {
         .to({}, { duration: 0.8 })
         // 4. Smooth transition from Panel 2 -> Panel 3 (KPSG Group)
         .to(track, {
-          x: () => -travelDistance,
+          xPercent: -(200 / 3),
           duration: 1.0,
           ease: 'power2.inOut',
         })
@@ -145,13 +141,13 @@ export default function ExperienceSection() {
       >
         {/* ── PANEL 01: SECTION COVER & TITLE ─────────────────────────────── */}
         <div
-          className="relative flex-shrink-0 flex flex-col justify-center px-8 sm:px-16 md:px-24 w-screen h-full"
+          className="relative flex-shrink-0 flex flex-col justify-center px-8 sm:px-14 md:px-20 w-screen h-full"
           style={{
             background: 'var(--surface-0)',
             borderRight: '1px solid var(--border)',
           }}
         >
-          <div className="max-w-4xl z-10">
+          <div className="w-full max-w-6xl mx-auto z-10">
             <h2
               className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter leading-[0.95] mb-6"
               style={{ color: 'var(--accent)' }}
@@ -160,14 +156,14 @@ export default function ExperienceSection() {
             </h2>
 
             <p
-              className="text-lg sm:text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mb-8"
+              className="text-lg sm:text-xl md:text-2xl font-medium leading-relaxed max-w-3xl mb-8"
               style={{ color: 'var(--foreground)' }}
             >
               A track record of engineering production-grade web systems, optimizing performance bottlenecks, and building scalable backend architectures.
             </p>
 
             {/* Quick Metrics Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-2xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl">
               <div
                 className="p-4 rounded-xl border"
                 style={{
@@ -268,7 +264,7 @@ export default function ExperienceSection() {
             01
           </span>
 
-          <div className="max-w-5xl z-10 py-16 sm:py-0">
+          <div className="w-full max-w-6xl mx-auto z-10 py-16 sm:py-0">
             {/* Header: Company & Meta */}
             <div className="flex flex-wrap items-start justify-between gap-3 pb-3.5 border-b mb-4.5"
               style={{ borderColor: 'var(--border)' }}
@@ -311,7 +307,7 @@ export default function ExperienceSection() {
             </div>
 
             {/* Content Grid: Key Metric & Bullets */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-[18px] mb-4.5">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 mb-4.5">
               {/* Left Column Metric / Focus */}
               <div className="lg:col-span-4 flex flex-col gap-3">
                 <div
@@ -386,7 +382,7 @@ export default function ExperienceSection() {
             02
           </span>
 
-          <div className="max-w-5xl z-10 py-16 sm:py-0">
+          <div className="w-full max-w-6xl mx-auto z-10 py-16 sm:py-0">
             {/* Header: Company & Meta */}
             <div className="flex flex-wrap items-start justify-between gap-3 pb-3.5 border-b mb-4.5"
               style={{ borderColor: 'var(--border)' }}
@@ -429,7 +425,7 @@ export default function ExperienceSection() {
             </div>
 
             {/* Content Grid: Key Metric & Bullets */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-[18px] mb-4.5">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 mb-4.5">
               {/* Left Column Metric / Focus */}
               <div className="lg:col-span-4 flex flex-col gap-3">
                 <div
