@@ -132,19 +132,16 @@ export default function ProjectCard({
     >
       {/* ── 3D Flip Container ──────────────────────────────────────────────── */}
       <div
-        className="relative w-full h-full rounded-xl transition-transform duration-700 [transform-style:preserve-3d]"
+        className="relative w-full h-full rounded-2xl transition-transform duration-700 [transform-style:preserve-3d]"
         style={{
           transform: activeFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          boxShadow: activeFlipped
-            ? '0 14px 24px -6px rgba(70, 70, 66, 0.2), 0 0 0 1px var(--border)'
-            : '0 6px 14px -4px rgba(70, 70, 66, 0.1), 0 0 0 1px var(--border)',
         }}
       >
         {/* ═════════════════════════════════════════════════════════════════════
             1. MINIMAL PLAYING CARD BACK (Authentic 1:1.4 Aspect Ratio)
            ═════════════════════════════════════════════════════════════════════ */}
         <div
-          className="absolute inset-0 w-full h-full rounded-2xl p-3.5 flex flex-col justify-between overflow-hidden [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
+          className="absolute inset-0 w-full h-full rounded-2xl p-3.5 flex flex-col justify-between overflow-hidden border [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
           style={{
             background: 'var(--surface-0)',
             borderColor: 'var(--border)',
@@ -196,23 +193,17 @@ export default function ProjectCard({
 
               {/* Center Monogram Seal */}
               <div
-                className="absolute z-10 w-10 h-10 rounded-full border flex flex-col items-center justify-center shadow-inner"
+                className="absolute z-10 w-10 h-10 rounded-full border flex items-center justify-center"
                 style={{
                   background: 'var(--surface-1)',
                   borderColor: 'var(--border)',
                 }}
               >
                 <span
-                  className="text-[11px] font-mono font-black tracking-widest"
+                  className="text-xs font-mono font-black tracking-wider pl-0.5"
                   style={{ color: 'var(--accent)' }}
                 >
                   JD
-                </span>
-                <span
-                  className="text-[5.5px] font-mono tracking-tighter opacity-60 -mt-0.5"
-                  style={{ color: 'var(--foreground)' }}
-                >
-                  STUDIO
                 </span>
               </div>
             </div>
@@ -243,7 +234,7 @@ export default function ProjectCard({
             2. POKER CARD FRONT (Revealed on 180deg flip)
            ═════════════════════════════════════════════════════════════════════ */}
         <div
-          className="absolute inset-0 w-full h-full rounded-2xl p-3 flex flex-col justify-between overflow-hidden [transform:rotateY(180deg)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
+          className="absolute inset-0 w-full h-full rounded-2xl p-3 flex flex-col justify-between overflow-hidden border [transform:rotateY(180deg)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
           style={{
             background: 'var(--surface-0)',
             borderColor: 'var(--border)',

@@ -145,16 +145,6 @@ export default function ProjectsSection() {
               >
                 04 / Archive
               </span>
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: 'var(--accent)' }}
-              />
-              <span
-                className="text-xs font-mono font-bold"
-                style={{ color: 'var(--accent)' }}
-              >
-                Playing Card Archive
-              </span>
             </div>
 
             <h2
@@ -187,14 +177,18 @@ export default function ProjectsSection() {
                   ref={(el) => {
                     cardRefs.current[index] = el;
                   }}
-                  className="absolute will-change-transform transform -translate-x-1/2 -translate-y-1/2"
-                  style={{
-                    // Staggered floating idle levitation
-                    animation: `card-float ${3.6 + (index % 3) * 0.6}s ease-in-out infinite alternate`,
-                    animationDelay: `${index * 0.25}s`,
-                  }}
+                  className="absolute will-change-transform -translate-x-1/2 -translate-y-1/2"
                 >
-                  <ProjectCard project={project} interactive={isDealt} />
+                  {/* Dedicated GPU-accelerated floating wrapper (isolated from GSAP coordinates) */}
+                  <div
+                    className="will-change-transform"
+                    style={{
+                      animation: `card-float-smooth ${4.4 + (index % 3) * 0.8}s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate`,
+                      animationDelay: `${index * 0.35}s`,
+                    }}
+                  >
+                    <ProjectCard project={project} interactive={isDealt} />
+                  </div>
                 </div>
               );
             })}
@@ -212,25 +206,16 @@ export default function ProjectsSection() {
             ))}
           </div>
         </div>
-
-        {/* ── Section Footer / Subtitle Prompt ─────────────────────────────── */}
-        <div
-          className="hidden md:flex items-center justify-between pt-2 border-t text-[11px] font-mono flex-shrink-0"
-          style={{ borderColor: 'var(--border)', color: 'var(--muted)' }}
-        >
-          <span>6 CARDS ARCHIVED · 2026 EDITION</span>
-          <span className="uppercase">FLIP TO INSPECT DETAILS</span>
-        </div>
       </div>
 
-      {/* Floating Levitation CSS */}
+      {/* Hardware-Accelerated Floating Levitation CSS */}
       <style jsx global>{`
-        @keyframes card-float {
+        @keyframes card-float-smooth {
           0% {
-            margin-top: 0px;
+            transform: translate3d(0, 0px, 0);
           }
           100% {
-            margin-top: -8px;
+            transform: translate3d(0, -7px, 0);
           }
         }
         @keyframes spin-slow {
