@@ -130,25 +130,12 @@ export default function Home() {
         style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}
         aria-label="Outro section"
       >
-        <p
-          className="text-xs uppercase tracking-[0.3em] mb-4 select-none"
-          style={{ color: 'var(--muted)' }}
-        >
-          End of scroll
-        </p>
-        <p
-          className="text-3xl font-bold"
+        <h2
+          className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter select-none"
           style={{ color: 'var(--accent)' }}
         >
-          Normal scroll resumed ✓
-        </p>
-        <p
-          className="mt-4 text-sm font-mono text-center max-w-sm"
-          style={{ color: 'var(--muted)' }}
-        >
-          Replace intro, outro, panels, and layers with real content —<br />
-          the scroll rig stays intact.
-        </p>
+          How to Contact Me
+        </h2>
       </section>
     </main>
   );
