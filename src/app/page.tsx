@@ -134,7 +134,7 @@ export default function Home() {
           className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter select-none"
           style={{ color: 'var(--accent)' }}
         >
-          How to Contact Me
+          Contact Me
         </h2>
       </section>
     </main>
