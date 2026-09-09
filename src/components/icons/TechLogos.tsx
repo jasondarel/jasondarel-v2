@@ -526,3 +526,11 @@ export const TechLogos: Record<string, React.FC<LogoProps>> = {
     </svg>
   ),
 };
+
+// Aliases for alternate naming conventions
+TechLogos.postgre = TechLogos.postgresql;
+TechLogos.aspnet = TechLogos.dotnet;
+TechLogos.css3 = TechLogos.css;
+TechLogos.html5 = TechLogos.html;
+TechLogos.js = TechLogos.javascript;
+TechLogos.ts = TechLogos.typescript;

@@ -9,7 +9,8 @@ export interface ProjectItem {
   description: string;
   category: string;
   cardIndex: string;
-  imageType: 'ai-chat' | 'transactions' | 'erp' | 'cms' | 'foundry' | 'figma';
+  imageType: 'booth' | 'food' | 'code' | 'ai' | 'store' | 'pomodoro' | 'figma';
+  imgSrc?: string;
   tags: string[];
   techLogos: ProjectTech[];
   links?: {
@@ -20,126 +21,158 @@ export interface ProjectItem {
 }
 
 export const PROJECTS_DATA: ProjectItem[] = [
-  // ── 1. OmniChat AI Gateway
+  // ── 1. BoothEase
   {
-    id: 'omnichat-ai',
-    title: 'OmniChat AI Gateway & Engine',
-    description: 'Conversational LLM engine exposing 1,100+ attendee records and live roster streams with sub-second retrieval.',
-    category: 'AI & DATA SYSTEMS',
+    id: 'boothease',
+    title: 'BoothEase',
+    description: 'A web app to book booths at events with interactive vendor reservations and venue management.',
+    category: 'EVENT BOOKING',
     cardIndex: '01',
-    imageType: 'ai-chat',
-    tags: ['Next.js 15', 'TypeScript', 'Node.js', 'PostgreSQL', 'Redis', 'LLM Stream'],
+    imageType: 'booth',
+    imgSrc: '/images/boothease.jpg',
+    tags: ['Fullstack Developer', 'PHP', 'Laravel', 'MariaDB'],
     techLogos: [
-      { name: 'Next.js', logoKey: 'nextjs' },
-      { name: 'TypeScript', logoKey: 'typescript' },
-      { name: 'Node.js', logoKey: 'nodejs' },
-      { name: 'Express', logoKey: 'express' },
+      { name: 'PHP', logoKey: 'php' },
+      { name: 'Laravel', logoKey: 'laravel' },
+      { name: 'MariaDB', logoKey: 'mariadb' },
     ],
     links: {
-      github: 'https://github.com',
-      live: 'https://example.com',
+      github: 'https://github.com/StephenJo16/BoothEase',
     },
   },
 
-  // ── 2. Enterprise Figma Canvas
+  // ── 2. FastEats
   {
-    id: 'figma-erp-canvas',
-    title: 'Enterprise Flow Design System',
-    description: 'Comprehensive Figma design library with 80+ atomic primitives, token variables, and conversational workflows.',
-    category: 'DESIGN ARCHITECTURE',
+    id: 'fasteats',
+    title: 'FastEats',
+    description: 'A PERN app used to order food online with digital menus and streamlined checkout processing.',
+    category: 'FOOD ORDERING',
     cardIndex: '02',
+    imageType: 'food',
+    imgSrc: '/images/fasteats.jpeg',
+    tags: ['Fullstack Developer', 'React', 'Node.js', 'Express', 'PostgreSQL'],
+    techLogos: [
+      { name: 'React', logoKey: 'react' },
+      { name: 'Node.js', logoKey: 'nodejs' },
+      { name: 'Express', logoKey: 'express' },
+      { name: 'PostgreSQL', logoKey: 'postgre' },
+    ],
+    links: {
+      github: 'https://github.com/jasondarel/FastEats',
+    },
+  },
+
+  // ── 3. CodeWave
+  {
+    id: 'codewave',
+    title: 'CodeWave',
+    description: 'A web application to learn programming and coding through structured guided lessons and exercises.',
+    category: 'EDTECH PLATFORM',
+    cardIndex: '03',
+    imageType: 'code',
+    imgSrc: '/images/codewave.jpeg',
+    tags: ['Fullstack Developer', 'PHP', 'Laravel', 'MySQL'],
+    techLogos: [
+      { name: 'PHP', logoKey: 'php' },
+      { name: 'Laravel', logoKey: 'laravel' },
+      { name: 'MySQL', logoKey: 'mysql' },
+    ],
+    links: {
+      github: 'https://github.com/jasondarel/CodeWave',
+    },
+  },
+
+  // ── 4. NourishScan
+  {
+    id: 'nourishscan',
+    title: 'NourishScan',
+    description: 'AI App for nutrition information providing instant dietary analysis and macro breakdown.',
+    category: 'AI & HEALTHCARE',
+    cardIndex: '04',
+    imageType: 'ai',
+    imgSrc: '/images/nourishscan.png',
+    tags: ['Back-End Developer', 'Python', 'Flask', 'AI'],
+    techLogos: [
+      { name: 'Python', logoKey: 'python' },
+      { name: 'Flask', logoKey: 'flask' },
+    ],
+    links: {
+      github: 'https://github.com/jasondarel/NourishScan',
+    },
+  },
+
+  // ── 5. GymMe
+  {
+    id: 'gymme',
+    title: 'GymMe',
+    description: 'Supplement selling application featuring catalog management, cart flows, and secure ordering.',
+    category: 'COMMERCE BACKEND',
+    cardIndex: '05',
+    imageType: 'store',
+    imgSrc: '/images/gymme.png',
+    tags: ['Back-End Developer', 'C#', 'ASP.NET'],
+    techLogos: [
+      { name: 'C#', logoKey: 'csharp' },
+      { name: 'ASP.NET', logoKey: 'aspnet' },
+    ],
+    links: {
+      github: 'https://github.com/jasondarel/GymMe',
+    },
+  },
+
+  // ── 6. StudyGo
+  {
+    id: 'studygo',
+    title: 'StudyGo',
+    description: 'Pomodoro-based Learning App built to enhance productivity, focus intervals, and study pacing.',
+    category: 'PRODUCTIVITY',
+    cardIndex: '06',
+    imageType: 'pomodoro',
+    imgSrc: '/images/studygo.png',
+    tags: ['Front-End Developer', 'HTML5', 'CSS3', 'JavaScript'],
+    techLogos: [
+      { name: 'JavaScript', logoKey: 'javascript' },
+      { name: 'HTML5', logoKey: 'html' },
+      { name: 'CSS3', logoKey: 'css3' },
+    ],
+    links: {
+      live: 'https://jasondarel.github.io/StudyGo/',
+    },
+  },
+
+  // ── 7. Calm
+  {
+    id: 'calm',
+    title: 'Calm',
+    description: 'Mental Health Consultation App designed with calming aesthetics and intuitive consultation flows.',
+    category: 'UI/UX DESIGN',
+    cardIndex: '07',
     imageType: 'figma',
-    tags: ['Figma', 'UI/UX', 'Design System', 'Auto-Layout 5.0'],
+    imgSrc: '/images/calm.png',
+    tags: ['UI/UX Designer', 'Figma', 'Prototyping'],
     techLogos: [
       { name: 'Figma', logoKey: 'figma' },
-      { name: 'HTML5', logoKey: 'html' },
-      { name: 'CSS3', logoKey: 'css' },
     ],
     links: {
-      figma: 'https://figma.com',
+      figma: 'https://www.figma.com/proto/fGarXaaZl37TFyOb6mshzO/Calm?node-id=24-347&node-type=canvas&t=GnatHqOsF43NwRpS-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=38%3A555&share=1',
     },
   },
 
-  // ── 3. Dynamic CMS Client Portals
+  // ── 8. StaySeeker
   {
-    id: 'dynamic-cms-portals',
-    title: 'Dynamic CMS Client Portals',
-    description: 'Production headless frontend portals translating complex Figma designs into responsive multilingual interfaces.',
-    category: 'CLIENT PLATFORMS',
-    cardIndex: '03',
-    imageType: 'cms',
-    tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'i18n'],
+    id: 'stayseeker',
+    title: 'StaySeeker',
+    description: 'Web-based Accommodation Booking App prototype with seamless property discovery and booking UX.',
+    category: 'UI/UX DESIGN',
+    cardIndex: '08',
+    imageType: 'figma',
+    imgSrc: '/images/stayseeker.png',
+    tags: ['UI/UX Designer', 'Figma', 'Prototyping'],
     techLogos: [
-      { name: 'Next.js', logoKey: 'nextjs' },
-      { name: 'React', logoKey: 'react' },
-      { name: 'Tailwind', logoKey: 'tailwind' },
-      { name: 'TypeScript', logoKey: 'typescript' },
+      { name: 'Figma', logoKey: 'figma' },
     ],
     links: {
-      live: 'https://example.com',
-      github: 'https://github.com',
-    },
-  },
-
-  // ── 4. Global Transaction Engine
-  {
-    id: 'global-transactions',
-    title: 'High-Throughput Transaction Core',
-    description: 'Country-specific checkout architecture achieving 99.6% latency reduction via SSR, OTP rate-limiting, and indexing.',
-    category: 'FINTECH & COMMERCE',
-    cardIndex: '04',
-    imageType: 'transactions',
-    tags: ['Next.js SSR', 'TypeScript', 'PostgreSQL', 'Security', 'REST API'],
-    techLogos: [
-      { name: 'Next.js', logoKey: 'nextjs' },
-      { name: 'React', logoKey: 'react' },
-      { name: 'TypeScript', logoKey: 'typescript' },
-      { name: 'Node.js', logoKey: 'nodejs' },
-    ],
-    links: {
-      live: 'https://example.com',
-    },
-  },
-
-  // ── 5. Kinetic UI Design Foundry
-  {
-    id: 'kinetic-design-foundry',
-    title: 'Kinetic UI System & Suite',
-    description: 'Minimalist component system with physics-driven scroll triggers, color flooding reveals, and Lenis inertia at 60 FPS.',
-    category: 'INTERACTIVE FOUNDRY',
-    cardIndex: '05',
-    imageType: 'foundry',
-    tags: ['React', 'GSAP', 'Lenis', 'Tailwind CSS', 'Animation'],
-    techLogos: [
-      { name: 'React', logoKey: 'react' },
-      { name: 'TypeScript', logoKey: 'typescript' },
-      { name: 'Tailwind', logoKey: 'tailwind' },
-      { name: 'HTML5', logoKey: 'html' },
-    ],
-    links: {
-      live: 'https://example.com',
-      github: 'https://github.com',
-    },
-  },
-
-  // ── 6. Enterprise ERP Microservices
-  {
-    id: 'erp-microservices',
-    title: 'ERP Microservice Dual-Sync',
-    description: 'Modernized enterprise platform bridging dual-version C#/.NET enterprise systems with performant PERN microservices.',
-    category: 'BACKEND ARCHITECTURE',
-    cardIndex: '06',
-    imageType: 'erp',
-    tags: ['PERN Stack', 'C# / .NET', 'Microservices', 'PostgreSQL', 'SQL Server'],
-    techLogos: [
-      { name: 'React', logoKey: 'react' },
-      { name: 'C#', logoKey: 'csharp' },
-      { name: 'Node.js', logoKey: 'nodejs' },
-      { name: 'Express', logoKey: 'express' },
-    ],
-    links: {
-      github: 'https://github.com',
+      figma: 'https://www.figma.com/proto/sIaTgozISUlysYVvxV3Zye/StaySeeker?node-id=59-251&node-type=canvas&t=bQKR8FEOSW9o1v9p-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=59%3A251&share=1',
     },
   },
 ];
-

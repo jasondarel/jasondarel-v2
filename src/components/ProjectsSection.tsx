@@ -8,26 +8,31 @@ import ProjectCard from '@/components/ProjectCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ── Target Coordinates for 4-Column Grid (relative to stage center) ─────────
-// Cards 200×280px. Section = 710px. Eliminates empty vertical space.
-// Row1 center y=-146, Row2 center y=+146. Clean 12px row gap, perfectly snug.
+// ── Target Coordinates for 4×2 Grid (relative to stage center) ───────────
+// 8 Cards 200×280px arranged in 4 columns × 2 rows. Snug 12px row gap.
 const GRID_COORDINATES = [
-  { x: -330, y: -146, rotation: 0 }, // Card 0: Row 1, Col 0
-  { x: -110, y: -146, rotation: 0 }, // Card 1: Row 1, Col 1
-  { x: 110,  y: -146, rotation: 0 }, // Card 2: Row 1, Col 2
-  { x: 330,  y: -146, rotation: 0 }, // Card 3: Row 1, Col 3
-  { x: -110, y: 146,  rotation: 0 }, // Card 4: Row 2, Col 1 (centered)
-  { x: 110,  y: 146,  rotation: 0 }, // Card 5: Row 2, Col 2 (centered)
+  // Row 1 (y = -146)
+  { x: -330, y: -146, rotation: 0 }, // Card 0: Row 1, Col 0 (BoothEase)
+  { x: -110, y: -146, rotation: 0 }, // Card 1: Row 1, Col 1 (FastEats)
+  { x: 110,  y: -146, rotation: 0 }, // Card 2: Row 1, Col 2 (CodeWave)
+  { x: 330,  y: -146, rotation: 0 }, // Card 3: Row 1, Col 3 (NourishScan)
+  // Row 2 (y = 146)
+  { x: -330, y: 146,  rotation: 0 }, // Card 4: Row 2, Col 0 (GymMe)
+  { x: -110, y: 146,  rotation: 0 }, // Card 5: Row 2, Col 1 (StudyGo)
+  { x: 110,  y: 146,  rotation: 0 }, // Card 6: Row 2, Col 2 (Calm)
+  { x: 330,  y: 146,  rotation: 0 }, // Card 7: Row 2, Col 3 (StaySeeker)
 ];
 
-// ── Fan Coordinates (centered in the stage) ─────────────────────────────
+// ── Fan Coordinates for 8 Cards (centered in the stage) ───────────────────
 const FAN_COORDINATES = [
-  { x: -150, y: 0,   rotation: -20 },
-  { x: -90,  y: -10, rotation: -12 },
-  { x: -30,  y: -15, rotation: -4  },
-  { x: 30,   y: -15, rotation: 4   },
-  { x: 90,   y: -10, rotation: 12  },
-  { x: 150,  y: 0,   rotation: 20  },
+  { x: -175, y: 4,   rotation: -21 },
+  { x: -125, y: -5,  rotation: -15 },
+  { x: -75,  y: -12, rotation: -9  },
+  { x: -25,  y: -16, rotation: -3  },
+  { x: 25,   y: -16, rotation: 3   },
+  { x: 75,   y: -12, rotation: 9   },
+  { x: 125,  y: -5,  rotation: 15  },
+  { x: 175,  y: 4,   rotation: 21  },
 ];
 
 export default function ProjectsSection() {
@@ -50,7 +55,7 @@ export default function ProjectsSection() {
           gsap.set(el, {
             x: index * 0.8,
             y: 20 + index * -0.6,
-            rotation: (index - 2.5) * 0.4,
+            rotation: (index - 3.5) * 0.4,
             scale: 1,
             opacity: index === 0 ? 1 : 0.85,
             zIndex: 10 + index,
@@ -111,7 +116,7 @@ export default function ProjectsSection() {
               ease: 'power2.inOut',
               duration: 1.6,
             },
-            1.6 + index * 0.08 // slight stagger for organic dealing feel
+            1.6 + index * 0.07 // slight stagger for organic dealing feel
           );
         });
       }
@@ -168,7 +173,7 @@ export default function ProjectsSection() {
           className="hidden md:flex relative flex-1 items-center justify-center"
         >
           {/* Card Anchor Center — items-center places this at the true middle of the flex-1 stage */}
-          <div className="relative w-0 h-0">
+          <div className="relative w-0 h-0 scale-[0.80] lg:scale-100 transition-transform duration-300">
             {PROJECTS_DATA.map((project, index) => {
               return (
                 <div
@@ -182,8 +187,8 @@ export default function ProjectsSection() {
                   <div
                     className="will-change-transform"
                     style={{
-                      animation: `card-float-smooth ${4.4 + (index % 3) * 0.8}s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate`,
-                      animationDelay: `${index * 0.35}s`,
+                      animation: `card-float-smooth ${4.4 + (index % 4) * 0.7}s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate`,
+                      animationDelay: `${index * 0.25}s`,
                     }}
                   >
                     <ProjectCard project={project} interactive={isDealt} />

@@ -13,7 +13,17 @@ interface ProjectCardProps {
   interactive?: boolean;
 }
 
-function ProjectImagePreview({ type, title }: { type: ProjectItem['imageType']; title: string }) {
+function ProjectImagePreview({
+  type,
+  title,
+  imgSrc,
+}: {
+  type: ProjectItem['imageType'];
+  title: string;
+  imgSrc?: string;
+}) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div
       className="relative w-full h-[80px] rounded-lg overflow-hidden border flex flex-col justify-between p-1.5 select-none mb-1.5"
@@ -22,86 +32,118 @@ function ProjectImagePreview({ type, title }: { type: ProjectItem['imageType']; 
         borderColor: 'var(--border)',
       }}
     >
-      {/* Top Browser / Canvas Bar */}
-      <div className="flex items-center justify-between pb-0.5 border-b border-[var(--border)]">
-        <div className="flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
-        </div>
-        <span className="text-[7.5px] font-mono tracking-wider uppercase opacity-60" style={{ color: 'var(--accent)' }}>
-          {type === 'figma' ? 'FIGMA' : type === 'ai-chat' ? 'AI GATEWAY' : 'WEB APP'}
-        </span>
-      </div>
-
-      {/* Abstract Minimal Graphic Based on Type */}
-      <div className="my-auto flex flex-col items-center justify-center text-center py-0.5">
-        {type === 'ai-chat' && (
-          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded border text-[8px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="truncate max-w-[120px]">1,100+ Records</span>
-          </div>
-        )}
-
-        {type === 'figma' && (
-          <div className="flex items-center gap-1.5">
-            <div className="px-1.5 py-0.5 rounded border border-dashed text-[7.5px] font-mono" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
-              Canvas
+      {imgSrc && !imgError ? (
+        <img
+          src={imgSrc}
+          alt={title}
+          onError={() => setImgError(true)}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      ) : (
+        <>
+          {/* Top Browser / Canvas Bar */}
+          <div className="flex items-center justify-between pb-0.5 border-b border-[var(--border)]">
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
             </div>
-            <div className="px-1.5 py-0.5 rounded border text-[7.5px] font-mono font-bold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--foreground)' }}>
-              80+ Tokens
-            </div>
-          </div>
-        )}
-
-        {type === 'cms' && (
-          <div className="w-full max-w-[140px] space-y-0.5">
-            <div className="flex items-center justify-between text-[7.5px] font-mono">
-              <span style={{ color: 'var(--accent)' }}>EN · ID · JA</span>
-              <span className="text-emerald-600 font-bold">SYNCED</span>
-            </div>
-            <div className="h-1 rounded-full w-full" style={{ background: 'var(--surface-0)' }} />
-          </div>
-        )}
-
-        {type === 'transactions' && (
-          <div className="w-full max-w-[140px] px-1.5 py-0.5 rounded border flex items-center justify-between" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}>
-            <span className="text-[7.5px] font-mono font-bold" style={{ color: 'var(--accent)' }}>&lt; 50ms SSR</span>
-            <span className="text-[7.5px] font-mono font-bold px-1 rounded" style={{ background: 'var(--surface-2)', color: 'var(--accent)' }}>
-              -99.6%
+            <span className="text-[7.5px] font-mono tracking-wider uppercase opacity-60" style={{ color: 'var(--accent)' }}>
+              {type === 'figma'
+                ? 'FIGMA'
+                : type === 'ai'
+                ? 'AI SCANNER'
+                : type === 'food'
+                ? 'PERN APP'
+                : type === 'booth'
+                ? 'EVENT WEB'
+                : type === 'code'
+                ? 'EDTECH WEB'
+                : type === 'store'
+                ? 'COMMERCE'
+                : type === 'pomodoro'
+                ? 'POMODORO'
+                : 'WEB APP'}
             </span>
           </div>
-        )}
 
-        {type === 'foundry' && (
-          <div className="flex items-center gap-1">
-            <span className="px-1.5 py-0.5 rounded text-[7.5px] font-mono font-bold" style={{ background: 'var(--accent)', color: 'var(--surface-0)' }}>
-              60 FPS
-            </span>
-            <span className="px-1.5 py-0.5 rounded text-[7.5px] font-mono border" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--foreground)' }}>
-              Kinetic Engine
-            </span>
+          {/* Abstract Minimal Graphic Based on Type */}
+          <div className="my-auto flex flex-col items-center justify-center text-center py-0.5">
+            {type === 'booth' && (
+              <div className="flex items-center gap-1 text-[7.5px] font-mono">
+                <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+                  Hall A · Booth 14
+                </span>
+                <span className="px-1 py-0.5 rounded font-bold text-emerald-600" style={{ background: 'var(--surface-0)' }}>
+                  BOOKED
+                </span>
+              </div>
+            )}
+
+            {type === 'food' && (
+              <div className="w-full max-w-[140px] px-1.5 py-0.5 rounded border flex items-center justify-between text-[7.5px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}>
+                <span className="font-bold" style={{ color: 'var(--accent)' }}>FastEats Core</span>
+                <span className="font-semibold text-emerald-600">Online</span>
+              </div>
+            )}
+
+            {type === 'code' && (
+              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded border text-[7.5px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+                <span className="font-bold text-emerald-600">&gt;</span>
+                <span className="truncate max-w-[120px]">run(code_wave)</span>
+              </div>
+            )}
+
+            {type === 'ai' && (
+              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded border text-[8px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="truncate max-w-[120px]">Nutrition Scanner</span>
+              </div>
+            )}
+
+            {type === 'store' && (
+              <div className="flex items-center gap-1 text-[7.5px] font-mono">
+                <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+                  C# .NET
+                </span>
+                <span style={{ color: 'var(--muted)' }}>⇄</span>
+                <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--foreground)' }}>
+                  Catalogue
+                </span>
+              </div>
+            )}
+
+            {type === 'pomodoro' && (
+              <div className="w-full max-w-[140px] space-y-0.5">
+                <div className="flex items-center justify-between text-[7.5px] font-mono">
+                  <span style={{ color: 'var(--accent)' }}>25:00 FOCUS</span>
+                  <span className="text-emerald-600 font-bold">ACTIVE</span>
+                </div>
+                <div className="h-1 rounded-full w-full overflow-hidden" style={{ background: 'var(--surface-0)' }}>
+                  <div className="h-full w-3/4 rounded-full" style={{ background: 'var(--accent)' }} />
+                </div>
+              </div>
+            )}
+
+            {type === 'figma' && (
+              <div className="flex items-center gap-1.5">
+                <div className="px-1.5 py-0.5 rounded border border-dashed text-[7.5px] font-mono" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+                  Prototype
+                </div>
+                <div className="px-1.5 py-0.5 rounded border text-[7.5px] font-mono font-bold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--foreground)' }}>
+                  Auto-Layout
+                </div>
+              </div>
+            )}
           </div>
-        )}
 
-        {type === 'erp' && (
-          <div className="flex items-center gap-1 text-[7.5px] font-mono">
-            <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
-              PERN
-            </span>
-            <span style={{ color: 'var(--muted)' }}>⇄</span>
-            <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
-              .NET
-            </span>
+          {/* Bottom Title Watermark */}
+          <div className="flex items-center justify-between text-[7.5px] font-mono" style={{ color: 'var(--muted)' }}>
+            <span className="truncate max-w-[110px]">{title}</span>
+            <span>2026</span>
           </div>
-        )}
-      </div>
-
-      {/* Bottom Title Watermark */}
-      <div className="flex items-center justify-between text-[7.5px] font-mono" style={{ color: 'var(--muted)' }}>
-        <span className="truncate max-w-[110px]">{title}</span>
-        <span>2026</span>
-      </div>
+        </>
+      )}
     </div>
   );
 }
@@ -252,7 +294,7 @@ export default function ProjectCard({
             </div>
 
             {/* Image Preview Graphic */}
-            <ProjectImagePreview type={project.imageType} title={project.title} />
+            <ProjectImagePreview type={project.imageType} title={project.title} imgSrc={project.imgSrc} />
 
             {/* Title */}
             <h3
@@ -275,7 +317,7 @@ export default function ProjectCard({
           <div>
             {/* Tech Badges */}
             <div className="flex flex-wrap items-center gap-0.5 mb-1">
-              {project.techLogos.slice(0, 3).map((tech, idx) => {
+              {project.techLogos.slice(0, 4).map((tech, idx) => {
                 const LogoComponent = TechLogos[tech.logoKey];
                 return (
                   <div
@@ -338,12 +380,12 @@ export default function ProjectCard({
                 )}
               </div>
 
-              {project.links?.live && (
+              {project.links?.live ? (
                 <a
                   href={project.links.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
+                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
                   style={{
                     background: 'var(--surface-2)',
                     borderColor: 'var(--border)',
@@ -355,7 +397,41 @@ export default function ProjectCard({
                   <span>Visit</span>
                   <ArrowUpRight size={7} />
                 </a>
-              )}
+              ) : project.links?.figma ? (
+                <a
+                  href={project.links.figma}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
+                  style={{
+                    background: 'var(--surface-2)',
+                    borderColor: 'var(--border)',
+                    color: 'var(--accent)',
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label="View Prototype"
+                >
+                  <span>Proto</span>
+                  <ArrowUpRight size={7} />
+                </a>
+              ) : project.links?.github ? (
+                <a
+                  href={project.links.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
+                  style={{
+                    background: 'var(--surface-2)',
+                    borderColor: 'var(--border)',
+                    color: 'var(--accent)',
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label="View Repository"
+                >
+                  <span>Repo</span>
+                  <ArrowUpRight size={7} />
+                </a>
+              ) : null}
             </div>
           </div>
         </div>
