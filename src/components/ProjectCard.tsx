@@ -26,7 +26,7 @@ function ProjectImagePreview({
 
   return (
     <div
-      className="relative w-full h-[80px] rounded-lg overflow-hidden border flex flex-col justify-between p-1.5 select-none mb-1.5"
+      className="relative w-full h-[76px] rounded-lg overflow-hidden border flex flex-col justify-between p-1.5 select-none mb-1.5"
       style={{
         background: 'var(--surface-2)',
         borderColor: 'var(--border)',
@@ -48,7 +48,7 @@ function ProjectImagePreview({
               <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
               <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
             </div>
-            <span className="text-[7.5px] font-mono tracking-wider uppercase opacity-60" style={{ color: 'var(--accent)' }}>
+            <span className="text-[9px] font-mono font-semibold tracking-wider uppercase opacity-75" style={{ color: 'var(--accent)' }}>
               {type === 'figma'
                 ? 'FIGMA'
                 : type === 'ai'
@@ -70,39 +70,39 @@ function ProjectImagePreview({
           {/* Abstract Minimal Graphic Based on Type */}
           <div className="my-auto flex flex-col items-center justify-center text-center py-0.5">
             {type === 'booth' && (
-              <div className="flex items-center gap-1 text-[7.5px] font-mono">
-                <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+              <div className="flex items-center gap-1 text-[9px] font-mono">
+                <span className="px-2 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
                   Hall A · Booth 14
                 </span>
-                <span className="px-1 py-0.5 rounded font-bold text-emerald-600" style={{ background: 'var(--surface-0)' }}>
+                <span className="px-1.5 py-0.5 rounded font-bold text-emerald-600" style={{ background: 'var(--surface-0)' }}>
                   BOOKED
                 </span>
               </div>
             )}
 
             {type === 'food' && (
-              <div className="w-full max-w-[140px] px-1.5 py-0.5 rounded border flex items-center justify-between text-[7.5px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}>
+              <div className="w-full max-w-[155px] px-2 py-0.5 rounded border flex items-center justify-between text-[9px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}>
                 <span className="font-bold" style={{ color: 'var(--accent)' }}>FastEats Core</span>
                 <span className="font-semibold text-emerald-600">Online</span>
               </div>
             )}
 
             {type === 'code' && (
-              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded border text-[7.5px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border text-[9px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
                 <span className="font-bold text-emerald-600">&gt;</span>
-                <span className="truncate max-w-[120px]">run(code_wave)</span>
+                <span className="truncate max-w-[130px]">run(code_wave)</span>
               </div>
             )}
 
             {type === 'ai' && (
-              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded border text-[8px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border text-[9px] font-mono" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="truncate max-w-[120px]">Nutrition Scanner</span>
+                <span className="truncate max-w-[130px]">Nutrition Scanner</span>
               </div>
             )}
 
             {type === 'store' && (
-              <div className="flex items-center gap-1 text-[7.5px] font-mono">
+              <div className="flex items-center gap-1.5 text-[9px] font-mono">
                 <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
                   C# .NET
                 </span>
@@ -114,12 +114,12 @@ function ProjectImagePreview({
             )}
 
             {type === 'pomodoro' && (
-              <div className="w-full max-w-[140px] space-y-0.5">
-                <div className="flex items-center justify-between text-[7.5px] font-mono">
+              <div className="w-full max-w-[155px] space-y-1">
+                <div className="flex items-center justify-between text-[9px] font-mono">
                   <span style={{ color: 'var(--accent)' }}>25:00 FOCUS</span>
                   <span className="text-emerald-600 font-bold">ACTIVE</span>
                 </div>
-                <div className="h-1 rounded-full w-full overflow-hidden" style={{ background: 'var(--surface-0)' }}>
+                <div className="h-1.5 rounded-full w-full overflow-hidden" style={{ background: 'var(--surface-0)' }}>
                   <div className="h-full w-3/4 rounded-full" style={{ background: 'var(--accent)' }} />
                 </div>
               </div>
@@ -127,10 +127,10 @@ function ProjectImagePreview({
 
             {type === 'figma' && (
               <div className="flex items-center gap-1.5">
-                <div className="px-1.5 py-0.5 rounded border border-dashed text-[7.5px] font-mono" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+                <div className="px-1.5 py-0.5 rounded border border-dashed text-[9px] font-mono" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
                   Prototype
                 </div>
-                <div className="px-1.5 py-0.5 rounded border text-[7.5px] font-mono font-bold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--foreground)' }}>
+                <div className="px-1.5 py-0.5 rounded border text-[9px] font-mono font-bold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--foreground)' }}>
                   Auto-Layout
                 </div>
               </div>
@@ -138,8 +138,8 @@ function ProjectImagePreview({
           </div>
 
           {/* Bottom Title Watermark */}
-          <div className="flex items-center justify-between text-[7.5px] font-mono" style={{ color: 'var(--muted)' }}>
-            <span className="truncate max-w-[110px]">{title}</span>
+          <div className="flex items-center justify-between text-[8.5px] font-mono" style={{ color: 'var(--muted)' }}>
+            <span className="truncate max-w-[125px]">{title}</span>
             <span>2026</span>
           </div>
         </>
@@ -200,16 +200,16 @@ export default function ProjectCard({
           />
 
           {/* Top Corner Metadata */}
-          <div className="relative z-10 flex items-center justify-between px-0.5 pt-0.5">
+          <div className="relative z-10 flex items-center justify-between px-1 pt-0.5">
             <span
-              className="text-[9px] font-mono font-bold tracking-widest"
+              className="text-[11px] font-mono font-bold tracking-widest"
               style={{ color: 'var(--accent)' }}
             >
               № {project.cardIndex}
             </span>
 
             <span
-              className="text-[8px] font-mono tracking-[0.15em] uppercase opacity-70"
+              className="text-[9.5px] font-mono tracking-[0.15em] uppercase opacity-80"
               style={{ color: 'var(--muted)' }}
             >
               ARCHIVE
@@ -242,7 +242,7 @@ export default function ProjectCard({
                 }}
               >
                 <span
-                  className="text-xs font-mono font-black tracking-wider pl-0.5"
+                  className="text-sm font-mono font-black tracking-wider pl-0.5"
                   style={{ color: 'var(--accent)' }}
                 >
                   JD
@@ -252,11 +252,11 @@ export default function ProjectCard({
           </div>
 
           {/* Bottom Corner Metadata & Flip Prompt */}
-          <div className="relative z-10 flex items-center justify-between px-0.5 pb-0.5">
-            <div className="flex items-center gap-0.5">
-              <RotateCw size={9} className="opacity-60" style={{ color: 'var(--muted)' }} />
+          <div className="relative z-10 flex items-center justify-between px-1 pb-0.5">
+            <div className="flex items-center gap-1">
+              <RotateCw size={11} className="opacity-70" style={{ color: 'var(--muted)' }} />
               <span
-                className="text-[7px] font-mono tracking-widest uppercase font-semibold"
+                className="text-[9.5px] font-mono tracking-widest uppercase font-semibold"
                 style={{ color: 'var(--muted)' }}
               >
                 Reveal
@@ -264,7 +264,7 @@ export default function ProjectCard({
             </div>
 
             <span
-              className="text-[8px] font-mono tracking-widest uppercase opacity-70"
+              className="text-[9.5px] font-mono tracking-widest uppercase opacity-80"
               style={{ color: 'var(--muted)' }}
             >
               2026
@@ -284,11 +284,11 @@ export default function ProjectCard({
         >
           <div>
             {/* Top Bar: Card metadata */}
-            <div className="flex items-center justify-between pb-0.5 mb-0.5 border-b" style={{ borderColor: 'var(--border)' }}>
-              <span className="text-[8px] font-mono tracking-wider uppercase font-semibold truncate max-w-[120px]" style={{ color: 'var(--muted)' }}>
+            <div className="flex items-center justify-between pb-1 mb-1 border-b" style={{ borderColor: 'var(--border)' }}>
+              <span className="text-[10px] font-mono tracking-wider uppercase font-semibold truncate max-w-[130px]" style={{ color: 'var(--muted)' }}>
                 {project.category}
               </span>
-              <span className="text-[8.5px] font-mono font-bold" style={{ color: 'var(--accent)' }}>
+              <span className="text-[10.5px] font-mono font-bold" style={{ color: 'var(--accent)' }}>
                 № {project.cardIndex}
               </span>
             </div>
@@ -298,7 +298,7 @@ export default function ProjectCard({
 
             {/* Title */}
             <h3
-              className="text-[11px] font-bold tracking-tight leading-snug mb-0.5 line-clamp-1"
+              className="text-[13px] font-bold tracking-tight leading-snug mb-0.5 line-clamp-1"
               style={{ color: 'var(--accent)' }}
               title={project.title}
             >
@@ -307,7 +307,7 @@ export default function ProjectCard({
 
             {/* Description */}
             <p
-              className="text-[9px] font-normal leading-tight mb-1.5 line-clamp-2"
+              className="text-[10px] sm:text-[10.5px] font-normal leading-snug mb-1.5"
               style={{ color: 'var(--foreground)' }}
             >
               {project.description}
@@ -316,13 +316,13 @@ export default function ProjectCard({
 
           <div>
             {/* Tech Badges */}
-            <div className="flex flex-wrap items-center gap-0.5 mb-1">
+            <div className="flex flex-wrap items-center gap-1 mb-1.5">
               {project.techLogos.slice(0, 4).map((tech, idx) => {
                 const LogoComponent = TechLogos[tech.logoKey];
                 return (
                   <div
                     key={idx}
-                    className="flex items-center gap-0.5 px-1.5 py-0.5 rounded border text-[7.5px] font-mono"
+                    className="flex items-center gap-1 px-1.5 py-0.5 rounded border text-[9px] font-mono"
                     style={{
                       background: 'var(--surface-1)',
                       borderColor: 'var(--border)',
@@ -330,9 +330,9 @@ export default function ProjectCard({
                     title={tech.name}
                   >
                     {LogoComponent ? (
-                      <LogoComponent size={9} className="w-2.5 h-2.5 object-contain" />
+                      <LogoComponent size={10} className="w-2.5 h-2.5 object-contain" />
                     ) : (
-                      <span className="text-[6.5px] font-bold" style={{ color: 'var(--accent)' }}>
+                      <span className="text-[8px] font-bold" style={{ color: 'var(--accent)' }}>
                         {tech.name.slice(0, 2)}
                       </span>
                     )}
@@ -346,21 +346,21 @@ export default function ProjectCard({
 
             {/* Bottom Links */}
             <div
-              className="flex items-center justify-between pt-0.5 border-t text-[7.5px] font-mono"
+              className="flex items-center justify-between pt-1 border-t text-[9.5px] font-mono"
               style={{ borderColor: 'var(--border)' }}
             >
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 {project.links?.github && (
                   <a
                     href={project.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-0.5 font-semibold hover:underline"
+                    className="inline-flex items-center gap-1 font-semibold hover:underline"
                     style={{ color: 'var(--accent)' }}
                     onClick={(e) => e.stopPropagation()}
                     aria-label="View Code"
                   >
-                    {TechLogos.github && <TechLogos.github size={8} />}
+                    {TechLogos.github && <TechLogos.github size={10} />}
                     <span>Code</span>
                   </a>
                 )}
@@ -369,12 +369,12 @@ export default function ProjectCard({
                     href={project.links.figma}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-0.5 font-semibold hover:underline"
+                    className="inline-flex items-center gap-1 font-semibold hover:underline"
                     style={{ color: 'var(--accent)' }}
                     onClick={(e) => e.stopPropagation()}
                     aria-label="View Figma"
                   >
-                    {TechLogos.figma && <TechLogos.figma size={8} />}
+                    {TechLogos.figma && <TechLogos.figma size={10} />}
                     <span>Figma</span>
                   </a>
                 )}
@@ -385,7 +385,7 @@ export default function ProjectCard({
                   href={project.links.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
                   style={{
                     background: 'var(--surface-2)',
                     borderColor: 'var(--border)',
@@ -395,14 +395,14 @@ export default function ProjectCard({
                   aria-label="Visit project"
                 >
                   <span>Visit</span>
-                  <ArrowUpRight size={7} />
+                  <ArrowUpRight size={9} />
                 </a>
               ) : project.links?.figma ? (
                 <a
                   href={project.links.figma}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
                   style={{
                     background: 'var(--surface-2)',
                     borderColor: 'var(--border)',
@@ -412,14 +412,14 @@ export default function ProjectCard({
                   aria-label="View Prototype"
                 >
                   <span>Proto</span>
-                  <ArrowUpRight size={7} />
+                  <ArrowUpRight size={9} />
                 </a>
               ) : project.links?.github ? (
                 <a
                   href={project.links.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
                   style={{
                     background: 'var(--surface-2)',
                     borderColor: 'var(--border)',
@@ -429,7 +429,7 @@ export default function ProjectCard({
                   aria-label="View Repository"
                 >
                   <span>Repo</span>
-                  <ArrowUpRight size={7} />
+                  <ArrowUpRight size={9} />
                 </a>
               ) : null}
             </div>
