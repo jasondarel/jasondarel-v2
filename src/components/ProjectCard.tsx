@@ -205,7 +205,7 @@ export default function ProjectCard({
               className="text-[11px] font-mono font-bold tracking-widest"
               style={{ color: 'var(--accent)' }}
             >
-              № {project.cardIndex}
+              {project.cardIndex}
             </span>
 
             <span
@@ -289,7 +289,7 @@ export default function ProjectCard({
                 {project.category}
               </span>
               <span className="text-[10.5px] font-mono font-bold" style={{ color: 'var(--accent)' }}>
-                № {project.cardIndex}
+                {project.cardIndex}
               </span>
             </div>
 
