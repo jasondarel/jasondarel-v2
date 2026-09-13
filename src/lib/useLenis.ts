@@ -5,6 +5,12 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+declare global {
+  interface Window {
+    __lenis?: Lenis | null;
+  }
+}
+
 // Register ScrollTrigger plugin once
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,7 +38,7 @@ export function useLenis() {
     });
 
     lenisRef.current = lenis;
-    (window as any).__lenis = lenis;
+    window.__lenis = lenis;
 
     // ── 2. Sync ScrollTrigger with Lenis ─────────────────────────────────────
     // Each time Lenis scrolls, notify ScrollTrigger so pinned sections
@@ -53,7 +59,7 @@ export function useLenis() {
     return () => {
       gsap.ticker.remove(onTick);
       lenis.destroy();
-      (window as any).__lenis = null;
+      window.__lenis = null;
     };
   }, []);
 

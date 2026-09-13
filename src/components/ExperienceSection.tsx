@@ -162,17 +162,11 @@ export default function ExperienceSection() {
               A track record of engineering production-grade web systems, optimizing performance bottlenecks, and building scalable backend architectures.
             </p>
 
-            {/* Quick Metrics Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl">
-              <div
-                className="p-4 rounded-xl border"
-                style={{
-                  background: 'var(--surface-1)',
-                  borderColor: 'var(--border)',
-                }}
-              >
+            {/* Quick Metrics */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-10 max-w-3xl">
+              <div>
                 <div
-                  className="text-2xl sm:text-3xl font-black font-mono tracking-tight"
+                  className="text-3xl sm:text-4xl font-black font-mono tracking-tight"
                   style={{ color: 'var(--accent)' }}
                 >
                   <CountUp
@@ -184,22 +178,16 @@ export default function ExperienceSection() {
                   />
                 </div>
                 <div
-                  className="text-xs font-mono uppercase tracking-wider mt-1"
+                  className="text-xs font-mono uppercase tracking-wider mt-1.5"
                   style={{ color: 'var(--muted)' }}
                 >
                   Load Time Cut
                 </div>
               </div>
 
-              <div
-                className="p-4 rounded-xl border"
-                style={{
-                  background: 'var(--surface-1)',
-                  borderColor: 'var(--border)',
-                }}
-              >
+              <div>
                 <div
-                  className="text-2xl sm:text-3xl font-black font-mono tracking-tight"
+                  className="text-3xl sm:text-4xl font-black font-mono tracking-tight"
                   style={{ color: 'var(--accent)' }}
                 >
                   <CountUp
@@ -211,22 +199,16 @@ export default function ExperienceSection() {
                   />
                 </div>
                 <div
-                  className="text-xs font-mono uppercase tracking-wider mt-1"
+                  className="text-xs font-mono uppercase tracking-wider mt-1.5"
                   style={{ color: 'var(--muted)' }}
                 >
                   Participant Records
                 </div>
               </div>
 
-              <div
-                className="p-4 rounded-xl border col-span-2 sm:col-span-1"
-                style={{
-                  background: 'var(--surface-1)',
-                  borderColor: 'var(--border)',
-                }}
-              >
+              <div className="col-span-2 sm:col-span-1">
                 <div
-                  className="text-2xl sm:text-3xl font-black font-mono tracking-tight"
+                  className="text-3xl sm:text-4xl font-black font-mono tracking-tight"
                   style={{ color: 'var(--accent)' }}
                 >
                   <CountUp
@@ -238,7 +220,7 @@ export default function ExperienceSection() {
                   />
                 </div>
                 <div
-                  className="text-xs font-mono uppercase tracking-wider mt-1"
+                  className="text-xs font-mono uppercase tracking-wider mt-1.5"
                   style={{ color: 'var(--muted)' }}
                 >
                   Full-Stack Experience
@@ -290,13 +272,7 @@ export default function ExperienceSection() {
                 </p>
               </div>
 
-              <div
-                className="px-3.5 py-1.5 rounded-xl border flex flex-col items-end"
-                style={{
-                  background: 'var(--surface-0)',
-                  borderColor: 'var(--border)',
-                }}
-              >
+              <div className="flex flex-col items-end">
                 <span className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--muted)' }}>
                   Duration
                 </span>
@@ -310,13 +286,7 @@ export default function ExperienceSection() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 mb-4.5">
               {/* Left Column Metric / Focus */}
               <div className="lg:col-span-4 flex flex-col gap-3">
-                <div
-                  className="p-5 rounded-2xl border"
-                  style={{
-                    background: 'var(--surface-0)',
-                    borderColor: 'var(--border)',
-                  }}
-                >
+                <div>
                   <span
                     className="text-xs font-mono uppercase tracking-wider block mb-1"
                     style={{ color: 'var(--muted)' }}
@@ -408,13 +378,7 @@ export default function ExperienceSection() {
                 </p>
               </div>
 
-              <div
-                className="px-3.5 py-1.5 rounded-xl border flex flex-col items-end"
-                style={{
-                  background: 'var(--surface-1)',
-                  borderColor: 'var(--border)',
-                }}
-              >
+              <div className="flex flex-col items-end">
                 <span className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--muted)' }}>
                   Duration
                 </span>
@@ -428,13 +392,7 @@ export default function ExperienceSection() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 mb-4.5">
               {/* Left Column Metric / Focus */}
               <div className="lg:col-span-4 flex flex-col gap-3">
-                <div
-                  className="p-5 rounded-2xl border"
-                  style={{
-                    background: 'var(--surface-1)',
-                    borderColor: 'var(--border)',
-                  }}
-                >
+                <div>
                   <span
                     className="text-xs font-mono uppercase tracking-wider block mb-1"
                     style={{ color: 'var(--muted)' }}

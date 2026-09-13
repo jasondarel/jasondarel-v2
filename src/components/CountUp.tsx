@@ -28,12 +28,17 @@ export default function CountUp({
   style,
 }: CountUpProps) {
   const [value, setValue] = useState(start);
+  const [prevTrigger, setPrevTrigger] = useState(trigger);
 
-  useEffect(() => {
+  if (prevTrigger !== trigger) {
+    setPrevTrigger(trigger);
     if (!trigger) {
       setValue(start);
-      return;
     }
+  }
+
+  useEffect(() => {
+    if (!trigger) return;
 
     let startTime: number | null = null;
     let animationFrameId: number;
@@ -64,11 +69,13 @@ export default function CountUp({
     };
   }, [end, start, duration, trigger]);
 
+  const displayVal = trigger ? value : start;
+
   let displayStr = '';
   if (decimals > 0) {
-    displayStr = value.toFixed(decimals);
+    displayStr = displayVal.toFixed(decimals);
   } else {
-    const rounded = Math.round(value);
+    const rounded = Math.round(displayVal);
     displayStr = useGrouping ? rounded.toLocaleString('en-US') : rounded.toString();
   }
 

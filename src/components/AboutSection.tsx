@@ -175,7 +175,7 @@ export default function AboutSection() {
       let idleTimer: ReturnType<typeof setTimeout> | null = null;
 
       const handleWheelOrTouch = () => {
-        const lenis = (window as any).__lenis;
+        const lenis = window.__lenis;
         if (!lenis || !tl.scrollTrigger) return;
         const capPos = tl.scrollTrigger.end;
 
@@ -194,7 +194,7 @@ export default function AboutSection() {
       };
 
       const handleLenisScroll = () => {
-        const lenis = (window as any).__lenis;
+        const lenis = window.__lenis;
         if (!lenis || !tl.scrollTrigger) return;
 
         const capPos = tl.scrollTrigger.end;
@@ -210,7 +210,7 @@ export default function AboutSection() {
         }
       };
 
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       if (lenis) {
         lenis.on('scroll', handleLenisScroll);
       }

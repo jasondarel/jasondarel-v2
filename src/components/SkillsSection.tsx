@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SKILLS_DATA, FloatingStack } from '@/constants/skills';
@@ -20,9 +21,11 @@ function TechLogoDisplay({
 
   if (stack.iconSrc && !imgError) {
     return (
-      <img
+      <Image
         src={stack.iconSrc}
         alt={stack.name}
+        width={36}
+        height={36}
         className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain transition-transform duration-300 group-hover:scale-110"
         onError={() => setImgError(true)}
       />

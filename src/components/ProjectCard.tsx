@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { ProjectItem } from '@/constants/projects';
 import { TechLogos } from '@/components/icons/TechLogos';
-import { ArrowUpRight, RotateCw } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 interface ProjectCardProps {
   project: ProjectItem;
@@ -33,11 +34,13 @@ function ProjectImagePreview({
       }}
     >
       {imgSrc && !imgError ? (
-        <img
+        <Image
           src={imgSrc}
           alt={title}
+          fill
+          sizes="(max-width: 768px) 100vw, 300px"
           onError={() => setImgError(true)}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="object-cover"
         />
       ) : (
         <>
@@ -207,13 +210,6 @@ export default function ProjectCard({
             >
               {project.cardIndex}
             </span>
-
-            <span
-              className="text-[9.5px] font-mono tracking-[0.15em] uppercase opacity-80"
-              style={{ color: 'var(--muted)' }}
-            >
-              ARCHIVE
-            </span>
           </div>
 
           {/* Center Luxury Playing Card Pattern & Monogram */}
@@ -251,18 +247,8 @@ export default function ProjectCard({
             </div>
           </div>
 
-          {/* Bottom Corner Metadata & Flip Prompt */}
-          <div className="relative z-10 flex items-center justify-between px-1 pb-0.5">
-            <div className="flex items-center gap-1">
-              <RotateCw size={11} className="opacity-70" style={{ color: 'var(--muted)' }} />
-              <span
-                className="text-[9.5px] font-mono tracking-widest uppercase font-semibold"
-                style={{ color: 'var(--muted)' }}
-              >
-                Reveal
-              </span>
-            </div>
-
+          {/* Bottom Corner Metadata */}
+          <div className="relative z-10 flex items-center justify-end px-1 pb-0.5">
             <span
               className="text-[9.5px] font-mono tracking-widest uppercase opacity-80"
               style={{ color: 'var(--muted)' }}

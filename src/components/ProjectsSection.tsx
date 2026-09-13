@@ -209,6 +209,28 @@ export default function ProjectsSection() {
             );
           })}
         </div>
+
+        {/* Far Right Scroll Indicator */}
+        <div
+          className="absolute right-6 lg:right-10 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5 pointer-events-none z-20"
+          aria-label="Scroll indicator"
+        >
+          <div
+            className="w-6 h-10 rounded-full border-2 flex justify-center pt-2"
+            style={{ borderColor: 'var(--accent)' }}
+          >
+            <span
+              className="w-1.5 h-2.5 rounded-full animate-scroll-wheel"
+              style={{ background: 'var(--accent)' }}
+            />
+          </div>
+          <span
+            className="text-[9.5px] font-mono tracking-[0.25em] uppercase opacity-60 [writing-mode:vertical-rl]"
+            style={{ color: 'var(--muted)' }}
+          >
+            Scroll
+          </span>
+        </div>
       </section>
 
       {/* ── 3. Mobile Static Grid Layout (Responsive fall-back) ───────────── */}
