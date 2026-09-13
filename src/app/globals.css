@@ -191,4 +191,30 @@ html.lenis, html.lenis body {
   animation: bounceX 1.5s ease-in-out infinite;
 }
 
+/* ── Universal Pill Button Utilities ────────────────────────────────────────── */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--foreground);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-pill:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+.btn-pill:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+
 

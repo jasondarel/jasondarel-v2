@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ProjectItem } from '@/constants/projects';
 import { TechLogos } from '@/components/icons/TechLogos';
-import { ArrowUpRight } from 'lucide-react';
+import Button from '@/components/Button';
 
 interface ProjectCardProps {
   project: ProjectItem;
@@ -186,7 +186,9 @@ export default function ProjectCard({
             1. MINIMAL PLAYING CARD BACK (Authentic 1:1.4 Aspect Ratio)
            ═════════════════════════════════════════════════════════════════════ */}
         <div
-          className="absolute inset-0 w-full h-full rounded-2xl p-3.5 flex flex-col justify-between overflow-hidden border [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
+          className={`absolute inset-0 w-full h-full rounded-2xl p-3.5 flex flex-col justify-between overflow-hidden border [backface-visibility:hidden] [-webkit-backface-visibility:hidden] ${
+            activeFlipped ? 'pointer-events-none' : 'pointer-events-auto'
+          }`}
           style={{
             background: 'var(--surface-0)',
             borderColor: 'var(--border)',
@@ -262,7 +264,9 @@ export default function ProjectCard({
             2. POKER CARD FRONT (Revealed on 180deg flip)
            ═════════════════════════════════════════════════════════════════════ */}
         <div
-          className="absolute inset-0 w-full h-full rounded-2xl p-3 flex flex-col justify-between overflow-hidden border [transform:rotateY(180deg)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
+          className={`absolute inset-0 w-full h-full rounded-2xl p-3 flex flex-col justify-between overflow-hidden border [transform:rotateY(180deg)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden] ${
+            activeFlipped ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
           style={{
             background: 'var(--surface-0)',
             borderColor: 'var(--border)',
@@ -332,91 +336,74 @@ export default function ProjectCard({
 
             {/* Bottom Links */}
             <div
-              className="flex items-center justify-between pt-1 border-t text-[9.5px] font-mono"
+              className="relative z-20 pointer-events-auto flex items-center justify-between pt-1 border-t text-[9.5px] font-mono"
               style={{ borderColor: 'var(--border)' }}
             >
               <div className="flex items-center gap-1.5">
                 {project.links?.github && (
-                  <a
+                  <Button
+                    size="xs"
+                    variant="ghost"
                     href={project.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 font-semibold hover:underline"
-                    style={{ color: 'var(--accent)' }}
+                    leftIcon={TechLogos.github && <TechLogos.github size={10} />}
                     onClick={(e) => e.stopPropagation()}
                     aria-label="View Code"
+                    className="font-mono text-[9.5px]"
                   >
-                    {TechLogos.github && <TechLogos.github size={10} />}
-                    <span>Code</span>
-                  </a>
+                    Code
+                  </Button>
                 )}
                 {project.links?.figma && (
-                  <a
+                  <Button
+                    size="xs"
+                    variant="ghost"
                     href={project.links.figma}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 font-semibold hover:underline"
-                    style={{ color: 'var(--accent)' }}
+                    leftIcon={TechLogos.figma && <TechLogos.figma size={10} />}
                     onClick={(e) => e.stopPropagation()}
                     aria-label="View Figma"
+                    className="font-mono text-[9.5px]"
                   >
-                    {TechLogos.figma && <TechLogos.figma size={10} />}
-                    <span>Figma</span>
-                  </a>
+                    Figma
+                  </Button>
                 )}
               </div>
 
               {project.links?.live ? (
-                <a
+                <Button
+                  size="xs"
+                  variant="accent"
+                  rightIcon={true}
                   href={project.links.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
-                  style={{
-                    background: 'var(--surface-2)',
-                    borderColor: 'var(--border)',
-                    color: 'var(--accent)',
-                  }}
                   onClick={(e) => e.stopPropagation()}
                   aria-label="Visit project"
+                  className="font-mono text-[9.5px]"
                 >
-                  <span>Visit</span>
-                  <ArrowUpRight size={9} />
-                </a>
+                  Visit
+                </Button>
               ) : project.links?.figma ? (
-                <a
+                <Button
+                  size="xs"
+                  variant="accent"
+                  rightIcon={true}
                   href={project.links.figma}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
-                  style={{
-                    background: 'var(--surface-2)',
-                    borderColor: 'var(--border)',
-                    color: 'var(--accent)',
-                  }}
                   onClick={(e) => e.stopPropagation()}
                   aria-label="View Prototype"
+                  className="font-mono text-[9.5px]"
                 >
-                  <span>Proto</span>
-                  <ArrowUpRight size={9} />
-                </a>
+                  Proto
+                </Button>
               ) : project.links?.github ? (
-                <a
+                <Button
+                  size="xs"
+                  variant="accent"
+                  rightIcon={true}
                   href={project.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded border font-bold hover:opacity-85 transition-opacity"
-                  style={{
-                    background: 'var(--surface-2)',
-                    borderColor: 'var(--border)',
-                    color: 'var(--accent)',
-                  }}
                   onClick={(e) => e.stopPropagation()}
                   aria-label="View Repository"
+                  className="font-mono text-[9.5px]"
                 >
-                  <span>Repo</span>
-                  <ArrowUpRight size={9} />
-                </a>
+                  Repo
+                </Button>
               ) : null}
             </div>
           </div>

@@ -5,6 +5,7 @@ import AboutSection from '@/components/AboutSection';
 import SkillsSection from '@/components/SkillsSection';
 import ExperienceSection from '@/components/ExperienceSection';
 import ProjectsSection from '@/components/ProjectsSection';
+import ContactSection from '@/components/ContactSection';
 
 /**
  * Home (App.tsx equivalent)
@@ -124,19 +125,8 @@ export default function Home() {
        */}
       <ProjectsSection />
 
-      {/* ── 6. OUTRO ─────────────────────────────────────────────────────── */}
-      <section
-        className="flex h-screen flex-col items-center justify-center border-t"
-        style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}
-        aria-label="Outro section"
-      >
-        <h2
-          className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter select-none"
-          style={{ color: 'var(--accent)' }}
-        >
-          Contact Me
-        </h2>
-      </section>
+      {/* ── 6. CONTACT SECTION ───────────────────────────────────────────── */}
+      <ContactSection />
     </main>
   );
 }
