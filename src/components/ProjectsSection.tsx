@@ -12,27 +12,27 @@ gsap.registerPlugin(ScrollTrigger);
 // 8 Cards 200×280px arranged in 4 columns × 2 rows. Snug 12px row gap.
 const GRID_COORDINATES = [
   // Row 1 (y = -146)
-  { x: -330, y: -146, rotation: 0 }, // Card 0: Row 1, Col 0 (BoothEase)
-  { x: -110, y: -146, rotation: 0 }, // Card 1: Row 1, Col 1 (FastEats)
-  { x: 110,  y: -146, rotation: 0 }, // Card 2: Row 1, Col 2 (CodeWave)
-  { x: 330,  y: -146, rotation: 0 }, // Card 3: Row 1, Col 3 (NourishScan)
+  { x: -330, y: -146, rotation: 0 }, // Card 0: Row 1, Col 0 (FastEats)
+  { x: -110, y: -146, rotation: 0 }, // Card 1: Row 1, Col 1 (NourishScan)
+  { x: 110, y: -146, rotation: 0 }, // Card 2: Row 1, Col 2 (BoothEase)
+  { x: 330, y: -146, rotation: 0 }, // Card 3: Row 1, Col 3 (CodeWave)
   // Row 2 (y = 146)
-  { x: -330, y: 146,  rotation: 0 }, // Card 4: Row 2, Col 0 (GymMe)
-  { x: -110, y: 146,  rotation: 0 }, // Card 5: Row 2, Col 1 (StudyGo)
-  { x: 110,  y: 146,  rotation: 0 }, // Card 6: Row 2, Col 2 (Calm)
-  { x: 330,  y: 146,  rotation: 0 }, // Card 7: Row 2, Col 3 (StaySeeker)
+  { x: -330, y: 146, rotation: 0 }, // Card 4: Row 2, Col 0 (GymMe)
+  { x: -110, y: 146, rotation: 0 }, // Card 5: Row 2, Col 1 (StudyGo)
+  { x: 110, y: 146, rotation: 0 }, // Card 6: Row 2, Col 2 (Calm)
+  { x: 330, y: 146, rotation: 0 }, // Card 7: Row 2, Col 3 (StaySeeker)
 ];
 
 // ── Fan Coordinates for 8 Cards (centered in the stage) ───────────────────
 const FAN_COORDINATES = [
-  { x: -175, y: 4,   rotation: -21 },
-  { x: -125, y: -5,  rotation: -15 },
-  { x: -75,  y: -12, rotation: -9  },
-  { x: -25,  y: -16, rotation: -3  },
-  { x: 25,   y: -16, rotation: 3   },
-  { x: 75,   y: -12, rotation: 9   },
-  { x: 125,  y: -5,  rotation: 15  },
-  { x: 175,  y: 4,   rotation: 21  },
+  { x: -175, y: 4, rotation: -21 },
+  { x: -125, y: -5, rotation: -15 },
+  { x: -75, y: -12, rotation: -9 },
+  { x: -25, y: -16, rotation: -3 },
+  { x: 25, y: -16, rotation: 3 },
+  { x: 75, y: -12, rotation: 9 },
+  { x: 125, y: -5, rotation: 15 },
+  { x: 175, y: 4, rotation: 21 },
 ];
 
 export default function ProjectsSection() {
@@ -169,7 +169,7 @@ export default function ProjectsSection() {
               className="text-sm sm:text-base font-medium leading-relaxed max-w-lg"
               style={{ color: 'var(--muted)' }}
             >
-              Scroll to deal and fan the deck. Hover any card to inspect the technical architecture, live preview, and source.
+              Scroll to deal and fan the deck. Hover any card to inspect the details.
             </p>
           </div>
         </div>

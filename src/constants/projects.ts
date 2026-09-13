@@ -21,33 +21,13 @@ export interface ProjectItem {
 }
 
 export const PROJECTS_DATA: ProjectItem[] = [
-  // ── 1. BoothEase
-  {
-    id: 'boothease',
-    title: 'BoothEase',
-    description: 'A web app to book booths at events with interactive vendor reservations and venue management.',
-    category: 'EVENT BOOKING',
-    cardIndex: '01',
-    imageType: 'booth',
-    imgSrc: '/images/boothease.jpg',
-    tags: ['Fullstack Developer', 'PHP', 'Laravel', 'MariaDB'],
-    techLogos: [
-      { name: 'PHP', logoKey: 'php' },
-      { name: 'Laravel', logoKey: 'laravel' },
-      { name: 'MariaDB', logoKey: 'mariadb' },
-    ],
-    links: {
-      github: 'https://github.com/StephenJo16/BoothEase',
-    },
-  },
-
-  // ── 2. FastEats
+  // ── 1. FastEats
   {
     id: 'fasteats',
     title: 'FastEats',
     description: 'A PERN app used to order food online with digital menus and streamlined checkout processing.',
     category: 'FOOD ORDERING',
-    cardIndex: '02',
+    cardIndex: '01',
     imageType: 'food',
     imgSrc: '/images/fasteats.jpeg',
     tags: ['Fullstack Developer', 'React', 'Node.js', 'Express', 'PostgreSQL'],
@@ -62,13 +42,52 @@ export const PROJECTS_DATA: ProjectItem[] = [
     },
   },
 
-  // ── 3. CodeWave
+  // ── 2. NourishScan
+  {
+    id: 'nourishscan',
+    title: 'NourishScan',
+    description: 'AI App for nutrition information providing instant dietary analysis and macro breakdown.',
+    category: 'AI & HEALTHCARE',
+    cardIndex: '02',
+    imageType: 'ai',
+    imgSrc: '/images/nourishscan.png',
+    tags: ['Back-End Developer', 'Python', 'Flask', 'AI'],
+    techLogos: [
+      { name: 'Python', logoKey: 'python' },
+      { name: 'Flask', logoKey: 'flask' },
+    ],
+    links: {
+      github: 'https://github.com/jasondarel/NourishScan',
+    },
+  },
+
+  // ── 3. BoothEase
+  {
+    id: 'boothease',
+    title: 'BoothEase',
+    description: 'A web app to book booths at events with interactive vendor reservations and venue management.',
+    category: 'EVENT BOOKING',
+    cardIndex: '03',
+    imageType: 'booth',
+    imgSrc: '/images/boothease.jpg',
+    tags: ['Fullstack Developer', 'PHP', 'Laravel', 'MariaDB'],
+    techLogos: [
+      { name: 'PHP', logoKey: 'php' },
+      { name: 'Laravel', logoKey: 'laravel' },
+      { name: 'MariaDB', logoKey: 'mariadb' },
+    ],
+    links: {
+      github: 'https://github.com/StephenJo16/BoothEase',
+    },
+  },
+
+  // ── 4. CodeWave
   {
     id: 'codewave',
     title: 'CodeWave',
     description: 'A web application to learn programming and coding through structured guided lessons and exercises.',
     category: 'EDTECH PLATFORM',
-    cardIndex: '03',
+    cardIndex: '04',
     imageType: 'code',
     imgSrc: '/images/codewave.jpeg',
     tags: ['Fullstack Developer', 'PHP', 'Laravel', 'MySQL'],
@@ -79,25 +98,6 @@ export const PROJECTS_DATA: ProjectItem[] = [
     ],
     links: {
       github: 'https://github.com/jasondarel/CodeWave',
-    },
-  },
-
-  // ── 4. NourishScan
-  {
-    id: 'nourishscan',
-    title: 'NourishScan',
-    description: 'AI App for nutrition information providing instant dietary analysis and macro breakdown.',
-    category: 'AI & HEALTHCARE',
-    cardIndex: '04',
-    imageType: 'ai',
-    imgSrc: '/images/nourishscan.png',
-    tags: ['Back-End Developer', 'Python', 'Flask', 'AI'],
-    techLogos: [
-      { name: 'Python', logoKey: 'python' },
-      { name: 'Flask', logoKey: 'flask' },
-    ],
-    links: {
-      github: 'https://github.com/jasondarel/NourishScan',
     },
   },
 
