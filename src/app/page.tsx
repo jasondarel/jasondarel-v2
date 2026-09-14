@@ -5,7 +5,6 @@ import AboutSection from '@/components/AboutSection';
 import SkillsSection from '@/components/SkillsSection';
 import ExperienceSection from '@/components/ExperienceSection';
 import ProjectsSection from '@/components/ProjectsSection';
-import ContactSection from '@/components/ContactSection';
 
 /**
  * Home (App.tsx equivalent)
@@ -118,15 +117,12 @@ export default function Home() {
        */}
       <ExperienceSection />
 
-      {/* ── 5. PROJECTS PARALLAX DEPTH SECTION ───────────────────────────── */}
+      {/* ── 5. PROJECTS & OVERLAPPING CONTACT SECTION ───────────────────── */}
       {/*
-       * Multi-layered parallax depth stream with differential scroll velocities.
+       * Pinned poker-deck deal into 4x2 grid, full-page frosted blur, and overlapping Contact section.
        * See src/components/ProjectsSection.tsx for ScrollTrigger config.
-       */}
+       */ }
       <ProjectsSection />
-
-      {/* ── 6. CONTACT SECTION ───────────────────────────────────────────── */}
-      <ContactSection />
     </main>
   );
 }

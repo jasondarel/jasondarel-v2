@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PROJECTS_DATA } from '@/constants/projects';
 import ProjectCard from '@/components/ProjectCard';
+import ContactSection from '@/components/ContactSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,23 +37,41 @@ const FAN_COORDINATES = [
 ];
 
 // ── Scroll & Timing Controls ──────────────────────────────────────────────
-// 1. Total scroll distance in pixels that the Projects section stays pinned.
-//    Increase this number to require MORE scrolling before moving to Contact.
-//    Decrease this number to require LESS scrolling.
-const TOTAL_PINNED_SCROLL = 3000;
+// Total scroll distance in pixels that the Projects section stays pinned.
+const TOTAL_PINNED_SCROLL = 4600;
 
-// 2. Timeline timing for dealing vs. stationary hold:
-//    Cards take 3.69s to deal into place.
-//    HOLD_DURATION is the stationary showcase buffer where cards stay still and interactive.
+// Timeline Keyframe Milestones (in seconds):
+// 0.0s -> 1.2s: Phase 1 - Fan out
+// 1.2s -> 1.6s: Settle in fan
+// 1.6s -> 3.69s: Phase 2 - Spread into 4x2 grid
 const DEAL_END_TIME = 1.6 + 7 * 0.07 + 1.6; // 3.69s
-const HOLD_DURATION = 3.0;
-// Automatically compute when cards finish dealing in timeline progress (e.g. ~0.345):
-const DEALT_THRESHOLD = DEAL_END_TIME / (DEAL_END_TIME + HOLD_DURATION);
+
+// 3.69s -> 5.8s: Phase 3 - Stationary cards showcase hold (~2.1s)
+const BLUR_START_TIME = DEAL_END_TIME + 2.1; // 5.79s
+
+// 5.8s -> 7.4s: Phase 4 - Full-page blur transition (~1.6s)
+const BLUR_DURATION = 1.6;
+
+// 6.9s -> 9.2s: Phase 5 - Contact elements fade up (~2.3s total with stagger)
+const CONTACT_START_TIME = BLUR_START_TIME + 1.1; // 6.89s (overlaps smoothly with blur)
+
+// 9.2s -> 11.5s: Phase 6 - Rock-solid hold for Contact section (~2.3s buffer)
+const TOTAL_TIMELINE_DURATION = 11.5;
+
+// Thresholds for onUpdate logic (normalized to [0, 1]):
+const DEALT_THRESHOLD = DEAL_END_TIME / TOTAL_TIMELINE_DURATION; // ~0.32
+const BLUR_THRESHOLD = BLUR_START_TIME / TOTAL_TIMELINE_DURATION; // ~0.50
+const CONTACT_ACTIVE_THRESHOLD = (CONTACT_START_TIME + 1.2) / TOTAL_TIMELINE_DURATION; // ~0.70
 
 export default function ProjectsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const cardsAnchorRef = useRef<HTMLDivElement>(null);
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+  const blurOverlayRef = useRef<HTMLDivElement>(null);
+  const contactOverlayRef = useRef<HTMLDivElement>(null);
+  const contactSectionRef = useRef<HTMLDivElement>(null);
   const [isDealt, setIsDealt] = useState(false);
 
   useEffect(() => {
@@ -80,6 +99,26 @@ export default function ProjectsSection() {
           });
         });
 
+        // Initial state for full-page blur overlay
+        if (blurOverlayRef.current) {
+          gsap.set(blurOverlayRef.current, {
+            opacity: 0,
+            backdropFilter: 'blur(0px)',
+            WebkitBackdropFilter: 'blur(0px)',
+          });
+        }
+
+        // Initial state for contact animatable elements
+        const contactElements = contactSectionRef.current
+          ? contactSectionRef.current.querySelectorAll('[data-contact-animate]')
+          : [];
+        if (contactElements.length > 0) {
+          gsap.set(contactElements, {
+            opacity: 0,
+            y: 35,
+          });
+        }
+
         // ── 2. Pinned Scroll Timeline ───────────────────────────────────────
         // Scrub: 0.15 provides instant sync with Lenis smooth scroll without double-lag
         const tl = gsap.timeline({
@@ -93,9 +132,17 @@ export default function ProjectsSection() {
             fastScrollEnd: true,
             preventOverlaps: true,
             onUpdate: (self) => {
-              // Enable hover flip once cards have completed the spread into the grid
-              const dealt = self.progress >= DEALT_THRESHOLD;
+              const p = self.progress;
+
+              // 1. Enable hover flip ONLY while cards are stationary in the 4x2 grid
+              const dealt = p >= DEALT_THRESHOLD && p < BLUR_THRESHOLD;
               setIsDealt((prev) => (prev !== dealt ? dealt : prev));
+
+              // 2. Enable contact section pointer-events once contact has faded in
+              const contactActive = p >= CONTACT_ACTIVE_THRESHOLD;
+              if (contactOverlayRef.current) {
+                contactOverlayRef.current.style.pointerEvents = contactActive ? 'auto' : 'none';
+              }
             },
           },
         });
@@ -144,8 +191,69 @@ export default function ProjectsSection() {
         });
 
         // ── Phase 3: Pinned Stationary Showcase Hold ─────────────────────────
-        // Buffer keeping the grid firmly pinned & interactive before unpinning to Contact.
-        tl.to({}, { duration: HOLD_DURATION }, DEAL_END_TIME);
+        tl.to({}, { duration: 2.1 }, DEAL_END_TIME);
+
+        // ── Phase 4: Full-Page Blur Transition ───────────────────────────────
+        // 1. Full-screen backdrop overlay blurs the entire visible viewport
+        if (blurOverlayRef.current) {
+          tl.to(
+            blurOverlayRef.current,
+            {
+              opacity: 1,
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              duration: BLUR_DURATION,
+              ease: 'power2.inOut',
+            },
+            BLUR_START_TIME
+          );
+        }
+
+        // 2. The background cards underneath blur and dim for depth
+        if (cardsAnchorRef.current) {
+          tl.to(
+            cardsAnchorRef.current,
+            {
+              filter: 'blur(14px)',
+              opacity: 0.28,
+              scale: 0.96,
+              duration: BLUR_DURATION,
+              ease: 'power2.inOut',
+            },
+            BLUR_START_TIME
+          );
+        }
+
+        // 3. Scroll indicator fades out cleanly
+        if (scrollIndicatorRef.current) {
+          tl.to(
+            scrollIndicatorRef.current,
+            {
+              opacity: 0,
+              duration: 0.8,
+              ease: 'power1.out',
+            },
+            BLUR_START_TIME
+          );
+        }
+
+        // ── Phase 5: Contact Contents Fade-Up Animation ──────────────────────
+        if (contactElements.length > 0) {
+          tl.to(
+            contactElements,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.5,
+              stagger: 0.18,
+              ease: 'power2.out',
+            },
+            CONTACT_START_TIME
+          );
+        }
+
+        // ── Phase 6: Pinned Contact Section Showcase Hold ─────────────────────
+        tl.to({}, { duration: 2.3 }, TOTAL_TIMELINE_DURATION - 2.3);
       }
     }, container);
 
@@ -200,7 +308,7 @@ export default function ProjectsSection() {
         </div>
       </div>
 
-      {/* ── 2. Desktop Interactive Poker Stage Canvas (Pins full-screen with ONLY the cards) ── */}
+      {/* ── 2. Desktop Interactive Poker Stage Canvas (Pins full-screen with cards & overlay) ── */}
       <section
         ref={stageRef}
         className="hidden md:flex relative h-screen w-full overflow-hidden items-center justify-center select-none"
@@ -210,7 +318,10 @@ export default function ProjectsSection() {
         aria-label="Projects Card Deck Stage"
       >
         {/* Card Anchor Center — items-center places this at the true middle of the full-screen viewport */}
-        <div className="relative w-0 h-0 scale-[0.85] lg:scale-100 xl:scale-105 transition-transform duration-300">
+        <div
+          ref={cardsAnchorRef}
+          className="relative w-0 h-0 scale-[0.85] lg:scale-100 xl:scale-105 transition-transform duration-300 will-change-[filter,opacity]"
+        >
           {PROJECTS_DATA.map((project, index) => {
             return (
               <div
@@ -237,7 +348,8 @@ export default function ProjectsSection() {
 
         {/* Far Right Scroll Indicator */}
         <div
-          className="absolute right-6 lg:right-10 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5 pointer-events-none z-20"
+          ref={scrollIndicatorRef}
+          className="absolute right-6 lg:right-10 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5 pointer-events-none z-20 transition-opacity duration-300"
           aria-label="Scroll indicator"
         >
           <div
@@ -256,9 +368,27 @@ export default function ProjectsSection() {
             Scroll
           </span>
         </div>
+
+        {/* ── 3. Full-Page Frosted Glass Blur Overlay ───────────────────────── */}
+        <div
+          ref={blurOverlayRef}
+          className="absolute inset-0 w-full h-full z-25 pointer-events-none"
+          style={{
+            background: 'color-mix(in srgb, var(--surface-0) 82%, transparent)',
+          }}
+          aria-hidden="true"
+        />
+
+        {/* ── 4. Contact Section Overlapping Canvas ─────────────────────────── */}
+        <div
+          ref={contactOverlayRef}
+          className="absolute inset-0 w-full h-full z-30 pointer-events-none"
+        >
+          <ContactSection isOverlay ref={contactSectionRef} />
+        </div>
       </section>
 
-      {/* ── 3. Mobile Static Grid Layout (Responsive fall-back) ───────────── */}
+      {/* ── 5. Mobile Static Grid Layout (Responsive fall-back) ───────────── */}
       <div
         className="md:hidden px-6 py-12 flex flex-col items-center gap-6"
         style={{ background: 'var(--background)' }}
@@ -271,6 +401,11 @@ export default function ProjectsSection() {
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
+      </div>
+
+      {/* ── 6. Mobile Contact Section ─────────────────────────────────────── */}
+      <div className="md:hidden">
+        <ContactSection />
       </div>
 
       {/* Hardware-Accelerated Floating Levitation CSS */}

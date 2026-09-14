@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { ArrowUpRight, Copy, Check, Mail, MapPin, Globe } from 'lucide-react';
 import Button from '@/components/Button';
 
@@ -82,56 +82,51 @@ const SOCIAL_LINKS = [
   },
 ];
 
-export default function ContactSection() {
-  const [copied, setCopied] = useState(false);
-  const emailAddress = 'jdarel21@gmail.com';
+export interface ContactSectionProps {
+  isOverlay?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+  id?: string;
+}
 
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(emailAddress);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
+  ({ isOverlay = false, className = '', style, id = 'contact' }, ref) => {
+    const [copied, setCopied] = useState(false);
+    const emailAddress = 'jdarel21@gmail.com';
 
-  return (
-    <section
-      id="contact"
-      className="relative min-h-screen flex flex-col justify-between overflow-hidden border-t px-6 sm:px-12 md:px-16 py-12 sm:py-16 select-none"
-      style={{ background: 'var(--surface-0)', borderColor: 'var(--border)' }}
-      aria-label="Contact section"
-    >
+    const handleCopyEmail = async () => {
+      try {
+        await navigator.clipboard.writeText(emailAddress);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        // Fallback
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    };
+
+    return (
+      <section
+        ref={ref}
+        id={id}
+        className={`relative flex flex-col justify-between overflow-hidden select-none ${
+          isOverlay
+            ? 'w-full h-full px-6 sm:px-12 md:px-16 py-8 md:py-12'
+            : 'min-h-screen border-t px-6 sm:px-12 md:px-16 py-12 sm:py-16'
+        } ${className}`}
+        style={{
+          background: isOverlay ? 'transparent' : 'var(--surface-0)',
+          borderColor: isOverlay ? 'transparent' : 'var(--border)',
+          ...style,
+        }}
+        aria-label="Contact section"
+      >
       {/* ── Main Content Container ───────────────────────────────────────────── */}
       <div className="relative z-10 max-w-6xl w-full mx-auto flex flex-col my-auto">
-        {/* Subtle Top Metadata Header */}
-        <div className="flex items-center justify-between mb-6 sm:mb-8">
-          <div className="flex items-center gap-2.5">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: 'var(--accent)' }} />
-              <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: 'var(--accent)' }} />
-            </span>
-            <span
-              className="text-xs font-mono uppercase tracking-[0.3em]"
-              style={{ color: 'var(--muted)' }}
-            >
-              Get In Touch
-            </span>
-          </div>
-
-          <span
-            className="text-xs font-mono uppercase tracking-[0.25em]"
-            style={{ color: 'var(--muted)' }}
-          >
-            {'// 05'}
-          </span>
-        </div>
 
         {/* ── Left-Aligned Display Headline (Inspired by Reference) ─────────── */}
-        <div className="flex flex-col items-start mb-6 sm:mb-8">
+        <div data-contact-animate className="flex flex-col items-start mb-6 sm:mb-8">
           <h2
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.92] tracking-tighter cursor-default text-left"
             style={{ color: 'var(--accent)' }}
@@ -142,7 +137,7 @@ export default function ContactSection() {
         </div>
 
         {/* ── Social Icons Row (Directly below headline) ─────────────────────── */}
-        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-10 sm:mb-12">
+        <div data-contact-animate className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-10 sm:mb-12">
           {SOCIAL_LINKS.map((social) => {
             const Icon = social.icon;
             return (
@@ -185,6 +180,7 @@ export default function ContactSection() {
 
         {/* ── 3 Reference Columns: LOCATION / CONTACT / SOCIAL ───────────────── */}
         <div
+          data-contact-animate
           className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pt-10 border-t"
           style={{ borderColor: 'var(--border)' }}
         >
@@ -269,7 +265,11 @@ export default function ContactSection() {
       </div>
 
       {/* ── Bottom Bar ──────────────────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-6xl w-full mx-auto mt-12 sm:mt-16 pt-6 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" style={{ borderColor: 'var(--border)' }}>
+      <div
+        data-contact-animate
+        className="relative z-10 max-w-6xl w-full mx-auto mt-12 sm:mt-16 pt-6 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+        style={{ borderColor: 'var(--border)' }}
+      >
         <div>
           <p className="text-sm font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--accent)' }}>
             <span>Jason Darel</span>
@@ -287,6 +287,7 @@ export default function ContactSection() {
 
       {/* ── Subtle Background Typography Watermark (Reference: "roku") ─────── */}
       <div
+        data-contact-animate
         className="absolute -bottom-6 right-2 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
         aria-hidden="true"
       >
@@ -302,4 +303,7 @@ export default function ContactSection() {
       </div>
     </section>
   );
-}
+});
+
+ContactSection.displayName = 'ContactSection';
+export default ContactSection;
