@@ -120,23 +120,21 @@ export const PROJECTS_DATA: ProjectItem[] = [
     },
   },
 
-  // ── 6. StudyGo
+  // ── 6. Fiomodoro
   {
-    id: 'studygo',
-    title: 'StudyGo',
+    id: 'fiomodoro',
+    title: 'Fiomodoro',
     description: 'Pomodoro-based Learning App built to enhance productivity, focus intervals, and study pacing.',
     category: 'PRODUCTIVITY',
     cardIndex: '06',
     imageType: 'pomodoro',
-    imgSrc: '/images/studygo.png',
+    imgSrc: '/images/fiomodoro.png',
     tags: ['Front-End Developer', 'HTML5', 'CSS3', 'JavaScript'],
     techLogos: [
-      { name: 'JavaScript', logoKey: 'javascript' },
-      { name: 'HTML5', logoKey: 'html' },
-      { name: 'CSS3', logoKey: 'css3' },
+      { name: 'React', logoKey: 'react' },
     ],
     links: {
-      live: 'https://jasondarel.github.io/StudyGo/',
+      live: 'https://fiomodoro.vercel.app/',
     },
   },
 

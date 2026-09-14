@@ -383,38 +383,9 @@ function ProjectCard({
 
             {/* Bottom Links */}
             <div
-              className="relative z-20 pointer-events-auto flex items-center justify-between pt-1 border-t text-[9.5px] font-mono"
+              className="relative z-20 pointer-events-auto flex items-center justify-end pt-1 border-t text-[9.5px] font-mono"
               style={{ borderColor: 'var(--border)' }}
             >
-              <div className="flex items-center gap-1.5">
-                {project.links?.github && (
-                  <Button
-                    size="xs"
-                    variant="ghost"
-                    href={project.links.github}
-                    leftIcon={TechLogos.github && <TechLogos.github size={10} />}
-                    onClick={(e) => e.stopPropagation()}
-                    aria-label="View Code"
-                    className="font-mono text-[9.5px]"
-                  >
-                    Code
-                  </Button>
-                )}
-                {project.links?.figma && (
-                  <Button
-                    size="xs"
-                    variant="ghost"
-                    href={project.links.figma}
-                    leftIcon={TechLogos.figma && <TechLogos.figma size={10} />}
-                    onClick={(e) => e.stopPropagation()}
-                    aria-label="View Figma"
-                    className="font-mono text-[9.5px]"
-                  >
-                    Figma
-                  </Button>
-                )}
-              </div>
-
               {project.links?.live ? (
                 <Button
                   size="xs"

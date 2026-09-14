@@ -19,7 +19,7 @@ const GRID_COORDINATES = [
   { x: 330, y: -146, rotation: 0 }, // Card 3: Row 1, Col 3 (CodeWave)
   // Row 2 (y = 146)
   { x: -330, y: 146, rotation: 0 }, // Card 4: Row 2, Col 0 (GymMe)
-  { x: -110, y: 146, rotation: 0 }, // Card 5: Row 2, Col 1 (StudyGo)
+  { x: -110, y: 146, rotation: 0 }, // Card 5: Row 2, Col 1 (Fiomodoro)
   { x: 110, y: 146, rotation: 0 }, // Card 6: Row 2, Col 2 (Calm)
   { x: 330, y: 146, rotation: 0 }, // Card 7: Row 2, Col 3 (StaySeeker)
 ];
@@ -346,12 +346,12 @@ export default function ProjectsSection() {
           aria-label="Scroll indicator"
         >
           <div
-            className="w-6 h-10 rounded-full border-2 flex justify-center pt-2"
-            style={{ borderColor: 'var(--accent)' }}
+            className="w-6 h-10 rounded-full border-2 flex justify-center pt-2 opacity-60"
+            style={{ borderColor: 'var(--muted)' }}
           >
             <span
               className="w-1.5 h-2.5 rounded-full animate-scroll-wheel"
-              style={{ background: 'var(--accent)' }}
+              style={{ background: 'var(--muted)' }}
             />
           </div>
           <span
