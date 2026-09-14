@@ -89,12 +89,12 @@ export default function Home() {
           aria-label="Scroll down indicator"
         >
           <div
-            className="w-6 h-10 rounded-full border-2 flex justify-center pt-2"
-            style={{ borderColor: 'var(--accent)' }}
+            className="w-6 h-10 rounded-full border-2 flex justify-center pt-2 opacity-60"
+            style={{ borderColor: 'var(--muted)' }}
           >
             <span
               className="w-1.5 h-2.5 rounded-full animate-scroll-wheel"
-              style={{ background: 'var(--accent)' }}
+              style={{ background: 'var(--muted)' }}
             />
           </div>
         </div>
