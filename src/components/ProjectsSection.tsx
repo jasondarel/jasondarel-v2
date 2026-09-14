@@ -383,15 +383,15 @@ export default function ProjectsSection() {
 
       {/* ── 5. Mobile Static Grid Layout (Responsive fall-back) ───────────── */}
       <div
-        className="md:hidden px-6 pt-6 pb-12 flex flex-col items-center gap-6"
+        className="md:hidden px-6 pt-6 pb-12 flex flex-col items-center gap-6 w-full"
         style={{ background: 'var(--background)' }}
       >
         <p className="text-sm font-mono text-center mb-2" style={{ color: 'var(--muted)' }}>
           Tap any card to flip and inspect details
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg mx-auto justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-md sm:max-w-xl mx-auto">
           {PROJECTS_DATA.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard key={project.id} project={project} className="w-full" />
           ))}
         </div>
       </div>

@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useState, forwardRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUp, ArrowUpRight, Copy, Check, Mail, MapPin, Globe } from 'lucide-react';
 import Button from '@/components/Button';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Custom SVG Social Icons adhering to currentColor and design tokens
@@ -93,6 +97,53 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
   ({ isOverlay = false, className = '', style, id = 'contact' }, ref) => {
     const [copied, setCopied] = useState(false);
     const emailAddress = 'jdarel21@gmail.com';
+    const localRef = useRef<HTMLElement | null>(null);
+
+    const setRefs = (node: HTMLElement | null) => {
+      localRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node as unknown as HTMLDivElement);
+      } else if (ref && typeof ref === 'object') {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node as unknown as HTMLDivElement;
+      }
+    };
+
+    useEffect(() => {
+      // In desktop overlay mode, ProjectsSection handles animation via pinned timeline
+      if (isOverlay) return;
+
+      const section = localRef.current;
+      if (!section) return;
+
+      const mm = gsap.matchMedia();
+
+      mm.add('(max-width: 767.98px)', () => {
+        const contactElements = section.querySelectorAll('[data-contact-animate]');
+        if (contactElements.length === 0) return;
+
+        gsap.fromTo(
+          contactElements,
+          {
+            opacity: 0,
+            y: 35,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            stagger: 0.15,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      });
+
+      return () => mm.revert();
+    }, [isOverlay]);
 
     const handleCopyEmail = async () => {
       try {
@@ -113,12 +164,13 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
 
     return (
       <section
-        ref={ref}
+        ref={setRefs}
         id={id}
-        className={`relative flex flex-col justify-between overflow-hidden select-none ${isOverlay
+        className={`relative flex flex-col justify-between overflow-hidden select-none ${
+          isOverlay
             ? 'w-full h-full px-6 sm:px-12 md:px-16 py-8 md:py-12'
-            : 'min-h-screen border-t px-6 sm:px-12 md:px-16 py-12 sm:py-16'
-          } ${className}`}
+            : 'w-full min-h-screen min-h-[100dvh] border-t px-6 sm:px-12 md:px-16 py-8 sm:py-12 md:py-16'
+        } ${className}`}
         style={{
           background: isOverlay ? 'transparent' : 'var(--surface-0)',
           borderColor: isOverlay ? 'transparent' : 'var(--border)',
@@ -127,10 +179,10 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         aria-label="Contact section"
       >
         {/* ── Main Content Container ───────────────────────────────────────────── */}
-        <div className="relative z-10 max-w-6xl w-full mx-auto flex flex-col my-auto">
+        <div className="relative z-10 max-w-6xl w-full mx-auto flex flex-col md:my-auto">
 
           {/* ── Left-Aligned Display Headline (Inspired by Reference) ─────────── */}
-          <div data-contact-animate className="flex flex-col items-start mb-6 sm:mb-8">
+          <div data-contact-animate className="flex flex-col items-start mb-4 sm:mb-6 md:mb-8">
             <h2
               className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.92] tracking-tighter cursor-default text-left"
               style={{ color: 'var(--accent)' }}
@@ -141,7 +193,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
           </div>
 
           {/* ── Social Icons Row (Directly below headline) ─────────────────────── */}
-          <div data-contact-animate className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-10 sm:mb-12">
+          <div data-contact-animate className="flex flex-wrap items-center gap-2 sm:gap-2.5 md:gap-3 mb-6 sm:mb-8 md:mb-12">
             {SOCIAL_LINKS.map((social) => {
               const Icon = social.icon;
               return (
@@ -185,13 +237,13 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
           {/* ── 3 Reference Columns: LOCATION / CONTACT / SOCIAL ───────────────── */}
           <div
             data-contact-animate
-            className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pt-10 border-t"
+            className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 md:gap-8 pt-6 sm:pt-8 md:pt-10 border-t"
             style={{ borderColor: 'var(--border)' }}
           >
             {/* Column 1: LOCATION */}
             <div className="md:col-span-4 flex flex-col items-start">
               <span
-                className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-2 md:mb-3 flex items-center gap-1.5"
                 style={{ color: 'var(--muted)' }}
               >
                 <MapPin className="w-3.5 h-3.5" />
@@ -211,7 +263,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
             {/* Column 2: CONTACT */}
             <div className="md:col-span-4 flex flex-col items-start">
               <span
-                className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-2 md:mb-3 flex items-center gap-1.5"
                 style={{ color: 'var(--muted)' }}
               >
                 <Mail className="w-3.5 h-3.5" />
@@ -236,13 +288,13 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
             {/* Column 3: SOCIAL */}
             <div className="md:col-span-4 flex flex-col items-start">
               <span
-                className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-2 md:mb-3 flex items-center gap-1.5"
                 style={{ color: 'var(--muted)' }}
               >
                 <Globe className="w-3.5 h-3.5" />
                 Social
               </span>
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-1.5 md:space-y-2">
                 {SOCIAL_LINKS.map((social) => {
                   const Icon = social.icon;
                   return (
@@ -271,7 +323,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         {/* ── Bottom Bar ──────────────────────────────────────────────────────── */}
         <div
           data-contact-animate
-          className="relative z-10 max-w-6xl w-full mx-auto mt-10 sm:mt-14 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="hidden md:flex relative z-10 max-w-6xl w-full mx-auto mt-10 sm:mt-14 pt-6 border-t flex-col sm:flex-row items-center justify-between gap-4"
           style={{ borderColor: 'var(--border)' }}
         >
           <div className="flex-1 w-full sm:w-auto text-center sm:text-left">
@@ -307,7 +359,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         {/* ── Subtle Background Typography Watermark (Reference: "roku") ─────── */}
         <div
           data-contact-animate
-          className="absolute -bottom-6 right-2 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
+          className="absolute -bottom-2 md:-bottom-6 right-2 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
           aria-hidden="true"
         >
           <span
@@ -317,7 +369,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
               opacity: 0.35,
             }}
           >
-            jason
+            Jason
           </span>
         </div>
       </section>
