@@ -88,7 +88,9 @@ export default function ProjectsSection() {
       if (!container) return;
       const firstChild = container.firstElementChild as HTMLElement | null;
       if (!firstChild) return;
-      const step = firstChild.offsetWidth + 16;
+      const secondChild = firstChild.nextElementSibling as HTMLElement | null;
+      const step = secondChild ? secondChild.offsetLeft - firstChild.offsetLeft : firstChild.offsetWidth + 16;
+      if (step <= 0) return;
       const index = Math.round(container.scrollLeft / step);
       const clamped = Math.max(0, Math.min(index, PROJECTS_DATA.length - 1));
       setMobileActiveIndex((prev) => (prev !== clamped ? clamped : prev));
@@ -101,7 +103,8 @@ export default function ProjectsSection() {
     const clamped = Math.max(0, Math.min(index, PROJECTS_DATA.length - 1));
     const firstChild = container.firstElementChild as HTMLElement | null;
     if (!firstChild) return;
-    const step = firstChild.offsetWidth + 16;
+    const secondChild = firstChild.nextElementSibling as HTMLElement | null;
+    const step = secondChild ? secondChild.offsetLeft - firstChild.offsetLeft : firstChild.offsetWidth + 16;
     container.scrollTo({
       left: clamped * step,
       behavior: 'smooth',
@@ -117,201 +120,202 @@ export default function ProjectsSection() {
     const stage = stageRef.current;
     if (!container || !stage) return;
 
-    const ctx = gsap.context(() => {
-      const isDesktop = window.innerWidth >= 768;
+    const mm = gsap.matchMedia(container);
 
-      if (isDesktop) {
-        // ── 1. Initial State: Deck Stack in center of full-screen stage ─────
-        cardRefs.current.forEach((el, index) => {
-          if (!el) return;
-          gsap.set(el, {
-            xPercent: -50,
-            yPercent: -50,
-            x: index * 0.8,
-            y: index * -0.6,
-            rotation: (index - 3.5) * 0.4,
-            scale: 1,
-            opacity: index === 0 ? 1 : 0.85,
-            zIndex: 10 + index,
-            force3D: true,
-          });
+    // ── Desktop Viewports (>= 1024px): Pinned Poker Deal Stage ───────────
+    mm.add('(min-width: 1024px)', () => {
+      // ── 1. Initial State: Deck Stack in center of full-screen stage ─────
+      cardRefs.current.forEach((el, index) => {
+        if (!el) return;
+        gsap.set(el, {
+          xPercent: -50,
+          yPercent: -50,
+          x: index * 0.8,
+          y: index * -0.6,
+          rotation: (index - 3.5) * 0.4,
+          scale: 1,
+          opacity: index === 0 ? 1 : 0.85,
+          zIndex: 10 + index,
+          force3D: true,
         });
+      });
 
-        // Initial state for full-page blur overlay
-        if (blurOverlayRef.current) {
-          gsap.set(blurOverlayRef.current, {
-            opacity: 0,
-            backdropFilter: 'blur(0px)',
-            WebkitBackdropFilter: 'blur(0px)',
-          });
-        }
-
-        // Initial state for contact animatable elements
-        const contactElements = contactSectionRef.current
-          ? contactSectionRef.current.querySelectorAll('[data-contact-animate]')
-          : [];
-        if (contactElements.length > 0) {
-          gsap.set(contactElements, {
-            opacity: 0,
-            y: 35,
-          });
-        }
-
-        // ── 2. Pinned Scroll Timeline ───────────────────────────────────────
-        const updateInteractiveState = (currentTime: number) => {
-          // 1. Enable hover flip while stationary in grid, until AFTER blur starts
-          const dealt = currentTime >= DEAL_END_TIME && currentTime < CARDS_UNINTERACTABLE_TIME;
-          setIsDealt((prev) => (prev !== dealt ? dealt : prev));
-
-          // 2. Enable contact section pointer-events once contact has faded in
-          const contactActive = currentTime >= CONTACT_ACTIVE_TIME;
-          if (contactOverlayRef.current) {
-            contactOverlayRef.current.style.pointerEvents = contactActive ? 'auto' : 'none';
-          }
-        };
-
-        // Scrub: 0.15 provides instant sync with Lenis smooth scroll without double-lag
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: stage,
-            start: 'top top',
-            end: `+=${TOTAL_PINNED_SCROLL}`,
-            pin: true,
-            anticipatePin: 1,
-            scrub: 0.15,
-            fastScrollEnd: true,
-            preventOverlaps: true,
-            onUpdate: () => updateInteractiveState(tl.time()),
-          },
-          onUpdate: () => updateInteractiveState(tl.time()),
+      // Initial state for full-page blur overlay
+      if (blurOverlayRef.current) {
+        gsap.set(blurOverlayRef.current, {
+          opacity: 0,
+          backdropFilter: 'blur(0px)',
+          WebkitBackdropFilter: 'blur(0px)',
         });
-
-        updateInteractiveState(tl.time());
-
-        // ── Phase 1: Cards Emerge & Fan Out into Hand ────────────────────────
-        cardRefs.current.forEach((el, index) => {
-          if (!el) return;
-          const fan = FAN_COORDINATES[index];
-
-          tl.to(
-            el,
-            {
-              x: fan.x,
-              y: fan.y,
-              rotation: fan.rotation,
-              opacity: 1,
-              scale: 1,
-              ease: 'power1.out',
-              duration: 1.2,
-              force3D: true,
-            },
-            0 // All fan at once
-          );
-        });
-
-        // Small hold/settle in fan pose before spreading
-        tl.to({}, { duration: 0.4 }, 1.2);
-
-        // ── Phase 2: Spread from Fan into 4-Column Grid ──────────────────────
-        cardRefs.current.forEach((el, index) => {
-          if (!el) return;
-          const grid = GRID_COORDINATES[index];
-
-          tl.to(
-            el,
-            {
-              x: grid.x,
-              y: grid.y,
-              rotation: 0,
-              ease: 'power2.inOut',
-              duration: 1.6,
-              force3D: true,
-            },
-            1.6 + index * 0.07 // slight stagger for organic dealing feel
-          );
-        });
-
-        // ── Phase 3: Pinned Stationary Showcase Hold ─────────────────────────
-        tl.to({}, { duration: 2.1 }, DEAL_END_TIME);
-
-        // ── Phase 4: Full-Page Blur Transition ───────────────────────────────
-        // 1. Full-screen backdrop overlay blurs the entire visible viewport
-        if (blurOverlayRef.current) {
-          tl.to(
-            blurOverlayRef.current,
-            {
-              opacity: 1,
-              backdropFilter: 'blur(24px)',
-              WebkitBackdropFilter: 'blur(24px)',
-              duration: BLUR_DURATION,
-              ease: 'power2.inOut',
-            },
-            BLUR_START_TIME
-          );
-        }
-
-        // 2. The background cards underneath blur and dim for depth
-        if (cardsAnchorRef.current) {
-          tl.to(
-            cardsAnchorRef.current,
-            {
-              filter: 'blur(14px)',
-              opacity: 0.28,
-              scale: 0.96,
-              duration: BLUR_DURATION,
-              ease: 'power2.inOut',
-            },
-            BLUR_START_TIME
-          );
-        }
-
-        // 3. Scroll indicator fades out cleanly
-        if (scrollIndicatorRef.current) {
-          tl.to(
-            scrollIndicatorRef.current,
-            {
-              opacity: 0,
-              duration: 0.8,
-              ease: 'power1.out',
-            },
-            BLUR_START_TIME
-          );
-        }
-
-        // ── Phase 5: Contact Contents Fade-Up Animation ──────────────────────
-        if (contactElements.length > 0) {
-          tl.to(
-            contactElements,
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1.5,
-              stagger: 0.18,
-              ease: 'power2.out',
-            },
-            CONTACT_START_TIME
-          );
-        }
-
-        // ── Phase 6: Pinned Contact Section Showcase Hold ─────────────────────
-        tl.to({}, { duration: 2.3 }, TOTAL_TIMELINE_DURATION - 2.3);
-      } else {
-        // ── Mobile Scroll Delay Hold (Holds projects section before moving to contact) ──
-        const mobileStage = mobileStageRef.current;
-        if (mobileStage) {
-          ScrollTrigger.create({
-            trigger: mobileStage,
-            start: 'top top',
-            end: '+=700',
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-          });
-        }
       }
-    }, container);
 
-    return () => ctx.revert();
+      // Initial state for contact animatable elements
+      const contactElements = contactSectionRef.current
+        ? contactSectionRef.current.querySelectorAll('[data-contact-animate]')
+        : [];
+      if (contactElements.length > 0) {
+        gsap.set(contactElements, {
+          opacity: 0,
+          y: 35,
+        });
+      }
+
+      // ── 2. Pinned Scroll Timeline ───────────────────────────────────────
+      const updateInteractiveState = (currentTime: number) => {
+        // 1. Enable hover flip while stationary in grid, until AFTER blur starts
+        const dealt = currentTime >= DEAL_END_TIME && currentTime < CARDS_UNINTERACTABLE_TIME;
+        setIsDealt((prev) => (prev !== dealt ? dealt : prev));
+
+        // 2. Enable contact section pointer-events once contact has faded in
+        const contactActive = currentTime >= CONTACT_ACTIVE_TIME;
+        if (contactOverlayRef.current) {
+          contactOverlayRef.current.style.pointerEvents = contactActive ? 'auto' : 'none';
+        }
+      };
+
+      // Scrub: 0.15 provides instant sync with Lenis smooth scroll without double-lag
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stage,
+          start: 'top top',
+          end: `+=${TOTAL_PINNED_SCROLL}`,
+          pin: true,
+          anticipatePin: 1,
+          scrub: 0.15,
+          fastScrollEnd: true,
+          preventOverlaps: true,
+          onUpdate: () => updateInteractiveState(tl.time()),
+        },
+        onUpdate: () => updateInteractiveState(tl.time()),
+      });
+
+      updateInteractiveState(tl.time());
+
+      // ── Phase 1: Cards Emerge & Fan Out into Hand ────────────────────────
+      cardRefs.current.forEach((el, index) => {
+        if (!el) return;
+        const fan = FAN_COORDINATES[index];
+
+        tl.to(
+          el,
+          {
+            x: fan.x,
+            y: fan.y,
+            rotation: fan.rotation,
+            opacity: 1,
+            scale: 1,
+            ease: 'power1.out',
+            duration: 1.2,
+            force3D: true,
+          },
+          0 // All fan at once
+        );
+      });
+
+      // Small hold/settle in fan pose before spreading
+      tl.to({}, { duration: 0.4 }, 1.2);
+
+      // ── Phase 2: Spread from Fan into 4-Column Grid ──────────────────────
+      cardRefs.current.forEach((el, index) => {
+        if (!el) return;
+        const grid = GRID_COORDINATES[index];
+
+        tl.to(
+          el,
+          {
+            x: grid.x,
+            y: grid.y,
+            rotation: 0,
+            ease: 'power2.inOut',
+            duration: 1.6,
+            force3D: true,
+          },
+          1.6 + index * 0.07 // slight stagger for organic dealing feel
+        );
+      });
+
+      // ── Phase 3: Pinned Stationary Showcase Hold ─────────────────────────
+      tl.to({}, { duration: 2.1 }, DEAL_END_TIME);
+
+      // ── Phase 4: Full-Page Blur Transition ───────────────────────────────
+      // 1. Full-screen backdrop overlay blurs the entire visible viewport
+      if (blurOverlayRef.current) {
+        tl.to(
+          blurOverlayRef.current,
+          {
+            opacity: 1,
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            duration: BLUR_DURATION,
+            ease: 'power2.inOut',
+          },
+          BLUR_START_TIME
+        );
+      }
+
+      // 2. The background cards underneath blur and dim for depth
+      if (cardsAnchorRef.current) {
+        tl.to(
+          cardsAnchorRef.current,
+          {
+            filter: 'blur(14px)',
+            opacity: 0.28,
+            scale: 0.96,
+            duration: BLUR_DURATION,
+            ease: 'power2.inOut',
+          },
+          BLUR_START_TIME
+        );
+      }
+
+      // 3. Scroll indicator fades out cleanly
+      if (scrollIndicatorRef.current) {
+        tl.to(
+          scrollIndicatorRef.current,
+          {
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power1.out',
+          },
+          BLUR_START_TIME
+        );
+      }
+
+      // ── Phase 5: Contact Contents Fade-Up Animation ──────────────────────
+      if (contactElements.length > 0) {
+        tl.to(
+          contactElements,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.5,
+            stagger: 0.18,
+            ease: 'power2.out',
+          },
+          CONTACT_START_TIME
+        );
+      }
+
+      // ── Phase 6: Pinned Contact Section Showcase Hold ─────────────────────
+      tl.to({}, { duration: 2.3 }, TOTAL_TIMELINE_DURATION - 2.3);
+    });
+
+    // ── Tablet & Mobile Viewports (< 1024px): Swipeable Carousel & Scroll Delay ──
+    mm.add('(max-width: 1023.98px)', () => {
+      const mobileStage = mobileStageRef.current;
+      if (mobileStage) {
+        ScrollTrigger.create({
+          trigger: mobileStage,
+          start: 'top top',
+          end: '+=700',
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+        });
+      }
+    });
+
+    return () => mm.revert();
   }, []);
 
   return (
@@ -322,7 +326,7 @@ export default function ProjectsSection() {
     >
       {/* ── 1. Section Header (Normal Scroll Flow - Desktop viewports only) ── */}
       <div
-        className="hidden md:flex relative border-t px-6 sm:px-10 md:px-14 py-8 sm:py-12 md:py-24 md:min-h-[45vh] flex-col justify-center select-none"
+        className="hidden lg:flex relative border-t px-6 sm:px-10 md:px-14 py-8 sm:py-12 md:py-24 md:min-h-[45vh] flex-col justify-center select-none"
         style={{
           background: 'var(--background)',
           borderColor: 'var(--border)',
@@ -347,10 +351,10 @@ export default function ProjectsSection() {
               className="text-sm sm:text-base font-medium leading-relaxed max-w-lg"
               style={{ color: 'var(--muted)' }}
             >
-              <span className="hidden md:inline">
+              <span className="hidden lg:inline">
                 Scroll to deal and fan the deck. Hover any card to inspect the details.
               </span>
-              <span className="md:hidden">
+              <span className="lg:hidden">
                 Swipe to browse the deck. Tap any card to inspect the details.
               </span>
             </p>
@@ -361,7 +365,7 @@ export default function ProjectsSection() {
       {/* ── 2. Desktop Interactive Poker Stage Canvas (Pins full-screen with cards & overlay) ── */}
       <section
         ref={stageRef}
-        className="hidden md:flex relative h-screen w-full overflow-hidden items-center justify-center select-none"
+        className="hidden lg:flex relative h-screen w-full overflow-hidden items-center justify-center select-none"
         style={{
           background: 'var(--background)',
         }}
@@ -370,7 +374,7 @@ export default function ProjectsSection() {
         {/* Card Anchor Center — items-center places this at the true middle of the full-screen viewport */}
         <div
           ref={cardsAnchorRef}
-          className="relative w-0 h-0 scale-[0.85] lg:scale-100 xl:scale-105 transition-transform duration-300 will-change-[filter,opacity]"
+          className="relative z-10 w-0 h-0 scale-[0.85] lg:scale-100 xl:scale-105 transition-transform duration-300 will-change-[filter,opacity]"
         >
           {PROJECTS_DATA.map((project, index) => {
             return (
@@ -424,6 +428,7 @@ export default function ProjectsSection() {
           ref={blurOverlayRef}
           className="absolute inset-0 w-full h-full z-25 pointer-events-none"
           style={{
+            opacity: 0,
             background: 'color-mix(in srgb, var(--surface-0) 82%, transparent)',
           }}
           aria-hidden="true"
@@ -438,33 +443,33 @@ export default function ProjectsSection() {
         </div>
       </section>
 
-      {/* ── 5. Mobile Full-Screen Showcase Stage with Scroll Delay ────────── */}
+      {/* ── 5. Mobile & Tablet Full-Screen Showcase Stage with Scroll Delay ── */}
       <section
         ref={mobileStageRef}
-        className="md:hidden relative w-full h-screen h-[100dvh] overflow-hidden flex flex-col justify-between select-none py-6 px-4 sm:px-6"
+        className="lg:hidden relative w-full h-screen h-[100dvh] overflow-hidden flex flex-col justify-between select-none py-6 px-4 sm:px-6 md:px-10"
         style={{ background: 'var(--background)' }}
-        aria-label="Mobile Projects Showcase"
+        aria-label="Mobile & Tablet Projects Showcase"
       >
         {/* ── Top Bar: Title, Subtitle, Counter ────────────────────────────── */}
         <div
-          className="flex items-center justify-between w-full max-w-lg mx-auto pb-3 border-b flex-shrink-0"
+          className="flex items-center justify-between w-full max-w-lg md:max-w-4xl mx-auto pb-3 border-b flex-shrink-0"
           style={{ borderColor: 'var(--border)' }}
         >
           <div>
             <h2
-              className="text-2xl sm:text-3xl font-black tracking-tighter leading-none"
+              className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter leading-none"
               style={{ color: 'var(--accent)' }}
             >
               Projects<span className="opacity-40">.</span>
             </h2>
-            <p className="text-[11px] font-mono mt-1" style={{ color: 'var(--muted)' }}>
+            <p className="text-[11px] md:text-xs font-mono mt-1" style={{ color: 'var(--muted)' }}>
               Swipe to browse • Tap to flip
             </p>
           </div>
 
           {/* Numerical Counter Pill */}
           <div
-            className="flex items-center gap-1.5 font-mono text-xs sm:text-sm px-2.5 py-1 rounded-md border"
+            className="flex items-center gap-1.5 font-mono text-xs sm:text-sm md:text-base px-2.5 py-1 rounded-md border"
             style={{
               borderColor: 'var(--border)',
               background: 'var(--surface-1)',
@@ -484,7 +489,7 @@ export default function ProjectsSection() {
         <div
           ref={mobileCarouselRef}
           onScroll={handleMobileScroll}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-2 py-4 my-auto touch-pan-x"
+          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory px-2 md:px-6 py-4 my-auto touch-pan-x"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -500,12 +505,12 @@ export default function ProjectsSection() {
             </div>
           ))}
           {/* End spacer for right-edge breathing room */}
-          <div className="w-4 flex-shrink-0" aria-hidden="true" />
+          <div className="w-4 md:w-8 flex-shrink-0" aria-hidden="true" />
         </div>
 
         {/* ── Bottom Controls: Dash Indicators & Arrow Buttons ────────────── */}
         <div
-          className="flex items-center justify-between w-full max-w-lg mx-auto pt-3 border-t flex-shrink-0"
+          className="flex items-center justify-between w-full max-w-lg md:max-w-4xl mx-auto pt-3 border-t flex-shrink-0"
           style={{ borderColor: 'var(--border)' }}
         >
           {/* Dash Progress Indicators */}
@@ -532,35 +537,35 @@ export default function ProjectsSection() {
               onClick={() => handleMobileNav(-1)}
               disabled={mobileActiveIndex === 0}
               aria-label="Previous project card"
-              className="w-7 h-7 rounded-full border flex items-center justify-center transition-all active:scale-95 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
+              className="w-7 h-7 md:w-8 md:h-8 rounded-full border flex items-center justify-center transition-all active:scale-95 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
               style={{
                 borderColor: 'var(--border)',
                 background: 'var(--surface-1)',
                 color: 'var(--accent)',
               }}
             >
-              <ChevronLeft className="w-3.5 h-3.5" />
+              <ChevronLeft className="w-3.5 h-3.5 md:w-4 md:h-4" />
             </button>
             <button
               type="button"
               onClick={() => handleMobileNav(1)}
               disabled={mobileActiveIndex === PROJECTS_DATA.length - 1}
               aria-label="Next project card"
-              className="w-7 h-7 rounded-full border flex items-center justify-center transition-all active:scale-95 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
+              className="w-7 h-7 md:w-8 md:h-8 rounded-full border flex items-center justify-center transition-all active:scale-95 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
               style={{
                 borderColor: 'var(--border)',
                 background: 'var(--surface-1)',
                 color: 'var(--accent)',
               }}
             >
-              <ChevronRight className="w-3.5 h-3.5" />
+              <ChevronRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
             </button>
           </div>
         </div>
       </section>
 
-      {/* ── 6. Mobile Contact Section ─────────────────────────────────────── */}
-      <div className="md:hidden">
+      {/* ── 6. Mobile & Tablet Contact Section ───────────────────────────── */}
+      <div className="lg:hidden">
         <ContactSection />
       </div>
 

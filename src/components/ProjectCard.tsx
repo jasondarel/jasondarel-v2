@@ -27,7 +27,7 @@ function ProjectImagePreview({
 
   return (
     <div
-      className="relative w-full h-[140px] sm:h-[150px] md:h-[76px] rounded-lg overflow-hidden border flex flex-col justify-between p-2 md:p-1.5 select-none mb-2 md:mb-1.5"
+      className="relative w-full h-[140px] sm:h-[150px] md:h-[160px] lg:h-[76px] rounded-lg overflow-hidden border flex flex-col justify-between p-2 md:p-2.5 lg:p-1.5 select-none mb-2 md:mb-2 lg:mb-1.5"
       style={{
         background: 'var(--surface-2)',
         borderColor: 'var(--border)',
@@ -38,7 +38,7 @@ function ProjectImagePreview({
           src={imgSrc}
           alt={title}
           fill
-          sizes="(max-width: 768px) 300px, 200px"
+          sizes="(max-width: 1024px) 320px, 200px"
           loading="lazy"
           onError={() => setImgError(true)}
           className="object-cover"
@@ -178,6 +178,21 @@ function ProjectCard({
     pointerStartPos.current = { x: e.clientX, y: e.clientY };
   };
 
+  const handlePointerEnter = (e: React.PointerEvent) => {
+    if (!interactive) return;
+    // Only desktop mouse hover should trigger pointerenter flip
+    if (e.pointerType === 'mouse') {
+      setIsFlipped(true);
+    }
+  };
+
+  const handlePointerLeave = (e: React.PointerEvent) => {
+    // Only desktop mouse hover should trigger pointerleave unflip
+    if (e.pointerType === 'mouse') {
+      setIsFlipped(false);
+    }
+  };
+
   const handleCardClick = (e: React.MouseEvent) => {
     if (!interactive) return;
     if (pointerStartPos.current) {
@@ -189,11 +204,13 @@ function ProjectCard({
     setIsFlipped((prev) => !prev);
   };
 
-  // When flipped, track global pointer movement to reliably unflip whenever cursor leaves the card
+  // When flipped via mouse, track global pointer movement to reliably unflip whenever cursor leaves the card
   useEffect(() => {
     if (!isFlipped) return;
 
     const handleGlobalPointerMove = (e: PointerEvent) => {
+      // Touch devices tap to toggle flip; do not auto-unflip on touch move
+      if (e.pointerType !== 'mouse') return;
       if (!cardRef.current) return;
       const rect = cardRef.current.getBoundingClientRect();
       const isInside =
@@ -228,14 +245,12 @@ function ProjectCard({
   return (
     <div
       ref={cardRef}
-      className={`group/card relative w-[270px] sm:w-[290px] md:w-[200px] h-[380px] sm:h-[400px] md:h-[280px] select-none [perspective:1200px] ${
+      className={`group/card relative w-[270px] sm:w-[290px] md:w-[320px] lg:w-[200px] h-[380px] sm:h-[400px] md:h-[430px] lg:h-[280px] select-none [perspective:1200px] ${
         interactive ? 'cursor-pointer' : 'cursor-default pointer-events-none'
       } ${className}`}
       style={style}
-      onMouseEnter={() => interactive && setIsFlipped(true)}
-      onPointerEnter={() => interactive && setIsFlipped(true)}
-      onMouseLeave={() => setIsFlipped(false)}
-      onPointerLeave={() => setIsFlipped(false)}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       onPointerDown={handlePointerDown}
       onClick={handleCardClick}
       role="region"
@@ -252,7 +267,7 @@ function ProjectCard({
             1. MINIMAL PLAYING CARD BACK (Authentic 1:1.4 Aspect Ratio)
            ═════════════════════════════════════════════════════════════════════ */}
         <div
-          className={`absolute inset-0 w-full h-full rounded-2xl p-4 md:p-3.5 flex flex-col justify-between overflow-hidden border [backface-visibility:hidden] [-webkit-backface-visibility:hidden] ${
+          className={`absolute inset-0 w-full h-full rounded-2xl p-4 md:p-5 lg:p-3.5 flex flex-col justify-between overflow-hidden border [backface-visibility:hidden] [-webkit-backface-visibility:hidden] ${
             activeFlipped ? 'pointer-events-none' : 'pointer-events-auto'
           }`}
           style={{
@@ -273,7 +288,7 @@ function ProjectCard({
           {/* Top Corner Metadata */}
           <div className="relative z-10 flex items-center justify-between px-1 pt-0.5">
             <span
-              className="text-[11px] font-mono font-bold tracking-widest"
+              className="text-[11px] md:text-xs font-mono font-bold tracking-widest"
               style={{ color: 'var(--accent)' }}
             >
               {project.cardIndex}
@@ -282,7 +297,7 @@ function ProjectCard({
 
           {/* Center Luxury Playing Card Pattern & Monogram */}
           <div className="relative z-10 flex-1 flex flex-col items-center justify-center my-auto">
-            <div className="relative w-24 h-24 md:w-[88px] md:h-[88px] flex items-center justify-center">
+            <div className="relative w-24 h-24 md:w-28 md:h-28 lg:w-[88px] lg:h-[88px] flex items-center justify-center">
               {/* Background Geometric Lattice SVG */}
               <svg
                 viewBox="0 0 100 100"
@@ -299,14 +314,14 @@ function ProjectCard({
 
               {/* Center Monogram Seal */}
               <div
-                className="absolute z-10 w-11 h-11 md:w-10 md:h-10 rounded-full border flex items-center justify-center"
+                className="absolute z-10 w-11 h-11 md:w-12 md:h-12 lg:w-10 lg:h-10 rounded-full border flex items-center justify-center"
                 style={{
                   background: 'var(--surface-1)',
                   borderColor: 'var(--border)',
                 }}
               >
                 <span
-                  className="text-base md:text-sm font-mono font-black tracking-wider pl-0.5"
+                  className="text-base md:text-lg lg:text-sm font-mono font-black tracking-wider pl-0.5"
                   style={{ color: 'var(--accent)' }}
                 >
                   JD
@@ -318,13 +333,13 @@ function ProjectCard({
           {/* Bottom Corner Metadata */}
           <div className="relative z-10 flex items-center justify-between px-1 pb-0.5">
             <span
-              className="text-[8.5px] font-mono tracking-wider uppercase opacity-60 flex items-center gap-1"
+              className="text-[8.5px] md:text-[9.5px] font-mono tracking-wider uppercase opacity-60 flex items-center gap-1"
               style={{ color: 'var(--muted)' }}
             >
               Tap to flip
             </span>
             <span
-              className="text-[9.5px] font-mono tracking-widest uppercase opacity-80"
+              className="text-[9.5px] md:text-[10.5px] font-mono tracking-widest uppercase opacity-80"
               style={{ color: 'var(--muted)' }}
             >
               2026
@@ -334,9 +349,9 @@ function ProjectCard({
 
         {/* ═════════════════════════════════════════════════════════════════════
             2. POKER CARD FRONT (Revealed on 180deg flip)
-           ═════════════════════════════════════════════════════════════════════ */}
+           ═════════════════════════════════════════════ */}
         <div
-          className={`absolute inset-0 w-full h-full rounded-2xl p-3.5 md:p-3 flex flex-col justify-between overflow-hidden border [transform:rotateY(180deg)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden] ${
+          className={`absolute inset-0 w-full h-full rounded-2xl p-3.5 md:p-4 lg:p-3 flex flex-col justify-between overflow-hidden border [transform:rotateY(180deg)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden] ${
             activeFlipped ? 'pointer-events-auto' : 'pointer-events-none'
           }`}
           style={{
@@ -346,11 +361,11 @@ function ProjectCard({
         >
           <div>
             {/* Top Bar: Card metadata */}
-            <div className="flex items-center justify-between pb-1.5 md:pb-1 mb-1.5 md:mb-1 border-b" style={{ borderColor: 'var(--border)' }}>
-              <span className="text-[11px] md:text-[10px] font-mono tracking-wider uppercase font-semibold truncate max-w-[180px] md:max-w-[130px]" style={{ color: 'var(--muted)' }}>
+            <div className="flex items-center justify-between pb-1.5 lg:pb-1 mb-1.5 lg:mb-1 border-b" style={{ borderColor: 'var(--border)' }}>
+              <span className="text-[11px] md:text-xs lg:text-[10px] font-mono tracking-wider uppercase font-semibold truncate max-w-[180px] md:max-w-[220px] lg:max-w-[130px]" style={{ color: 'var(--muted)' }}>
                 {project.category}
               </span>
-              <span className="text-xs md:text-[10.5px] font-mono font-bold" style={{ color: 'var(--accent)' }}>
+              <span className="text-xs md:text-sm lg:text-[10.5px] font-mono font-bold" style={{ color: 'var(--accent)' }}>
                 {project.cardIndex}
               </span>
             </div>
@@ -360,7 +375,7 @@ function ProjectCard({
 
             {/* Title */}
             <h3
-              className="text-sm md:text-[13px] font-bold tracking-tight leading-snug mb-1 md:mb-0.5 line-clamp-1"
+              className="text-sm sm:text-base md:text-lg lg:text-[13px] font-bold tracking-tight leading-snug mb-1 md:mb-1.5 lg:mb-0.5 line-clamp-1"
               style={{ color: 'var(--accent)' }}
               title={project.title}
             >
@@ -369,7 +384,7 @@ function ProjectCard({
 
             {/* Description */}
             <p
-              className="text-xs md:text-[10.5px] font-normal leading-relaxed md:leading-snug mb-2 md:mb-1.5 line-clamp-2 md:line-clamp-none"
+              className="text-xs sm:text-xs md:text-sm lg:text-[10.5px] font-normal leading-relaxed lg:leading-snug mb-2 md:mb-2.5 lg:mb-1.5 line-clamp-2 lg:line-clamp-none"
               style={{ color: 'var(--foreground)' }}
             >
               {project.description}
@@ -378,13 +393,13 @@ function ProjectCard({
 
           <div>
             {/* Tech Badges */}
-            <div className="flex flex-wrap items-center gap-1.5 md:gap-1 mb-2 md:mb-1.5">
+            <div className="flex flex-wrap items-center gap-1.5 md:gap-1.5 lg:gap-1 mb-2 md:mb-2 lg:mb-1.5">
               {project.techLogos.slice(0, 4).map((tech, idx) => {
                 const LogoComponent = TechLogos[tech.logoKey];
                 return (
                   <div
                     key={idx}
-                    className="flex items-center gap-1.5 md:gap-1 px-2 py-0.5 md:px-1.5 md:py-0.5 rounded border text-[10px] md:text-[9px] font-mono"
+                    className="flex items-center gap-1.5 lg:gap-1 px-2 py-0.5 md:px-2 md:py-0.5 lg:px-1.5 lg:py-0.5 rounded border text-[10px] md:text-[10px] lg:text-[9px] font-mono"
                     style={{
                       background: 'var(--surface-1)',
                       borderColor: 'var(--border)',
@@ -392,9 +407,9 @@ function ProjectCard({
                     title={tech.name}
                   >
                     {LogoComponent ? (
-                      <LogoComponent size={12} className="w-3 h-3 md:w-2.5 md:h-2.5 object-contain" />
+                      <LogoComponent size={12} className="w-3 h-3 lg:w-2.5 lg:h-2.5 object-contain" />
                     ) : (
-                      <span className="text-[9px] md:text-[8px] font-bold" style={{ color: 'var(--accent)' }}>
+                      <span className="text-[9px] lg:text-[8px] font-bold" style={{ color: 'var(--accent)' }}>
                         {tech.name.slice(0, 2)}
                       </span>
                     )}

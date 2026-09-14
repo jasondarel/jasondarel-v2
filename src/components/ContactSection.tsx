@@ -117,7 +117,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
 
       const mm = gsap.matchMedia();
 
-      mm.add('(max-width: 767.98px)', () => {
+      mm.add('(max-width: 1023.98px)', () => {
         const contactElements = section.querySelectorAll('[data-contact-animate]');
         if (contactElements.length === 0) return;
 
