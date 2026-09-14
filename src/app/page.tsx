@@ -6,6 +6,7 @@ import SkillsSection from '@/components/SkillsSection';
 import ExperienceSection from '@/components/ExperienceSection';
 import ProjectsSection from '@/components/ProjectsSection';
 import FadeToTopOverlay from '@/components/FadeToTopOverlay';
+import MobileScrollPrompt from '@/components/MobileScrollPrompt';
 
 /**
  * Home (App.tsx equivalent)
@@ -29,6 +30,9 @@ export default function Home() {
     <main>
       {/* ── Global Fade-to-Top Overlay ─────────────────────────────────────── */}
       <FadeToTopOverlay />
+
+      {/* ── Mobile Floating "Scroll Slowly" Widget ─────────────────────────── */}
+      <MobileScrollPrompt />
 
       {/* ── 1. INTRO HERO ─────────────────────────────────────────────────── */}
       <section

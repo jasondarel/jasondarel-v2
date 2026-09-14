@@ -189,7 +189,7 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'PostgreSQL',
         logoKey: 'postgresql',
-        pos: { bottom: '32%', right: '20%' },
+        pos: { bottom: '35%', right: '11%' },
         animationClass: 'animate-float-1',
         delay: '1.1s',
       },

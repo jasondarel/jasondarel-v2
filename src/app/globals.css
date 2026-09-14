@@ -205,6 +205,30 @@ html.lenis, html.lenis body {
   animation: bounceY 2s ease-in-out infinite;
 }
 
+/* ── Mobile "Scroll Slowly" Widget Animations ────────────────────────────── */
+@keyframes scrollWheelMini {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(6px);
+  }
+  95%, 100% {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+}
+
+.animate-scroll-wheel-mini {
+  animation: scrollWheelMini 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+
 /* ── Universal Pill Button Utilities ────────────────────────────────────────── */
 .btn-pill {
   display: inline-flex;
