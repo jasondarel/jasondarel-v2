@@ -59,7 +59,7 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'TypeScript',
         logoKey: 'typescript',
-        pos: { top: '48%', left: '6%' },
+        pos: { bottom: '14%', left: '8%' },
         animationClass: 'animate-float-3',
         delay: '0.8s',
       },
@@ -189,7 +189,7 @@ export const SKILLS_DATA: SkillItem[] = [
       {
         name: 'PostgreSQL',
         logoKey: 'postgresql',
-        pos: { bottom: '38%', right: '16%' },
+        pos: { bottom: '32%', right: '20%' },
         animationClass: 'animate-float-1',
         delay: '1.1s',
       },

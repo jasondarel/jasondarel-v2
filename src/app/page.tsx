@@ -85,7 +85,7 @@ export default function Home() {
 
         {/* Bottom Minimalist Scroll Icon */}
         <div
-          className="absolute bottom-8 flex flex-col items-center pointer-events-none"
+          className="absolute bottom-8 hidden sm:flex flex-col items-center pointer-events-none"
           aria-label="Scroll down indicator"
         >
           <div

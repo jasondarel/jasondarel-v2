@@ -270,7 +270,7 @@ export default function ProjectsSection() {
     >
       {/* ── 1. Section Header (Normal Scroll Flow - Scrolls out of POV) ───── */}
       <div
-        className="relative border-t px-6 sm:px-10 md:px-14 py-20 md:py-28 min-h-[50vh] flex flex-col justify-center select-none"
+        className="relative border-t px-6 sm:px-10 md:px-14 py-8 sm:py-12 md:py-24 md:min-h-[45vh] flex flex-col justify-center select-none"
         style={{
           background: 'var(--background)',
           borderColor: 'var(--border)',
@@ -279,7 +279,7 @@ export default function ProjectsSection() {
       >
         <div className="max-w-7xl mx-auto w-full">
           <div
-            className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b flex-shrink-0"
+            className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 pb-5 sm:pb-6 border-b flex-shrink-0"
             style={{ borderColor: 'var(--border)' }}
           >
             <div>
@@ -383,7 +383,7 @@ export default function ProjectsSection() {
 
       {/* ── 5. Mobile Static Grid Layout (Responsive fall-back) ───────────── */}
       <div
-        className="md:hidden px-6 py-12 flex flex-col items-center gap-6"
+        className="md:hidden px-6 pt-6 pb-12 flex flex-col items-center gap-6"
         style={{ background: 'var(--background)' }}
       >
         <p className="text-sm font-mono text-center mb-2" style={{ color: 'var(--muted)' }}>

@@ -109,7 +109,7 @@ export default function ExperienceSection() {
     >
       {/* Top Header Panel Progress Indicator */}
       {activePanelIndex > 1 && (
-        <div className="absolute top-8 right-8 z-20 flex items-center gap-2 pointer-events-none select-none">
+        <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-20 flex items-center gap-2 pointer-events-none select-none">
           <span
             className="text-xs font-mono font-medium"
             style={{ color: 'var(--accent)' }}
@@ -249,7 +249,8 @@ export default function ExperienceSection() {
 
           <div className="w-full max-w-6xl mx-auto z-10 py-16 sm:py-0">
             {/* Header: Company & Meta */}
-            <div className="flex flex-wrap items-start justify-between gap-3 pb-3.5 border-b mb-4.5"
+            <div
+              className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-3 pb-3 sm:pb-3.5 border-b mb-4 sm:mb-4.5"
               style={{ borderColor: 'var(--border)' }}
             >
               <div>
@@ -273,7 +274,7 @@ export default function ExperienceSection() {
                 </p>
               </div>
 
-              <div className="flex flex-col items-end pt-1">
+              <div className="flex flex-col sm:items-end pt-0 sm:pt-1">
                 <span className="text-sm sm:text-base font-mono font-bold" style={{ color: 'var(--accent)' }}>
                   {gositus.period}
                 </span>
@@ -352,7 +353,8 @@ export default function ExperienceSection() {
 
           <div className="w-full max-w-6xl mx-auto z-10 py-16 sm:py-0">
             {/* Header: Company & Meta */}
-            <div className="flex flex-wrap items-start justify-between gap-3 pb-3.5 border-b mb-4.5"
+            <div
+              className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-3 pb-3 sm:pb-3.5 border-b mb-4 sm:mb-4.5"
               style={{ borderColor: 'var(--border)' }}
             >
               <div>
@@ -376,7 +378,7 @@ export default function ExperienceSection() {
                 </p>
               </div>
 
-              <div className="flex flex-col items-end pt-1">
+              <div className="flex flex-col sm:items-end pt-0 sm:pt-1">
                 <span className="text-sm sm:text-base font-mono font-bold" style={{ color: 'var(--accent)' }}>
                   {kpsg.period}
                 </span>
