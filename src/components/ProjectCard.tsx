@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { ProjectItem } from '@/constants/projects';
 import { TechLogos } from '@/components/icons/TechLogos';
@@ -160,19 +160,65 @@ function ProjectCard({
   interactive = true,
 }: ProjectCardProps) {
   const [isFlipped, setIsFlipped] = useState(forceFlipped);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Reset flip state when card becomes uninteractable (official React pattern without cascading effect renders)
+  const [prevInteractive, setPrevInteractive] = useState(interactive);
+  if (prevInteractive !== interactive) {
+    setPrevInteractive(interactive);
+    if (!interactive) {
+      setIsFlipped(false);
+    }
+  }
+
+  // When flipped, track global pointer movement to reliably unflip whenever cursor leaves the card
+  useEffect(() => {
+    if (!isFlipped) return;
+
+    const handleGlobalPointerMove = (e: PointerEvent) => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const isInside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      if (!isInside) {
+        setIsFlipped(false);
+      }
+    };
+
+    const handleWindowLeave = () => {
+      setIsFlipped(false);
+    };
+
+    window.addEventListener('pointermove', handleGlobalPointerMove, { passive: true });
+    document.addEventListener('mouseleave', handleWindowLeave);
+    window.addEventListener('blur', handleWindowLeave);
+
+    return () => {
+      window.removeEventListener('pointermove', handleGlobalPointerMove);
+      document.removeEventListener('mouseleave', handleWindowLeave);
+      window.removeEventListener('blur', handleWindowLeave);
+    };
+  }, [isFlipped]);
 
   // If interactive is disabled, keep card back visible
   const activeFlipped = interactive && isFlipped;
 
   return (
     <div
+      ref={cardRef}
       className={`group/card relative w-[200px] h-[280px] select-none [perspective:1200px] ${
         interactive ? 'cursor-pointer' : 'cursor-default pointer-events-none'
       } ${className}`}
       style={style}
       onMouseEnter={() => interactive && setIsFlipped(true)}
-      onMouseLeave={() => interactive && setIsFlipped(false)}
-      onClick={() => interactive && setIsFlipped(!isFlipped)}
+      onPointerEnter={() => interactive && setIsFlipped(true)}
+      onMouseLeave={() => setIsFlipped(false)}
+      onPointerLeave={() => setIsFlipped(false)}
+      onClick={() => interactive && setIsFlipped((prev) => !prev)}
       role="region"
       aria-label={`Project card for ${project.title}`}
     >
