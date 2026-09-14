@@ -35,6 +35,20 @@ const FAN_COORDINATES = [
   { x: 175, y: 4, rotation: 21 },
 ];
 
+// ── Scroll & Timing Controls ──────────────────────────────────────────────
+// 1. Total scroll distance in pixels that the Projects section stays pinned.
+//    Increase this number to require MORE scrolling before moving to Contact.
+//    Decrease this number to require LESS scrolling.
+const TOTAL_PINNED_SCROLL = 3000;
+
+// 2. Timeline timing for dealing vs. stationary hold:
+//    Cards take 3.69s to deal into place.
+//    HOLD_DURATION is the stationary showcase buffer where cards stay still and interactive.
+const DEAL_END_TIME = 1.6 + 7 * 0.07 + 1.6; // 3.69s
+const HOLD_DURATION = 3.0;
+// Automatically compute when cards finish dealing in timeline progress (e.g. ~0.345):
+const DEALT_THRESHOLD = DEAL_END_TIME / (DEAL_END_TIME + HOLD_DURATION);
+
 export default function ProjectsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -54,34 +68,39 @@ export default function ProjectsSection() {
         cardRefs.current.forEach((el, index) => {
           if (!el) return;
           gsap.set(el, {
+            xPercent: -50,
+            yPercent: -50,
             x: index * 0.8,
             y: index * -0.6,
             rotation: (index - 3.5) * 0.4,
             scale: 1,
             opacity: index === 0 ? 1 : 0.85,
             zIndex: 10 + index,
+            force3D: true,
           });
         });
 
         // ── 2. Pinned Scroll Timeline ───────────────────────────────────────
-        // Trigger is stageRef: pins only when the stage hits 'top top' (AFTER the header has scrolled out of view)
+        // Scrub: 0.15 provides instant sync with Lenis smooth scroll without double-lag
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: stage,
             start: 'top top',
-            end: '+=2400',
+            end: `+=${TOTAL_PINNED_SCROLL}`,
             pin: true,
             anticipatePin: 1,
-            scrub: 1,
+            scrub: 0.15,
+            fastScrollEnd: true,
+            preventOverlaps: true,
             onUpdate: (self) => {
-              // Only enable hover flip once cards have completed the spread into the grid
-              const dealt = self.progress >= 0.78;
+              // Enable hover flip once cards have completed the spread into the grid
+              const dealt = self.progress >= DEALT_THRESHOLD;
               setIsDealt((prev) => (prev !== dealt ? dealt : prev));
             },
           },
         });
 
-        // ── Phase 1 (0 -> 0.35): Cards Emerge & Fan Out into Hand ───────────
+        // ── Phase 1: Cards Emerge & Fan Out into Hand ────────────────────────
         cardRefs.current.forEach((el, index) => {
           if (!el) return;
           const fan = FAN_COORDINATES[index];
@@ -96,15 +115,16 @@ export default function ProjectsSection() {
               scale: 1,
               ease: 'power1.out',
               duration: 1.2,
+              force3D: true,
             },
             0 // All fan at once
           );
         });
 
         // Small hold/settle in fan pose before spreading
-        tl.to({}, { duration: 0.4 });
+        tl.to({}, { duration: 0.4 }, 1.2);
 
-        // ── Phase 2 (0.45 -> 1.0): Spread from Fan into 4-Column Grid ───────
+        // ── Phase 2: Spread from Fan into 4-Column Grid ──────────────────────
         cardRefs.current.forEach((el, index) => {
           if (!el) return;
           const grid = GRID_COORDINATES[index];
@@ -117,10 +137,15 @@ export default function ProjectsSection() {
               rotation: 0,
               ease: 'power2.inOut',
               duration: 1.6,
+              force3D: true,
             },
             1.6 + index * 0.07 // slight stagger for organic dealing feel
           );
         });
+
+        // ── Phase 3: Pinned Stationary Showcase Hold ─────────────────────────
+        // Buffer keeping the grid firmly pinned & interactive before unpinning to Contact.
+        tl.to({}, { duration: HOLD_DURATION }, DEAL_END_TIME);
       }
     }, container);
 
@@ -193,14 +218,14 @@ export default function ProjectsSection() {
                 ref={(el) => {
                   cardRefs.current[index] = el;
                 }}
-                className="absolute will-change-transform -translate-x-1/2 -translate-y-1/2"
+                className="absolute"
               >
-                {/* Dedicated GPU-accelerated floating wrapper (isolated from GSAP coordinates) */}
+                {/* Dedicated GPU-accelerated floating wrapper (only active when cards are stationary in grid) */}
                 <div
-                  className="will-change-transform"
                   style={{
-                    animation: `card-float-smooth ${4.4 + (index % 4) * 0.7}s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate`,
-                    animationDelay: `${index * 0.25}s`,
+                    animation: isDealt
+                      ? `card-float-smooth ${4.4 + (index % 4) * 0.7}s cubic-bezier(0.45, 0.05, 0.55, 0.95) ${index * 0.25}s infinite alternate`
+                      : 'none',
                   }}
                 >
                   <ProjectCard project={project} interactive={isDealt} />

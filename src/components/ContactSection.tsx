@@ -65,7 +65,7 @@ const SOCIAL_LINKS = [
   {
     name: 'Instagram',
     handle: '@jasondarel',
-    url: 'https://instagram.com/jasondarel',
+    url: 'https://instagram.com/jdarel_',
     icon: InstagramIcon,
   },
   {
@@ -77,14 +77,14 @@ const SOCIAL_LINKS = [
   {
     name: 'LinkedIn',
     handle: 'Jason Darel',
-    url: 'https://linkedin.com/in/jasondarel',
+    url: 'https://www.linkedin.com/in/jason-darel-528b13247',
     icon: LinkedinIcon,
   },
 ];
 
 export default function ContactSection() {
   const [copied, setCopied] = useState(false);
-  const emailAddress = 'jasondarel@gmail.com';
+  const emailAddress = 'jdarel21@gmail.com';
 
   const handleCopyEmail = async () => {
     try {
@@ -201,7 +201,7 @@ export default function ContactSection() {
               className="text-lg sm:text-xl font-medium tracking-tight mb-1"
               style={{ color: 'var(--foreground)' }}
             >
-              Jakarta, Indonesia
+              Tangerang, Indonesia
             </p>
             <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
               UTC+7 (WIB) • Remote &amp; Worldwide
@@ -268,14 +268,15 @@ export default function ContactSection() {
         </div>
       </div>
 
-      {/* ── Bottom Bar (Reference: roku studio / part of Gositus) ──────────── */}
+      {/* ── Bottom Bar ──────────────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-6xl w-full mx-auto mt-12 sm:mt-16 pt-6 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" style={{ borderColor: 'var(--border)' }}>
         <div>
-          <p className="text-sm font-semibold tracking-tight" style={{ color: 'var(--accent)' }}>
-            jasondarel
-          </p>
-          <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-            part of Gositus • Full-Stack Developer
+          <p className="text-sm font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--accent)' }}>
+            <span>Jason Darel</span>
+            <span className="font-mono text-xs font-normal opacity-40">•</span>
+            <span className="font-mono text-xs font-normal" style={{ color: 'var(--muted)' }}>
+              Full-Stack Developer
+            </span>
           </p>
         </div>
 
@@ -296,7 +297,7 @@ export default function ContactSection() {
             opacity: 0.35,
           }}
         >
-          darel
+          jason
         </span>
       </div>
     </section>

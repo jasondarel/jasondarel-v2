@@ -38,7 +38,8 @@ function ProjectImagePreview({
           src={imgSrc}
           alt={title}
           fill
-          sizes="(max-width: 768px) 100vw, 300px"
+          sizes="200px"
+          loading="lazy"
           onError={() => setImgError(true)}
           className="object-cover"
         />
@@ -151,7 +152,7 @@ function ProjectImagePreview({
   );
 }
 
-export default function ProjectCard({
+function ProjectCard({
   project,
   className = '',
   style = {},
@@ -412,3 +413,5 @@ export default function ProjectCard({
     </div>
   );
 }
+
+export default React.memo(ProjectCard);
