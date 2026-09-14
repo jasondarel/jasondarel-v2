@@ -46,22 +46,21 @@ const TOTAL_PINNED_SCROLL = 4600;
 // 1.6s -> 3.69s: Phase 2 - Spread into 4x2 grid
 const DEAL_END_TIME = 1.6 + 7 * 0.07 + 1.6; // 3.69s
 
-// 3.69s -> 5.8s: Phase 3 - Stationary cards showcase hold (~2.1s)
+// 3.69s -> 5.79s: Phase 3 - Stationary cards showcase hold (~2.1s)
 const BLUR_START_TIME = DEAL_END_TIME + 2.1; // 5.79s
 
-// 5.8s -> 7.4s: Phase 4 - Full-page blur transition (~1.6s)
+// 5.79s -> 7.39s: Phase 4 - Full-page blur transition (~1.6s)
 const BLUR_DURATION = 1.6;
 
-// 6.9s -> 9.2s: Phase 5 - Contact elements fade up (~2.3s total with stagger)
+// Cards stay interactable after blur starts (~0.4s into blur transition)
+const CARDS_UNINTERACTABLE_TIME = BLUR_START_TIME + 0.4; // 6.19s
+
+// 6.89s -> 9.19s: Phase 5 - Contact elements fade up (~2.3s total with stagger)
 const CONTACT_START_TIME = BLUR_START_TIME + 1.1; // 6.89s (overlaps smoothly with blur)
+const CONTACT_ACTIVE_TIME = CONTACT_START_TIME + 1.2; // 8.09s (pointer-events enabled)
 
 // 9.2s -> 11.5s: Phase 6 - Rock-solid hold for Contact section (~2.3s buffer)
 const TOTAL_TIMELINE_DURATION = 11.5;
-
-// Thresholds for onUpdate logic (normalized to [0, 1]):
-const DEALT_THRESHOLD = DEAL_END_TIME / TOTAL_TIMELINE_DURATION; // ~0.32
-const BLUR_THRESHOLD = BLUR_START_TIME / TOTAL_TIMELINE_DURATION; // ~0.50
-const CONTACT_ACTIVE_THRESHOLD = (CONTACT_START_TIME + 1.2) / TOTAL_TIMELINE_DURATION; // ~0.70
 
 export default function ProjectsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -120,6 +119,18 @@ export default function ProjectsSection() {
         }
 
         // ── 2. Pinned Scroll Timeline ───────────────────────────────────────
+        const updateInteractiveState = (currentTime: number) => {
+          // 1. Enable hover flip while stationary in grid, until AFTER blur starts
+          const dealt = currentTime >= DEAL_END_TIME && currentTime < CARDS_UNINTERACTABLE_TIME;
+          setIsDealt((prev) => (prev !== dealt ? dealt : prev));
+
+          // 2. Enable contact section pointer-events once contact has faded in
+          const contactActive = currentTime >= CONTACT_ACTIVE_TIME;
+          if (contactOverlayRef.current) {
+            contactOverlayRef.current.style.pointerEvents = contactActive ? 'auto' : 'none';
+          }
+        };
+
         // Scrub: 0.15 provides instant sync with Lenis smooth scroll without double-lag
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -131,21 +142,12 @@ export default function ProjectsSection() {
             scrub: 0.15,
             fastScrollEnd: true,
             preventOverlaps: true,
-            onUpdate: (self) => {
-              const p = self.progress;
-
-              // 1. Enable hover flip ONLY while cards are stationary in the 4x2 grid
-              const dealt = p >= DEALT_THRESHOLD && p < BLUR_THRESHOLD;
-              setIsDealt((prev) => (prev !== dealt ? dealt : prev));
-
-              // 2. Enable contact section pointer-events once contact has faded in
-              const contactActive = p >= CONTACT_ACTIVE_THRESHOLD;
-              if (contactOverlayRef.current) {
-                contactOverlayRef.current.style.pointerEvents = contactActive ? 'auto' : 'none';
-              }
-            },
+            onUpdate: () => updateInteractiveState(tl.time()),
           },
+          onUpdate: () => updateInteractiveState(tl.time()),
         });
+
+        updateInteractiveState(tl.time());
 
         // ── Phase 1: Cards Emerge & Fan Out into Hand ────────────────────────
         cardRefs.current.forEach((el, index) => {
