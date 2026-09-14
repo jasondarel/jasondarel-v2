@@ -23,7 +23,7 @@ function formatHighlight(text: string) {
 }
 
 // ── Sensitivity & Timing Controls ───────────────────────────────────────────
-const DISTANCE_MULTIPLIER = 1.15; // Balanced scroll travel
+const DISTANCE_MULTIPLIER = 1.55; // Extended scroll travel for generous last panel hold
 const SCRUB_SMOOTHING = 0.8;      // Inertia smoothing on scroll scrub
 
 export default function ExperienceSection() {
@@ -59,14 +59,15 @@ export default function ExperienceSection() {
           onUpdate: (self) => {
             // Track active panel index based on timeline progress
             const progress = self.progress;
-            if (progress < 0.28) {
+            if (progress < 0.20) {
               setActivePanelIndex(1);
               if (progress > 0.01) setPanel1Visible(true);
-            } else if (progress < 0.72) {
+            } else if (progress < 0.55) {
               setActivePanelIndex(2);
               setPanel2Visible(true);
             } else {
               setActivePanelIndex(3);
+              setPanel2Visible(true);
             }
           },
         },
@@ -82,15 +83,15 @@ export default function ExperienceSection() {
           ease: 'power2.inOut',
         })
         // 3. CENTER PANEL SCROLL LOCK: Dedicated stationary hold on Panel 2 (Gositus)
-        .to({}, { duration: 0.8 })
+        .to({}, { duration: 0.9 })
         // 4. Smooth transition from Panel 2 -> Panel 3 (KPSG Group)
         .to(track, {
           xPercent: -(200 / 3),
           duration: 1.0,
           ease: 'power2.inOut',
         })
-        // 5. Final stationary hold on Panel 3 before unpinning
-        .to({}, { duration: 0.5 });
+        // 5. Final rock-solid stationary hold on Panel 3 before unpinning to Projects
+        .to({}, { duration: 2.0 });
     }, section);
 
     return () => ctx.revert();
