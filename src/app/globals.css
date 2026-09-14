@@ -191,6 +191,20 @@ html.lenis, html.lenis body {
   animation: bounceX 1.5s ease-in-out infinite;
 }
 
+/* ── Vertical Back-To-Top Widget Bounce Animation ───────────────────────────── */
+@keyframes bounceY {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.animate-bounce-y {
+  animation: bounceY 2s ease-in-out infinite;
+}
+
 /* ── Universal Pill Button Utilities ────────────────────────────────────────── */
 .btn-pill {
   display: inline-flex;

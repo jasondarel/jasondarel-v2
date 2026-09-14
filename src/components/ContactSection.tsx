@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, forwardRef } from 'react';
-import { ArrowUpRight, Copy, Check, Mail, MapPin, Globe } from 'lucide-react';
+import { ArrowUp, ArrowUpRight, Copy, Check, Mail, MapPin, Globe } from 'lucide-react';
 import Button from '@/components/Button';
 
 /**
@@ -106,15 +106,19 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
       }
     };
 
+    const handleScrollToTop = () => {
+      if (typeof window === 'undefined') return;
+      window.dispatchEvent(new CustomEvent('fade-to-top'));
+    };
+
     return (
       <section
         ref={ref}
         id={id}
-        className={`relative flex flex-col justify-between overflow-hidden select-none ${
-          isOverlay
+        className={`relative flex flex-col justify-between overflow-hidden select-none ${isOverlay
             ? 'w-full h-full px-6 sm:px-12 md:px-16 py-8 md:py-12'
             : 'min-h-screen border-t px-6 sm:px-12 md:px-16 py-12 sm:py-16'
-        } ${className}`}
+          } ${className}`}
         style={{
           background: isOverlay ? 'transparent' : 'var(--surface-0)',
           borderColor: isOverlay ? 'transparent' : 'var(--border)',
@@ -122,188 +126,203 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         }}
         aria-label="Contact section"
       >
-      {/* ── Main Content Container ───────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-6xl w-full mx-auto flex flex-col my-auto">
+        {/* ── Main Content Container ───────────────────────────────────────────── */}
+        <div className="relative z-10 max-w-6xl w-full mx-auto flex flex-col my-auto">
 
-        {/* ── Left-Aligned Display Headline (Inspired by Reference) ─────────── */}
-        <div data-contact-animate className="flex flex-col items-start mb-6 sm:mb-8">
-          <h2
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.92] tracking-tighter cursor-default text-left"
-            style={{ color: 'var(--accent)' }}
-          >
-            <span className="block">Let&apos;s Work</span>
-            <span className="block">Together</span>
-          </h2>
-        </div>
+          {/* ── Left-Aligned Display Headline (Inspired by Reference) ─────────── */}
+          <div data-contact-animate className="flex flex-col items-start mb-6 sm:mb-8">
+            <h2
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.92] tracking-tighter cursor-default text-left"
+              style={{ color: 'var(--accent)' }}
+            >
+              <span className="block">Let&apos;s Work</span>
+              <span className="block">Together</span>
+            </h2>
+          </div>
 
-        {/* ── Social Icons Row (Directly below headline) ─────────────────────── */}
-        <div data-contact-animate className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-10 sm:mb-12">
-          {SOCIAL_LINKS.map((social) => {
-            const Icon = social.icon;
-            return (
-              <Button
-                key={social.name}
-                href={social.url}
-                leftIcon={<Icon className="w-4 h-4 sm:w-5 sm:h-5" />}
-                rightIcon={true}
-                aria-label={`Visit Jason's ${social.name}`}
-              >
-                {social.name}
-              </Button>
-            );
-          })}
+          {/* ── Social Icons Row (Directly below headline) ─────────────────────── */}
+          <div data-contact-animate className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-10 sm:mb-12">
+            {SOCIAL_LINKS.map((social) => {
+              const Icon = social.icon;
+              return (
+                <Button
+                  key={social.name}
+                  href={social.url}
+                  leftIcon={<Icon className="w-4 h-4 sm:w-5 sm:h-5" />}
+                  rightIcon={true}
+                  aria-label={`Visit Jason's ${social.name}`}
+                >
+                  {social.name}
+                </Button>
+              );
+            })}
 
-          {/* Quick Copy Email Action Pill */}
-          <Button
-            onClick={handleCopyEmail}
-            leftIcon={
-              copied ? (
-                <Check className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: 'var(--accent)' }} />
+            {/* Quick Copy Email Action Pill */}
+            <Button
+              onClick={handleCopyEmail}
+              leftIcon={
+                copied ? (
+                  <Check className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: 'var(--accent)' }} />
+                ) : (
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+                )
+              }
+              rightIcon={
+                copied ? undefined : (
+                  <Copy className="w-3.5 h-3.5" style={{ color: 'var(--muted)' }} />
+                )
+              }
+              aria-label="Copy email address"
+            >
+              {copied ? (
+                <span style={{ color: 'var(--accent)' }}>Copied Email!</span>
               ) : (
-                <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
-              )
-            }
-            rightIcon={
-              copied ? undefined : (
-                <Copy className="w-3.5 h-3.5" style={{ color: 'var(--muted)' }} />
-              )
-            }
-            aria-label="Copy email address"
+                'Copy Email'
+              )}
+            </Button>
+          </div>
+
+          {/* ── 3 Reference Columns: LOCATION / CONTACT / SOCIAL ───────────────── */}
+          <div
+            data-contact-animate
+            className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pt-10 border-t"
+            style={{ borderColor: 'var(--border)' }}
           >
-            {copied ? (
-              <span style={{ color: 'var(--accent)' }}>Copied Email!</span>
-            ) : (
-              'Copy Email'
-            )}
-          </Button>
-        </div>
-
-        {/* ── 3 Reference Columns: LOCATION / CONTACT / SOCIAL ───────────────── */}
-        <div
-          data-contact-animate
-          className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pt-10 border-t"
-          style={{ borderColor: 'var(--border)' }}
-        >
-          {/* Column 1: LOCATION */}
-          <div className="md:col-span-4 flex flex-col items-start">
-            <span
-              className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'var(--muted)' }}
-            >
-              <MapPin className="w-3.5 h-3.5" />
-              Location
-            </span>
-            <p
-              className="text-lg sm:text-xl font-medium tracking-tight mb-1"
-              style={{ color: 'var(--foreground)' }}
-            >
-              Tangerang, Indonesia
-            </p>
-            <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-              UTC+7 (WIB) • Remote &amp; Worldwide
-            </p>
-          </div>
-
-          {/* Column 2: CONTACT */}
-          <div className="md:col-span-4 flex flex-col items-start">
-            <span
-              className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'var(--muted)' }}
-            >
-              <Mail className="w-3.5 h-3.5" />
-              Contact
-            </span>
-            <a
-              href={`mailto:${emailAddress}`}
-              className="group inline-flex items-center gap-1.5 text-lg sm:text-xl font-medium tracking-tight mb-1 transition-colors hover:opacity-80"
-              style={{ color: 'var(--foreground)' }}
-            >
-              <span>{emailAddress}</span>
-              <ArrowUpRight
-                className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            {/* Column 1: LOCATION */}
+            <div className="md:col-span-4 flex flex-col items-start">
+              <span
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
                 style={{ color: 'var(--muted)' }}
-              />
-            </a>
-            <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-              Open for full-time roles &amp; select contracts
-            </p>
-          </div>
+              >
+                <MapPin className="w-3.5 h-3.5" />
+                Location
+              </span>
+              <p
+                className="text-lg sm:text-xl font-medium tracking-tight mb-1"
+                style={{ color: 'var(--foreground)' }}
+              >
+                Tangerang, Indonesia
+              </p>
+              <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
+                UTC+7 (WIB) • Remote &amp; Worldwide
+              </p>
+            </div>
 
-          {/* Column 3: SOCIAL */}
-          <div className="md:col-span-4 flex flex-col items-start">
-            <span
-              className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'var(--muted)' }}
-            >
-              <Globe className="w-3.5 h-3.5" />
-              Social
-            </span>
-            <div className="flex flex-col space-y-2">
-              {SOCIAL_LINKS.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 text-base font-normal tracking-tight transition-colors hover:opacity-80"
-                    style={{ color: 'var(--foreground)' }}
-                  >
-                    <Icon className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: 'var(--muted)' }} />
-                    <span className="group-hover:underline underline-offset-4">{social.name}</span>
-                    <ArrowUpRight
-                      className="w-3.5 h-3.5 opacity-60 transition-transform group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                      style={{ color: 'var(--muted)' }}
-                    />
-                  </a>
-                );
-              })}
+            {/* Column 2: CONTACT */}
+            <div className="md:col-span-4 flex flex-col items-start">
+              <span
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
+                style={{ color: 'var(--muted)' }}
+              >
+                <Mail className="w-3.5 h-3.5" />
+                Email
+              </span>
+              <a
+                href={`mailto:${emailAddress}`}
+                className="group inline-flex items-center gap-1.5 text-lg sm:text-xl font-medium tracking-tight mb-1 transition-colors hover:opacity-80"
+                style={{ color: 'var(--foreground)' }}
+              >
+                <span>{emailAddress}</span>
+                <ArrowUpRight
+                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  style={{ color: 'var(--muted)' }}
+                />
+              </a>
+              <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
+                Open for full-time roles &amp; select contracts
+              </p>
+            </div>
+
+            {/* Column 3: SOCIAL */}
+            <div className="md:col-span-4 flex flex-col items-start">
+              <span
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-3 flex items-center gap-1.5"
+                style={{ color: 'var(--muted)' }}
+              >
+                <Globe className="w-3.5 h-3.5" />
+                Social
+              </span>
+              <div className="flex flex-col space-y-2">
+                {SOCIAL_LINKS.map((social) => {
+                  const Icon = social.icon;
+                  return (
+                    <a
+                      key={social.name}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-2 text-base font-normal tracking-tight transition-colors hover:opacity-80"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      <Icon className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: 'var(--muted)' }} />
+                      <span className="group-hover:underline underline-offset-4">{social.name}</span>
+                      <ArrowUpRight
+                        className="w-3.5 h-3.5 opacity-60 transition-transform group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        style={{ color: 'var(--muted)' }}
+                      />
+                    </a>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* ── Bottom Bar ──────────────────────────────────────────────────────── */}
-      <div
-        data-contact-animate
-        className="relative z-10 max-w-6xl w-full mx-auto mt-12 sm:mt-16 pt-6 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-        style={{ borderColor: 'var(--border)' }}
-      >
-        <div>
-          <p className="text-sm font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--accent)' }}>
-            <span>Jason Darel</span>
-            <span className="font-mono text-xs font-normal opacity-40">•</span>
-            <span className="font-mono text-xs font-normal" style={{ color: 'var(--muted)' }}>
-              Full-Stack Developer
-            </span>
-          </p>
+        {/* ── Bottom Bar ──────────────────────────────────────────────────────── */}
+        <div
+          data-contact-animate
+          className="relative z-10 max-w-6xl w-full mx-auto mt-10 sm:mt-14 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
+          style={{ borderColor: 'var(--border)' }}
+        >
+          <div className="flex-1 w-full sm:w-auto text-center sm:text-left">
+            <p className="text-sm font-semibold tracking-tight flex items-center justify-center sm:justify-start gap-2" style={{ color: 'var(--accent)' }}>
+              <span>Jason Darel</span>
+              <span className="font-mono text-xs font-normal opacity-40">•</span>
+              <span className="font-mono text-xs font-normal" style={{ color: 'var(--muted)' }}>
+                Full-Stack Developer
+              </span>
+            </p>
+          </div>
+
+          {/* Back To Top Bouncing Widget */}
+          <div className="flex-shrink-0 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={handleScrollToTop}
+              aria-label="Back to top"
+              title="Back to top"
+              className="animate-bounce-y group flex items-center justify-center w-10 h-10 rounded-full border border-border bg-surface-1 text-accent hover:bg-surface-2 hover:border-accent hover:[animation-play-state:paused] transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer shadow-xs"
+            >
+              <ArrowUp className="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
+            </button>
+          </div>
+
+          <div className="flex-1 w-full sm:w-auto text-center sm:text-right">
+            <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
+              Portfolio &amp; Archive 2026
+            </p>
+          </div>
         </div>
 
-        <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-          Portfolio &amp; Archive 2026
-        </p>
-      </div>
-
-      {/* ── Subtle Background Typography Watermark (Reference: "roku") ─────── */}
-      <div
-        data-contact-animate
-        className="absolute -bottom-6 right-2 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
-        aria-hidden="true"
-      >
-        <span
-          className="text-[20vw] sm:text-[18vw] font-black tracking-tighter inline-block select-none"
-          style={{
-            color: 'var(--border)',
-            opacity: 0.35,
-          }}
+        {/* ── Subtle Background Typography Watermark (Reference: "roku") ─────── */}
+        <div
+          data-contact-animate
+          className="absolute -bottom-6 right-2 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
+          aria-hidden="true"
         >
-          jason
-        </span>
-      </div>
-    </section>
-  );
-});
+          <span
+            className="text-[20vw] sm:text-[18vw] font-black tracking-tighter inline-block select-none"
+            style={{
+              color: 'var(--border)',
+              opacity: 0.35,
+            }}
+          >
+            jason
+          </span>
+        </div>
+      </section>
+    );
+  });
 
 ContactSection.displayName = 'ContactSection';
 export default ContactSection;

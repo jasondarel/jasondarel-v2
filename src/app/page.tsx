@@ -5,6 +5,7 @@ import AboutSection from '@/components/AboutSection';
 import SkillsSection from '@/components/SkillsSection';
 import ExperienceSection from '@/components/ExperienceSection';
 import ProjectsSection from '@/components/ProjectsSection';
+import FadeToTopOverlay from '@/components/FadeToTopOverlay';
 
 /**
  * Home (App.tsx equivalent)
@@ -26,6 +27,9 @@ export default function Home() {
 
   return (
     <main>
+      {/* ── Global Fade-to-Top Overlay ─────────────────────────────────────── */}
+      <FadeToTopOverlay />
+
       {/* ── 1. INTRO HERO ─────────────────────────────────────────────────── */}
       <section
         className="relative flex h-screen flex-col items-center justify-center px-6 text-center select-none"
