@@ -273,11 +273,8 @@ export default function ExperienceSection() {
                 </p>
               </div>
 
-              <div className="flex flex-col items-end">
-                <span className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--muted)' }}>
-                  Duration
-                </span>
-                <span className="text-sm font-mono font-bold" style={{ color: 'var(--accent)' }}>
+              <div className="flex flex-col items-end pt-1">
+                <span className="text-sm sm:text-base font-mono font-bold" style={{ color: 'var(--accent)' }}>
                   {gositus.period}
                 </span>
               </div>
@@ -379,11 +376,8 @@ export default function ExperienceSection() {
                 </p>
               </div>
 
-              <div className="flex flex-col items-end">
-                <span className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--muted)' }}>
-                  Duration
-                </span>
-                <span className="text-sm font-mono font-bold" style={{ color: 'var(--accent)' }}>
+              <div className="flex flex-col items-end pt-1">
+                <span className="text-sm sm:text-base font-mono font-bold" style={{ color: 'var(--accent)' }}>
                   {kpsg.period}
                 </span>
               </div>
