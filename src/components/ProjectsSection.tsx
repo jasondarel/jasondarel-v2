@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PROJECTS_DATA } from '@/constants/projects';
 import ProjectCard from '@/components/ProjectCard';
 import ContactSection from '@/components/ContactSection';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -72,6 +73,44 @@ export default function ProjectsSection() {
   const contactOverlayRef = useRef<HTMLDivElement>(null);
   const contactSectionRef = useRef<HTMLDivElement>(null);
   const [isDealt, setIsDealt] = useState(false);
+
+  // Mobile horizontal snap carousel state & refs
+  const [mobileActiveIndex, setMobileActiveIndex] = useState(0);
+  const mobileStageRef = useRef<HTMLElement>(null);
+  const mobileCarouselRef = useRef<HTMLDivElement>(null);
+  const mobileScrollRaf = useRef<number | null>(null);
+
+  const handleMobileScroll = () => {
+    if (mobileScrollRaf.current !== null) return;
+    mobileScrollRaf.current = requestAnimationFrame(() => {
+      mobileScrollRaf.current = null;
+      const container = mobileCarouselRef.current;
+      if (!container) return;
+      const firstChild = container.firstElementChild as HTMLElement | null;
+      if (!firstChild) return;
+      const step = firstChild.offsetWidth + 16;
+      const index = Math.round(container.scrollLeft / step);
+      const clamped = Math.max(0, Math.min(index, PROJECTS_DATA.length - 1));
+      setMobileActiveIndex((prev) => (prev !== clamped ? clamped : prev));
+    });
+  };
+
+  const scrollToMobileCard = (index: number) => {
+    const container = mobileCarouselRef.current;
+    if (!container) return;
+    const clamped = Math.max(0, Math.min(index, PROJECTS_DATA.length - 1));
+    const firstChild = container.firstElementChild as HTMLElement | null;
+    if (!firstChild) return;
+    const step = firstChild.offsetWidth + 16;
+    container.scrollTo({
+      left: clamped * step,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleMobileNav = (direction: number) => {
+    scrollToMobileCard(mobileActiveIndex + direction);
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -256,6 +295,19 @@ export default function ProjectsSection() {
 
         // ── Phase 6: Pinned Contact Section Showcase Hold ─────────────────────
         tl.to({}, { duration: 2.3 }, TOTAL_TIMELINE_DURATION - 2.3);
+      } else {
+        // ── Mobile Scroll Delay Hold (Holds projects section before moving to contact) ──
+        const mobileStage = mobileStageRef.current;
+        if (mobileStage) {
+          ScrollTrigger.create({
+            trigger: mobileStage,
+            start: 'top top',
+            end: '+=700',
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+          });
+        }
       }
     }, container);
 
@@ -268,9 +320,9 @@ export default function ProjectsSection() {
       className="relative w-full select-none"
       aria-label="Projects Section"
     >
-      {/* ── 1. Section Header (Normal Scroll Flow - Scrolls out of POV) ───── */}
+      {/* ── 1. Section Header (Normal Scroll Flow - Desktop viewports only) ── */}
       <div
-        className="relative border-t px-6 sm:px-10 md:px-14 py-8 sm:py-12 md:py-24 md:min-h-[45vh] flex flex-col justify-center select-none"
+        className="hidden md:flex relative border-t px-6 sm:px-10 md:px-14 py-8 sm:py-12 md:py-24 md:min-h-[45vh] flex-col justify-center select-none"
         style={{
           background: 'var(--background)',
           borderColor: 'var(--border)',
@@ -295,7 +347,12 @@ export default function ProjectsSection() {
               className="text-sm sm:text-base font-medium leading-relaxed max-w-lg"
               style={{ color: 'var(--muted)' }}
             >
-              Scroll to deal and fan the deck. Hover any card to inspect the details.
+              <span className="hidden md:inline">
+                Scroll to deal and fan the deck. Hover any card to inspect the details.
+              </span>
+              <span className="md:hidden">
+                Swipe to browse the deck. Tap any card to inspect the details.
+              </span>
             </p>
           </div>
         </div>
@@ -381,20 +438,126 @@ export default function ProjectsSection() {
         </div>
       </section>
 
-      {/* ── 5. Mobile Static Grid Layout (Responsive fall-back) ───────────── */}
-      <div
-        className="md:hidden px-6 pt-6 pb-12 flex flex-col items-center gap-6 w-full"
+      {/* ── 5. Mobile Full-Screen Showcase Stage with Scroll Delay ────────── */}
+      <section
+        ref={mobileStageRef}
+        className="md:hidden relative w-full h-screen h-[100dvh] overflow-hidden flex flex-col justify-between select-none py-6 px-4 sm:px-6"
         style={{ background: 'var(--background)' }}
+        aria-label="Mobile Projects Showcase"
       >
-        <p className="text-sm font-mono text-center mb-2" style={{ color: 'var(--muted)' }}>
-          Tap any card to flip and inspect details
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-md sm:max-w-xl mx-auto">
-          {PROJECTS_DATA.map((project) => (
-            <ProjectCard key={project.id} project={project} className="w-full" />
-          ))}
+        {/* ── Top Bar: Title, Subtitle, Counter ────────────────────────────── */}
+        <div
+          className="flex items-center justify-between w-full max-w-lg mx-auto pb-3 border-b flex-shrink-0"
+          style={{ borderColor: 'var(--border)' }}
+        >
+          <div>
+            <h2
+              className="text-2xl sm:text-3xl font-black tracking-tighter leading-none"
+              style={{ color: 'var(--accent)' }}
+            >
+              Projects<span className="opacity-40">.</span>
+            </h2>
+            <p className="text-[11px] font-mono mt-1" style={{ color: 'var(--muted)' }}>
+              Swipe to browse • Tap to flip
+            </p>
+          </div>
+
+          {/* Numerical Counter Pill */}
+          <div
+            className="flex items-center gap-1.5 font-mono text-xs sm:text-sm px-2.5 py-1 rounded-md border"
+            style={{
+              borderColor: 'var(--border)',
+              background: 'var(--surface-1)',
+            }}
+          >
+            <span className="font-bold tracking-wider" style={{ color: 'var(--accent)' }}>
+              {String(mobileActiveIndex + 1).padStart(2, '0')}
+            </span>
+            <span className="opacity-40 text-xs" style={{ color: 'var(--muted)' }}>/</span>
+            <span className="text-xs" style={{ color: 'var(--muted)' }}>
+              {String(PROJECTS_DATA.length).padStart(2, '0')}
+            </span>
+          </div>
         </div>
-      </div>
+
+        {/* ── Middle: Horizontal Swipeable Snap Carousel ──────────────────── */}
+        <div
+          ref={mobileCarouselRef}
+          onScroll={handleMobileScroll}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-2 py-4 my-auto touch-pan-x"
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          {PROJECTS_DATA.map((project) => (
+            <div
+              key={project.id}
+              className="snap-start flex-shrink-0"
+            >
+              <ProjectCard project={project} />
+            </div>
+          ))}
+          {/* End spacer for right-edge breathing room */}
+          <div className="w-4 flex-shrink-0" aria-hidden="true" />
+        </div>
+
+        {/* ── Bottom Controls: Dash Indicators & Arrow Buttons ────────────── */}
+        <div
+          className="flex items-center justify-between w-full max-w-lg mx-auto pt-3 border-t flex-shrink-0"
+          style={{ borderColor: 'var(--border)' }}
+        >
+          {/* Dash Progress Indicators */}
+          <div className="flex items-center gap-1.5">
+            {PROJECTS_DATA.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => scrollToMobileCard(idx)}
+                aria-label={`Jump to project card ${idx + 1}`}
+                className="h-1 rounded-full transition-all duration-300 cursor-pointer"
+                style={{
+                  width: mobileActiveIndex === idx ? '22px' : '6px',
+                  background: mobileActiveIndex === idx ? 'var(--accent)' : 'var(--border)',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Prev / Next Nav Buttons */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => handleMobileNav(-1)}
+              disabled={mobileActiveIndex === 0}
+              aria-label="Previous project card"
+              className="w-7 h-7 rounded-full border flex items-center justify-center transition-all active:scale-95 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
+              style={{
+                borderColor: 'var(--border)',
+                background: 'var(--surface-1)',
+                color: 'var(--accent)',
+              }}
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMobileNav(1)}
+              disabled={mobileActiveIndex === PROJECTS_DATA.length - 1}
+              aria-label="Next project card"
+              className="w-7 h-7 rounded-full border flex items-center justify-center transition-all active:scale-95 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
+              style={{
+                borderColor: 'var(--border)',
+                background: 'var(--surface-1)',
+                color: 'var(--accent)',
+              }}
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* ── 6. Mobile Contact Section ─────────────────────────────────────── */}
       <div className="md:hidden">

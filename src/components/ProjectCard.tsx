@@ -38,7 +38,7 @@ function ProjectImagePreview({
           src={imgSrc}
           alt={title}
           fill
-          sizes="(max-width: 768px) 100vw, 200px"
+          sizes="(max-width: 768px) 300px, 200px"
           loading="lazy"
           onError={() => setImgError(true)}
           className="object-cover"
@@ -171,6 +171,24 @@ function ProjectCard({
     }
   }
 
+  // Pointer position tracker to distinguish genuine taps from swipe/drag gestures
+  const pointerStartPos = useRef<{ x: number; y: number } | null>(null);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    pointerStartPos.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (!interactive) return;
+    if (pointerStartPos.current) {
+      const dx = Math.abs(e.clientX - pointerStartPos.current.x);
+      const dy = Math.abs(e.clientY - pointerStartPos.current.y);
+      // If pointer moved more than 8px, it was a swipe/drag gesture, not an intentional tap
+      if (dx > 8 || dy > 8) return;
+    }
+    setIsFlipped((prev) => !prev);
+  };
+
   // When flipped, track global pointer movement to reliably unflip whenever cursor leaves the card
   useEffect(() => {
     if (!isFlipped) return;
@@ -210,7 +228,7 @@ function ProjectCard({
   return (
     <div
       ref={cardRef}
-      className={`group/card relative w-full md:w-[200px] h-[380px] md:h-[280px] select-none [perspective:1200px] ${
+      className={`group/card relative w-[270px] sm:w-[290px] md:w-[200px] h-[380px] sm:h-[400px] md:h-[280px] select-none [perspective:1200px] ${
         interactive ? 'cursor-pointer' : 'cursor-default pointer-events-none'
       } ${className}`}
       style={style}
@@ -218,7 +236,8 @@ function ProjectCard({
       onPointerEnter={() => interactive && setIsFlipped(true)}
       onMouseLeave={() => setIsFlipped(false)}
       onPointerLeave={() => setIsFlipped(false)}
-      onClick={() => interactive && setIsFlipped((prev) => !prev)}
+      onPointerDown={handlePointerDown}
+      onClick={handleCardClick}
       role="region"
       aria-label={`Project card for ${project.title}`}
     >
@@ -297,7 +316,13 @@ function ProjectCard({
           </div>
 
           {/* Bottom Corner Metadata */}
-          <div className="relative z-10 flex items-center justify-end px-1 pb-0.5">
+          <div className="relative z-10 flex items-center justify-between px-1 pb-0.5">
+            <span
+              className="text-[8.5px] font-mono tracking-wider uppercase opacity-60 flex items-center gap-1"
+              style={{ color: 'var(--muted)' }}
+            >
+              Tap to flip
+            </span>
             <span
               className="text-[9.5px] font-mono tracking-widest uppercase opacity-80"
               style={{ color: 'var(--muted)' }}
@@ -383,9 +408,15 @@ function ProjectCard({
 
             {/* Bottom Links */}
             <div
-              className="relative z-20 pointer-events-auto flex items-center justify-end pt-1 border-t text-[9.5px] font-mono"
+              className="relative z-20 pointer-events-auto flex items-center justify-between pt-1 border-t text-[9.5px] font-mono"
               style={{ borderColor: 'var(--border)' }}
             >
+              <span
+                className="text-[8.5px] font-mono tracking-wider uppercase opacity-50 select-none"
+                style={{ color: 'var(--muted)' }}
+              >
+                Tap to flip back
+              </span>
               {project.links?.live ? (
                 <Button
                   size="xs"
