@@ -283,15 +283,6 @@ export default function ProjectsSection() {
             style={{ borderColor: 'var(--border)' }}
           >
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span
-                  className="text-xs sm:text-sm font-mono uppercase tracking-[0.25em]"
-                  style={{ color: 'var(--muted)' }}
-                >
-                  04 / Archive
-                </span>
-              </div>
-
               <h2
                 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-[0.95]"
                 style={{ color: 'var(--accent)' }}
