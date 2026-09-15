@@ -572,18 +572,23 @@ export default function ProjectsSection() {
         {/* ── Middle: Horizontal Swipeable Snap Carousel ──────────────────── */}
         <div
           ref={mobileCarouselRef}
+          data-lenis-prevent-horizontal="true"
           onScroll={handleMobileScroll}
-          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory px-[calc(50%-135px)] sm:px-[calc(50%-145px)] md:px-[calc(50%-160px)] py-4 my-auto touch-pan-x"
+          className="flex gap-4 md:gap-6 overflow-x-auto overflow-y-hidden snap-x snap-mandatory px-[calc(50%-135px)] sm:px-[calc(50%-145px)] md:px-[calc(50%-160px)] py-4 my-auto"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
             WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-x pan-y',
+            overscrollBehaviorX: 'contain',
+            overscrollBehaviorY: 'auto',
           }}
         >
           {PROJECTS_DATA.map((project) => (
             <div
               key={project.id}
               className="snap-center flex-shrink-0"
+              style={{ touchAction: 'pan-x pan-y' }}
             >
               <ProjectCard project={project} onOpenModal={handleOpenModal} forceFlipped={true} />
             </div>
