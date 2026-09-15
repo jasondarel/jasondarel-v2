@@ -30,7 +30,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'fasteats',
     title: 'FastEats',
-    description: 'A full-stack food ordering platform with digital menus, cart management, and online checkout.',
+    description: 'Food ordering platform with digital menus and seamless cart checkout.',
     longDescription:
       'FastEats is a web application built to make ordering from local eateries straightforward. Customers can browse restaurant menus, customize items, manage their cart in real time, and check out seamlessly. I built the backend with Node and Express on top of a PostgreSQL database to handle menu inventory, user orders, and order history.',
     features: [
@@ -63,7 +63,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'nourishscan',
     title: 'NourishScan',
-    description: 'A nutrition tracking app that analyzes meal photos to estimate calories and macronutrients.',
+    description: 'AI nutrition tracker estimating calories and macros from meal photos.',
     longDescription:
       'NourishScan helps users keep track of what they eat by snapping or uploading a photo of their meal. The backend uses Python and Flask along with an AI model to detect food items on the plate and provide an estimated breakdown of calories, protein, carbs, and fats.',
     features: [
@@ -93,7 +93,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'boothease',
     title: 'BoothEase',
-    description: 'An event management platform for booking and managing exhibition stalls with an interactive floor plan.',
+    description: 'Exhibition booth booking platform with interactive venue floor plans.',
     longDescription:
       'BoothEase was created to simplify how event organizers rent out stalls and how vendors reserve their spots. Instead of relying on manual forms or spreadsheets, vendors can view a venue floor map, pick available booths based on size and price, and confirm their booking through an organized dashboard.',
     features: [
@@ -124,7 +124,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'codewave',
     title: 'CodeWave',
-    description: 'A course enrollment platform where students can browse programming topics and study structured learning materials.',
+    description: 'Course enrollment platform with structured programming learning paths.',
     longDescription:
       'CodeWave is a course platform built with PHP Laravel and MySQL. Users can explore available programming courses, enroll in the topics they want to learn, and read through organized module materials at their own pace.',
     features: [
@@ -155,7 +155,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'fiomodoro',
     title: 'Fiomodoro',
-    description: 'A focused Pomodoro timer and study companion designed to help maintain productive work intervals.',
+    description: 'Minimalist Pomodoro timer and study companion with session tracking.',
     longDescription:
       'Fiomodoro is a clean, distraction-free Pomodoro web app built with React and TypeScript. It lets you customize focus sessions and breaks, tracks your daily completed intervals, and plays subtle audio alerts so you can stay in the zone without constantly watching the clock.',
     features: [
@@ -185,7 +185,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'gymme',
     title: 'GymMe',
-    description: 'An e-commerce web application for fitness supplements with product catalogs and order processing.',
+    description: 'Fitness supplement e-commerce store with integrated order management.',
     longDescription:
       'GymMe is a fitness supplement web shop built with C# and ASP.NET. Users can browse products by category, filter by fitness goal, add items to their shopping cart, and place orders through a step-by-step checkout flow. The back-end also includes basic admin functionality for managing product stock and reviewing customer orders.',
     features: [
@@ -214,7 +214,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'calm',
     title: 'Calm',
-    description: 'A mobile UI/UX concept for mental health consultation, therapist matching, and appointment booking.',
+    description: 'Therapist matching and appointment booking mobile UI/UX concept.',
     longDescription:
       'Calm is a mobile app concept designed in Figma to make finding and booking mental health support feel warm and approachable. The flow guides users through a gentle self-check questionnaire, matches them with verified licensed therapists based on their needs, and lets them schedule chat or video sessions with ease.',
     features: [
@@ -242,7 +242,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'stayseeker',
     title: 'StaySeeker',
-    description: 'A UI/UX prototype for an accommodation booking platform featuring interactive search and stay previews.',
+    description: 'Holiday accommodation booking prototype with interactive stay search.',
     longDescription:
       'StaySeeker is a web prototype designed in Figma for discovering and booking holiday stays and rentals. The layout emphasizes clean visuals, clear pricing breakdowns without hidden fees, and an intuitive map-based search so travelers can easily compare properties and check amenities before booking.',
     features: [

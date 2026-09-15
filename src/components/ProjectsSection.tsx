@@ -74,6 +74,9 @@ export default function ProjectsSection() {
   const blurOverlayRef = useRef<HTMLDivElement>(null);
   const contactOverlayRef = useRef<HTMLDivElement>(null);
   const contactSectionRef = useRef<HTMLDivElement>(null);
+  const mobileBlurOverlayRef = useRef<HTMLDivElement>(null);
+  const mobileContactOverlayRef = useRef<HTMLDivElement>(null);
+  const mobileContactSectionRef = useRef<HTMLDivElement>(null);
   const [isDealt, setIsDealt] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
@@ -320,15 +323,66 @@ export default function ProjectsSection() {
     // ── Tablet & Mobile Viewports (< 1024px): Swipeable Carousel & Scroll Delay ──
     mm.add('(max-width: 1023.98px)', () => {
       const mobileStage = mobileStageRef.current;
-      if (mobileStage) {
-        ScrollTrigger.create({
+      if (!mobileStage) return;
+
+      // Initial state for mobile blur overlay
+      if (mobileBlurOverlayRef.current) {
+        gsap.set(mobileBlurOverlayRef.current, {
+          opacity: 0,
+          backdropFilter: 'blur(0px)',
+          WebkitBackdropFilter: 'blur(0px)',
+        });
+      }
+
+      // Initial state for mobile contact elements
+      const mobileContactElements = mobileContactSectionRef.current
+        ? mobileContactSectionRef.current.querySelectorAll('[data-contact-animate]')
+        : [];
+      if (mobileContactElements.length > 0) {
+        gsap.set(mobileContactElements, { opacity: 0, y: 35 });
+      }
+
+      // Pointer-events: off until contact fades in
+      if (mobileContactOverlayRef.current) {
+        mobileContactOverlayRef.current.style.pointerEvents = 'none';
+      }
+
+      const mobileTl = gsap.timeline({
+        scrollTrigger: {
           trigger: mobileStage,
           start: 'top top',
           end: `+=${MOBILE_PINNED_HOLD}`,
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
-        });
+          scrub: 0.15,
+          onUpdate: (self) => {
+            // Enable contact pointer-events once past 85% through the pinned scroll
+            if (mobileContactOverlayRef.current) {
+              mobileContactOverlayRef.current.style.pointerEvents =
+                self.progress >= 0.85 ? 'auto' : 'none';
+            }
+          },
+        },
+      });
+
+      // Blur + dim the carousel stage (starts at 30% progress)
+      if (mobileBlurOverlayRef.current) {
+        mobileTl.fromTo(
+          mobileBlurOverlayRef.current,
+          { opacity: 0, backdropFilter: 'blur(0px)', WebkitBackdropFilter: 'blur(0px)' },
+          { opacity: 1, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', ease: 'power2.inOut' },
+          0.3
+        );
+      }
+
+      // Fade-up contact elements (starts at 50% progress, staggered)
+      if (mobileContactElements.length > 0) {
+        mobileTl.to(
+          mobileContactElements,
+          { opacity: 1, y: 0, stagger: 0.12, ease: 'power2.out' },
+          0.5
+        );
       }
     });
 
@@ -549,12 +603,25 @@ export default function ProjectsSection() {
             ))}
           </div>
         </div>
-      </section>
+        {/* ── 6. Mobile Frosted Glass Blur Overlay ─────────────────────── */}
+        <div
+          ref={mobileBlurOverlayRef}
+          className="absolute inset-0 w-full h-full z-25 pointer-events-none"
+          style={{
+            opacity: 0,
+            background: 'color-mix(in srgb, var(--surface-0) 82%, transparent)',
+          }}
+          aria-hidden="true"
+        />
 
-      {/* ── 6. Mobile & Tablet Contact Section ───────────────────────────── */}
-      <div className="lg:hidden">
-        <ContactSection />
-      </div>
+        {/* ── 7. Mobile Contact Section Overlay ────────────────────────── */}
+        <div
+          ref={mobileContactOverlayRef}
+          className="absolute inset-0 w-full h-full z-30 pointer-events-none"
+        >
+          <ContactSection isOverlay ref={mobileContactSectionRef} />
+        </div>
+      </section>
 
       {/* ── 7. Project Full Details Modal ─────────────────────────────── */}
       <ProjectModal

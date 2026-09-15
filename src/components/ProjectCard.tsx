@@ -410,8 +410,9 @@ function ProjectCard({
 
             {/* Description */}
             <p
-              className="text-xs sm:text-xs md:text-sm lg:text-[10.5px] font-normal leading-relaxed lg:leading-snug mb-2 md:mb-2.5 lg:mb-1.5 line-clamp-2 lg:line-clamp-none"
+              className="text-xs sm:text-xs md:text-sm lg:text-[10.5px] font-normal leading-relaxed lg:leading-snug mb-2 md:mb-2.5 lg:mb-1.5 line-clamp-2"
               style={{ color: 'var(--foreground)' }}
+              title={project.description}
             >
               {project.description}
             </p>

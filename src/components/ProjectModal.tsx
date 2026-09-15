@@ -544,21 +544,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
               </div>
             )}
 
-            {/* Top-Left Image Counter Badge (Visible if multiple images exist) */}
-            {totalImages > 1 && (
-              <div className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4 z-20 pointer-events-none">
-                <span
-                  className="px-2.5 py-1 rounded-md border text-[11px] font-mono tracking-wider backdrop-blur-md font-bold tabular-nums"
-                  style={{
-                    background: 'color-mix(in srgb, var(--surface-0) 88%, transparent)',
-                    borderColor: 'var(--border)',
-                    color: 'var(--accent)',
-                  }}
-                >
-                  {String(currentImageIndex + 1).padStart(2, '0')} / {String(totalImages).padStart(2, '0')}
-                </span>
-              </div>
-            )}
+
 
             {/* Left & Right Arrow Buttons (Visible when multiple images exist) */}
             {totalImages > 1 && (
