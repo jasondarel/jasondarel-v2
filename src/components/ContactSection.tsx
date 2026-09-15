@@ -119,27 +119,47 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
 
       mm.add('(max-width: 1023.98px)', () => {
         const contactElements = section.querySelectorAll('[data-contact-animate]');
-        if (contactElements.length === 0) return;
+        const watermark = section.querySelector('[data-contact-watermark]');
 
-        gsap.fromTo(
-          contactElements,
-          {
-            opacity: 0,
-            y: 35,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.9,
-            stagger: 0.15,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
+        if (watermark) {
+          gsap.fromTo(
+            watermark,
+            { opacity: 0, y: 15 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+              },
+            }
+          );
+        }
+
+        if (contactElements.length > 0) {
+          gsap.fromTo(
+            contactElements,
+            {
+              opacity: 0,
+              y: 25,
             },
-          }
-        );
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.1,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+              },
+            }
+          );
+        }
       });
 
       return () => mm.revert();
@@ -168,8 +188,8 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         id={id}
         className={`relative flex flex-col justify-between overflow-hidden select-none ${
           isOverlay
-            ? 'w-full h-full px-6 sm:px-12 md:px-16 py-8 md:py-12'
-            : 'w-full min-h-screen min-h-[100dvh] border-t px-6 sm:px-12 md:px-16 py-8 sm:py-12 md:py-16'
+            ? 'w-full h-full px-5 sm:px-12 md:px-16 py-6 sm:py-10 md:py-12'
+            : 'w-full min-h-screen min-h-[100dvh] border-t px-5 sm:px-12 md:px-16 py-8 sm:py-12 md:py-16'
         } ${className}`}
         style={{
           background: isOverlay ? 'transparent' : 'var(--surface-0)',
@@ -182,9 +202,9 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         <div className="relative z-10 max-w-6xl w-full mx-auto flex flex-col md:my-auto">
 
           {/* ── Left-Aligned Display Headline (Inspired by Reference) ─────────── */}
-          <div data-contact-animate className="flex flex-col items-start mb-4 sm:mb-6 md:mb-8">
+          <div data-contact-animate className="flex flex-col items-start mb-3 sm:mb-6 md:mb-8">
             <h2
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.92] tracking-tighter cursor-default text-left"
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.92] tracking-tighter cursor-default text-left"
               style={{ color: 'var(--accent)' }}
             >
               <span className="block">Let&apos;s Work</span>
@@ -193,7 +213,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
           </div>
 
           {/* ── Social Icons Row (Directly below headline) ─────────────────────── */}
-          <div data-contact-animate className="flex flex-wrap items-center gap-2 sm:gap-2.5 md:gap-3 mb-6 sm:mb-8 md:mb-12">
+          <div data-contact-animate className="flex flex-wrap items-center gap-2 sm:gap-2.5 md:gap-3 mb-4 sm:mb-8 md:mb-12">
             {SOCIAL_LINKS.map((social) => {
               const Icon = social.icon;
               return (
@@ -237,33 +257,33 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
           {/* ── 3 Reference Columns: LOCATION / CONTACT / SOCIAL ───────────────── */}
           <div
             data-contact-animate
-            className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 md:gap-8 pt-6 sm:pt-8 md:pt-10 border-t"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 sm:gap-6 md:gap-8 pt-3 sm:pt-8 md:pt-10 border-t"
             style={{ borderColor: 'var(--border)' }}
           >
             {/* Column 1: LOCATION */}
-            <div className="md:col-span-4 flex flex-col items-start">
+            <div className="col-span-1 md:col-span-4 flex flex-col items-start">
               <span
-                className="text-xs font-mono uppercase tracking-[0.28em] mb-2 md:mb-3 flex items-center gap-1.5"
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-1 sm:mb-2 md:mb-3 flex items-center gap-1.5"
                 style={{ color: 'var(--muted)' }}
               >
                 <MapPin className="w-3.5 h-3.5" />
                 Location
               </span>
               <p
-                className="text-lg sm:text-xl font-medium tracking-tight mb-1"
+                className="text-base sm:text-xl font-medium tracking-tight mb-0.5 sm:mb-1"
                 style={{ color: 'var(--foreground)' }}
               >
                 Tangerang, Indonesia
               </p>
-              <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
+              <p className="text-[11px] sm:text-xs font-mono" style={{ color: 'var(--muted)' }}>
                 UTC+7 (WIB) • Remote &amp; Worldwide
               </p>
             </div>
 
             {/* Column 2: CONTACT */}
-            <div className="md:col-span-4 flex flex-col items-start">
+            <div className="col-span-1 md:col-span-4 flex flex-col items-start">
               <span
-                className="text-xs font-mono uppercase tracking-[0.28em] mb-2 md:mb-3 flex items-center gap-1.5"
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-1 sm:mb-2 md:mb-3 flex items-center gap-1.5"
                 style={{ color: 'var(--muted)' }}
               >
                 <Mail className="w-3.5 h-3.5" />
@@ -271,30 +291,30 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
               </span>
               <a
                 href={`mailto:${emailAddress}`}
-                className="group inline-flex items-center gap-1.5 text-lg sm:text-xl font-medium tracking-tight mb-1 transition-colors hover:opacity-80"
+                className="group inline-flex items-center gap-1.5 text-base sm:text-xl font-medium tracking-tight mb-0.5 sm:mb-1 transition-colors hover:opacity-80 break-all sm:break-normal"
                 style={{ color: 'var(--foreground)' }}
               >
                 <span>{emailAddress}</span>
                 <ArrowUpRight
-                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 flex-shrink-0"
                   style={{ color: 'var(--muted)' }}
                 />
               </a>
-              <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
+              <p className="text-[11px] sm:text-xs font-mono" style={{ color: 'var(--muted)' }}>
                 Open for full-time roles &amp; select contracts
               </p>
             </div>
 
             {/* Column 3: SOCIAL */}
-            <div className="md:col-span-4 flex flex-col items-start">
+            <div className="col-span-1 md:col-span-4 flex flex-col items-start">
               <span
-                className="text-xs font-mono uppercase tracking-[0.28em] mb-2 md:mb-3 flex items-center gap-1.5"
+                className="text-xs font-mono uppercase tracking-[0.28em] mb-1 sm:mb-2 md:mb-3 flex items-center gap-1.5"
                 style={{ color: 'var(--muted)' }}
               >
                 <Globe className="w-3.5 h-3.5" />
                 Social
               </span>
-              <div className="flex flex-col space-y-1.5 md:space-y-2">
+              <div className="flex flex-col space-y-1 sm:space-y-1.5 md:space-y-2">
                 {SOCIAL_LINKS.map((social) => {
                   const Icon = social.icon;
                   return (
@@ -303,10 +323,10 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group inline-flex items-center gap-2 text-base font-normal tracking-tight transition-colors hover:opacity-80"
+                      className="group inline-flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base font-normal tracking-tight transition-colors hover:opacity-80"
                       style={{ color: 'var(--foreground)' }}
                     >
-                      <Icon className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: 'var(--muted)' }} />
+                      <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" style={{ color: 'var(--muted)' }} />
                       <span className="group-hover:underline underline-offset-4">{social.name}</span>
                       <ArrowUpRight
                         className="w-3.5 h-3.5 opacity-60 transition-transform group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -358,12 +378,12 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
 
         {/* ── Subtle Background Typography Watermark (Reference: "roku") ─────── */}
         <div
-          data-contact-animate
+          data-contact-watermark
           className="absolute -bottom-2 md:-bottom-6 right-2 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
           aria-hidden="true"
         >
           <span
-            className="text-[20vw] sm:text-[18vw] font-black tracking-tighter inline-block select-none"
+            className="text-[18vw] sm:text-[18vw] font-black tracking-tighter inline-block select-none"
             style={{
               color: 'var(--border)',
               opacity: 0.35,

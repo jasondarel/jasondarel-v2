@@ -174,10 +174,20 @@ export default function ProjectsSection() {
       const contactElements = contactSectionRef.current
         ? contactSectionRef.current.querySelectorAll('[data-contact-animate]')
         : [];
+      const contactWatermark = contactSectionRef.current
+        ? contactSectionRef.current.querySelector('[data-contact-watermark]')
+        : null;
+
       if (contactElements.length > 0) {
         gsap.set(contactElements, {
           opacity: 0,
           y: 35,
+        });
+      }
+      if (contactWatermark) {
+        gsap.set(contactWatermark, {
+          opacity: 0,
+          y: 20,
         });
       }
 
@@ -303,6 +313,19 @@ export default function ProjectsSection() {
       }
 
       // ── Phase 5: Contact Contents Fade-Up Animation ──────────────────────
+      if (contactWatermark) {
+        tl.to(
+          contactWatermark,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.5,
+            ease: 'power2.out',
+          },
+          CONTACT_START_TIME
+        );
+      }
+
       if (contactElements.length > 0) {
         tl.to(
           contactElements,
@@ -343,8 +366,15 @@ export default function ProjectsSection() {
       const mobileContactElements = mobileContactSectionRef.current
         ? mobileContactSectionRef.current.querySelectorAll('[data-contact-animate]')
         : [];
+      const mobileWatermark = mobileContactSectionRef.current
+        ? mobileContactSectionRef.current.querySelector('[data-contact-watermark]')
+        : null;
+
       if (mobileContactElements.length > 0) {
-        gsap.set(mobileContactElements, { opacity: 0, y: 35 });
+        gsap.set(mobileContactElements, { opacity: 0, y: 25 });
+      }
+      if (mobileWatermark) {
+        gsap.set(mobileWatermark, { opacity: 0, y: 15 });
       }
 
       // Pointer-events: off until contact fades in
@@ -362,10 +392,10 @@ export default function ProjectsSection() {
           anticipatePin: 1,
           scrub: 0.15,
           onUpdate: (self) => {
-            // Enable contact pointer-events once past 85% through the pinned scroll
+            // Enable contact pointer-events once past 65% through the pinned scroll
             if (mobileContactOverlayRef.current) {
               mobileContactOverlayRef.current.style.pointerEvents =
-                self.progress >= 0.85 ? 'auto' : 'none';
+                self.progress >= 0.65 ? 'auto' : 'none';
             }
           },
         },
@@ -381,12 +411,21 @@ export default function ProjectsSection() {
         );
       }
 
-      // Fade-up contact elements (starts at 50% progress, staggered)
+      // Watermark fades up concurrently as ambient backdrop (starts at 42% progress)
+      if (mobileWatermark) {
+        mobileTl.to(
+          mobileWatermark,
+          { opacity: 1, y: 0, ease: 'power2.out' },
+          0.42
+        );
+      }
+
+      // Fade-up contact elements (starts at 45% progress with tight stagger)
       if (mobileContactElements.length > 0) {
         mobileTl.to(
           mobileContactElements,
-          { opacity: 1, y: 0, stagger: 0.12, ease: 'power2.out' },
-          0.5
+          { opacity: 1, y: 0, stagger: 0.08, ease: 'power2.out' },
+          0.45
         );
       }
 
