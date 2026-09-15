@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { EXPERIENCE_DATA } from '@/constants/experience';
 import CountUp from '@/components/CountUp';
+import { attachEdgeBarrier } from '@/lib/antiOverscroll';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -94,6 +95,10 @@ export default function ExperienceSection() {
         })
         // 5. Final rock-solid stationary hold on Panel 3 before unpinning to Projects
         .to({}, { duration: 2.0 });
+
+      // Anti-overscroll barrier at boundaries
+      const cleanupBarrier = tl.scrollTrigger ? attachEdgeBarrier(tl.scrollTrigger) : undefined;
+      return () => cleanupBarrier?.();
     });
 
     // ── Tablet & Mobile Viewports (< 1024px) ──────────────────────────────────
@@ -134,7 +139,7 @@ export default function ExperienceSection() {
         },
       });
 
-      // Calculate final panel hold duration so it maps exactly to MOBILE_PINNED_HOLD (500px)
+      // Calculate final panel hold duration so it maps exactly to MOBILE_PINNED_HOLD (300px)
       const finalHoldDuration = activeDuration * (MOBILE_PINNED_HOLD / getActiveScroll());
 
       tl
@@ -154,8 +159,12 @@ export default function ExperienceSection() {
           duration: 0.9,
           ease: 'power2.inOut',
         })
-        // 5. Final hold on Panel 3: exactly aligned with Projects (500px)
+        // 5. Final hold on Panel 3: exactly aligned with Projects (300px)
         .to({}, { duration: finalHoldDuration });
+
+      // Anti-overscroll barrier at boundaries
+      const cleanupBarrier = tl.scrollTrigger ? attachEdgeBarrier(tl.scrollTrigger) : undefined;
+      return () => cleanupBarrier?.();
     });
 
     return () => mm.revert();

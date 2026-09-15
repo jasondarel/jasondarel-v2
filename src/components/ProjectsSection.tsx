@@ -7,6 +7,7 @@ import { ProjectItem, PROJECTS_DATA } from '@/constants/projects';
 import ProjectCard from '@/components/ProjectCard';
 import ProjectModal from '@/components/ProjectModal';
 import ContactSection from '@/components/ContactSection';
+import { attachEdgeBarrier } from '@/lib/antiOverscroll';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -41,7 +42,7 @@ const FAN_COORDINATES = [
 // Total scroll distance in pixels that the Projects section stays pinned.
 const TOTAL_PINNED_SCROLL = 4600;
 // Aligned mobile scroll hold distance (px) before continuing to Contact section
-const MOBILE_PINNED_HOLD = 300;
+const MOBILE_PINNED_HOLD = 1000;
 
 // Timeline Keyframe Milestones (in seconds):
 // 0.0s -> 1.2s: Phase 1 - Fan out
@@ -318,6 +319,10 @@ export default function ProjectsSection() {
 
       // ── Phase 6: Pinned Contact Section Showcase Hold ─────────────────────
       tl.to({}, { duration: 2.3 }, TOTAL_TIMELINE_DURATION - 2.3);
+
+      // Anti-overscroll barrier at boundaries
+      const cleanupBarrier = tl.scrollTrigger ? attachEdgeBarrier(tl.scrollTrigger) : undefined;
+      return () => cleanupBarrier?.();
     });
 
     // ── Tablet & Mobile Viewports (< 1024px): Swipeable Carousel & Scroll Delay ──
@@ -384,6 +389,10 @@ export default function ProjectsSection() {
           0.5
         );
       }
+
+      // Anti-overscroll barrier at boundaries
+      const cleanupBarrier = mobileTl.scrollTrigger ? attachEdgeBarrier(mobileTl.scrollTrigger) : undefined;
+      return () => cleanupBarrier?.();
     });
 
     return () => mm.revert();
