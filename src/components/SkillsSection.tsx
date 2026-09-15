@@ -52,8 +52,8 @@ function TechLogoDisplay({
 }
 
 // ── Timing & Scrub Controls ──────────────────────────────────────────────────
-const SCROLL_DISTANCE_PER_SKILL = 1300; // Pixels of scroll travel allocated per skill
-const SCRUB_SMOOTHING = 0.8;           // Snappy scrub smoothing
+const SCROLL_DISTANCE_PER_SKILL = 975;  // Pixels of scroll travel allocated per skill (3/4 of previous 1300px)
+const SCRUB_SMOOTHING = 0.8;            // Snappy scrub smoothing
 
 export default function SkillsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
