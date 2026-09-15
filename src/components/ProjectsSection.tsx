@@ -366,15 +366,9 @@ export default function ProjectsSection() {
       const mobileContactElements = mobileContactSectionRef.current
         ? mobileContactSectionRef.current.querySelectorAll('[data-contact-animate]')
         : [];
-      const mobileWatermark = mobileContactSectionRef.current
-        ? mobileContactSectionRef.current.querySelector('[data-contact-watermark]')
-        : null;
 
       if (mobileContactElements.length > 0) {
         gsap.set(mobileContactElements, { opacity: 0, y: 25 });
-      }
-      if (mobileWatermark) {
-        gsap.set(mobileWatermark, { opacity: 0, y: 15 });
       }
 
       // Pointer-events: off until contact fades in
@@ -408,15 +402,6 @@ export default function ProjectsSection() {
           { opacity: 0, backdropFilter: 'blur(0px)', WebkitBackdropFilter: 'blur(0px)' },
           { opacity: 1, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', ease: 'power2.inOut' },
           0.3
-        );
-      }
-
-      // Watermark fades up concurrently as ambient backdrop (starts at 42% progress)
-      if (mobileWatermark) {
-        mobileTl.to(
-          mobileWatermark,
-          { opacity: 1, y: 0, ease: 'power2.out' },
-          0.42
         );
       }
 
@@ -523,27 +508,59 @@ export default function ProjectsSection() {
           })}
         </div>
 
-        {/* Far Right Scroll Indicator */}
+        {/* ── Center-Bottom Dynamic Stage Status HUD ── */}
         <div
           ref={scrollIndicatorRef}
-          className="absolute right-6 lg:right-10 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5 pointer-events-none z-20 transition-opacity duration-300"
-          aria-label="Scroll indicator"
+          className="absolute left-1/2 -translate-x-1/2 bottom-7 lg:bottom-9 flex items-center pointer-events-none z-20 select-none transition-all duration-300"
+          aria-label={isDealt ? 'Hover to flip cards' : 'Scroll to deal cards'}
         >
           <div
-            className="w-6 h-10 rounded-full border-2 flex justify-center pt-2 opacity-60"
-            style={{ borderColor: 'var(--muted)' }}
+            className={`flex items-center rounded-full border shadow-sm backdrop-blur-md transition-all duration-500 ease-out overflow-hidden ${
+              isDealt ? 'gap-2 px-3.5 py-1.5' : 'px-2.5 py-1.5'
+            }`}
+            style={{
+              background: 'color-mix(in srgb, var(--surface-0) 88%, transparent)',
+              borderColor: isDealt
+                ? 'color-mix(in srgb, var(--accent) 35%, var(--border))'
+                : 'var(--border)',
+            }}
           >
-            <span
-              className="w-1.5 h-2.5 rounded-full animate-scroll-wheel"
-              style={{ background: 'var(--muted)' }}
-            />
+            {isDealt ? (
+              <>
+                {/* Pulsing Status Dot */}
+                <span className="relative flex h-2 w-2 flex-shrink-0">
+                  <span
+                    className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                    style={{ background: 'var(--accent)' }}
+                  />
+                  <span
+                    className="relative inline-flex rounded-full h-2 w-2"
+                    style={{ background: 'var(--accent)' }}
+                  />
+                </span>
+
+                {/* Compact Action Prompt */}
+                <span
+                  className="text-[10px] font-mono uppercase tracking-[0.16em] font-semibold flex-shrink-0 whitespace-nowrap"
+                  style={{ color: 'var(--accent)' }}
+                >
+                  Hover to Flip
+                </span>
+              </>
+            ) : (
+              /* Miniature Animated Mouse Scroll Wheel (Icon-only) */
+              <div
+                className="w-3.5 h-5 rounded-full border flex justify-center pt-0.5 flex-shrink-0"
+                style={{ borderColor: 'var(--accent)', opacity: 0.75 }}
+                aria-hidden="true"
+              >
+                <span
+                  className="w-1 h-1.5 rounded-full animate-scroll-wheel-mini"
+                  style={{ background: 'var(--accent)' }}
+                />
+              </div>
+            )}
           </div>
-          <span
-            className="text-[9.5px] font-mono tracking-[0.25em] uppercase opacity-60 [writing-mode:vertical-rl]"
-            style={{ color: 'var(--muted)' }}
-          >
-            Scroll
-          </span>
         </div>
 
         {/* ── 3. Full-Page Frosted Glass Blur Overlay ───────────────────────── */}

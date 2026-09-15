@@ -186,11 +186,10 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
       <section
         ref={setRefs}
         id={id}
-        className={`relative flex flex-col justify-between overflow-hidden select-none ${
-          isOverlay
+        className={`relative flex flex-col justify-between overflow-hidden select-none ${isOverlay
             ? 'w-full h-full px-5 sm:px-12 md:px-16 py-6 sm:py-10 md:py-12'
             : 'w-full min-h-screen min-h-[100dvh] border-t px-5 sm:px-12 md:px-16 py-8 sm:py-12 md:py-16'
-        } ${className}`}
+          } ${className}`}
         style={{
           background: isOverlay ? 'transparent' : 'var(--surface-0)',
           borderColor: isOverlay ? 'transparent' : 'var(--border)',
@@ -379,17 +378,17 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         {/* ── Subtle Background Typography Watermark (Reference: "roku") ─────── */}
         <div
           data-contact-watermark
-          className="absolute -bottom-2 md:-bottom-6 right-2 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
+          className="absolute bottom-2 sm:bottom-0 md:-bottom-6 right-3 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
           aria-hidden="true"
         >
           <span
-            className="text-[18vw] sm:text-[18vw] font-black tracking-tighter inline-block select-none"
+            className="text-[24vw] sm:text-[18vw] font-black tracking-tighter inline-block select-none"
             style={{
               color: 'var(--border)',
               opacity: 0.35,
             }}
           >
-            Jason
+            JD
           </span>
         </div>
       </section>

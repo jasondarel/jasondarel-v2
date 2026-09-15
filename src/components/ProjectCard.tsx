@@ -359,10 +359,13 @@ function ProjectCard({
           {/* Bottom Corner Metadata */}
           <div className="relative z-10 flex items-center justify-between px-1 pb-0.5">
             <span
-              className="text-[8.5px] md:text-[9.5px] font-mono tracking-wider uppercase opacity-60 flex items-center gap-1 lg:hidden"
+              className={`text-[8.5px] md:text-[9.5px] lg:text-[8px] font-mono tracking-wider uppercase transition-opacity duration-300 flex items-center gap-1 ${
+                interactive ? 'opacity-70' : 'opacity-0'
+              }`}
               style={{ color: 'var(--muted)' }}
             >
-              Tap to flip
+              <span className="lg:hidden">Tap to flip</span>
+              <span className="hidden lg:inline">Hover to flip</span>
             </span>
             <span
               className="text-[9.5px] md:text-[10.5px] font-mono tracking-widest uppercase opacity-80 ml-auto"
