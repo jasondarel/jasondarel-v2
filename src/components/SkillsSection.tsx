@@ -58,6 +58,16 @@ const SCRUB_SMOOTHING = 0.8;           // Snappy scrub smoothing
 export default function SkillsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const skillRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeStack, setActiveStack] = useState<string | null>(null);
+
+  // Close active tooltip when clicking anywhere outside
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      setActiveStack(null);
+    };
+    window.addEventListener('click', handleOutsideClick);
+    return () => window.removeEventListener('click', handleOutsideClick);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -66,12 +76,12 @@ export default function SkillsSection() {
     const ctx = gsap.context(() => {
       const totalScrollDistance = SKILLS_DATA.length * SCROLL_DISTANCE_PER_SKILL;
 
-      // ── Initial Clip-Path Setup ───────────────────────────────────────────
-      // Skill 0 (Frontend): fully open (inset 0 0 0 0)
-      // Skill 1 (Backend) & Skill 2 (Tools): clipped at bottom (inset 100% 0 0 0)
-      gsap.set(skillRefs.current[0], { clipPath: 'inset(0% 0% 0% 0%)' });
-      gsap.set(skillRefs.current[1], { clipPath: 'inset(100% 0% 0% 0%)' });
-      gsap.set(skillRefs.current[2], { clipPath: 'inset(100% 0% 0% 0%)' });
+      // ── Initial Clip-Path & Pointer-Events Setup ──────────────────────────
+      // Skill 0 (Frontend): fully open (inset 0 0 0 0) and interactive
+      // Skill 1 (Backend) & Skill 2 (Tools): clipped at bottom (inset 100% 0 0 0) and non-interactive
+      gsap.set(skillRefs.current[0], { clipPath: 'inset(0% 0% 0% 0%)', pointerEvents: 'auto' });
+      gsap.set(skillRefs.current[1], { clipPath: 'inset(100% 0% 0% 0%)', pointerEvents: 'none' });
+      gsap.set(skillRefs.current[2], { clipPath: 'inset(100% 0% 0% 0%)', pointerEvents: 'none' });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -81,6 +91,12 @@ export default function SkillsSection() {
           pin: true,
           scrub: SCRUB_SMOOTHING,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            // Dismiss active tooltip when scrolling through stages
+            if (Math.abs(self.getVelocity()) > 100) {
+              setActiveStack(null);
+            }
+          },
         },
       });
 
@@ -89,21 +105,25 @@ export default function SkillsSection() {
         .to({}, { duration: 0.5 })
 
         // 2. Flood Backend up from bottom (inset 100% -> 0%) with reversed dark scheme
+        .set(skillRefs.current[1], { pointerEvents: 'auto' })
         .to(skillRefs.current[1], {
           clipPath: 'inset(0% 0% 0% 0%)',
           duration: 1.4,
           ease: 'none',
         })
+        .set(skillRefs.current[0], { pointerEvents: 'none' })
 
         // 3. Hold Backend
         .to({}, { duration: 0.6 })
 
         // 4. Flood Tools up from bottom (inset 100% -> 0%) reverting to normal light scheme
+        .set(skillRefs.current[2], { pointerEvents: 'auto' })
         .to(skillRefs.current[2], {
           clipPath: 'inset(0% 0% 0% 0%)',
           duration: 1.4,
           ease: 'none',
         })
+        .set(skillRefs.current[1], { pointerEvents: 'none' })
 
         // 5. Hold Tools before unpinning
         .to({}, { duration: 0.5 });
@@ -142,6 +162,7 @@ export default function SkillsSection() {
           {/* ── Scattered Floating Stack Boxes (Logo-Only & Enlarged) ───────── */}
           <div className="absolute inset-0 pointer-events-none">
             {skill.stacks.map((stack, sIdx) => {
+              const isActive = activeStack === stack.name;
               return (
                 <div
                   key={sIdx}
@@ -151,21 +172,35 @@ export default function SkillsSection() {
                     animationDelay: stack.delay,
                   }}
                 >
-                  <div
-                    className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl sm:rounded-3xl border shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-125 cursor-pointer backdrop-blur-md"
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveStack((prev) => (prev === stack.name ? null : stack.name));
+                    }}
+                    className={`group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl sm:rounded-3xl border shadow-sm transition-all duration-300 cursor-pointer backdrop-blur-md ${
+                      isActive
+                        ? 'scale-125 shadow-xl ring-2 ring-white/30'
+                        : 'hover:scale-125 hover:shadow-xl active:scale-95'
+                    }`}
                     style={{
                       background: skill.boxBg,
-                      borderColor: skill.boxBorder,
+                      borderColor: isActive ? skill.boxTextColor : skill.boxBorder,
                       color: skill.boxTextColor,
                     }}
                     title={stack.name}
                     aria-label={stack.name}
+                    aria-pressed={isActive}
                   >
                     <TechLogoDisplay stack={stack} skill={skill} />
 
-                    {/* Subtle Hover Tooltip Label */}
+                    {/* Subtle Hover / Tap Tooltip Label */}
                     <div
-                      className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-lg border text-[11px] font-mono whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none shadow-md z-30 transform translate-y-1 group-hover:translate-y-0"
+                      className={`absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-lg border text-[11px] font-mono whitespace-nowrap transition-all duration-200 pointer-events-none shadow-md z-30 transform ${
+                        isActive
+                          ? 'opacity-100 translate-y-0 scale-100'
+                          : 'opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0'
+                      }`}
                       style={{
                         background: skill.boxBg,
                         borderColor: skill.boxBorder,
@@ -174,7 +209,7 @@ export default function SkillsSection() {
                     >
                       {stack.name}
                     </div>
-                  </div>
+                  </button>
                 </div>
               );
             })}

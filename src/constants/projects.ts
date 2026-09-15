@@ -135,6 +135,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     ],
     links: {
       live: 'https://fiomodoro.vercel.app/',
+      github: 'https://github.com/jasondarel/Fiomodoro',
     },
   },
 

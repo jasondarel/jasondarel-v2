@@ -333,13 +333,13 @@ function ProjectCard({
           {/* Bottom Corner Metadata */}
           <div className="relative z-10 flex items-center justify-between px-1 pb-0.5">
             <span
-              className="text-[8.5px] md:text-[9.5px] font-mono tracking-wider uppercase opacity-60 flex items-center gap-1"
+              className="text-[8.5px] md:text-[9.5px] font-mono tracking-wider uppercase opacity-60 flex items-center gap-1 lg:hidden"
               style={{ color: 'var(--muted)' }}
             >
               Tap to flip
             </span>
             <span
-              className="text-[9.5px] md:text-[10.5px] font-mono tracking-widest uppercase opacity-80"
+              className="text-[9.5px] md:text-[10.5px] font-mono tracking-widest uppercase opacity-80 ml-auto"
               style={{ color: 'var(--muted)' }}
             >
               2026
@@ -423,52 +423,56 @@ function ProjectCard({
 
             {/* Bottom Links */}
             <div
-              className="relative z-20 pointer-events-auto flex items-center justify-between pt-1 border-t text-[9.5px] font-mono"
+              className="relative z-20 pointer-events-auto flex items-center justify-between lg:justify-end pt-1 border-t text-[9.5px] font-mono"
               style={{ borderColor: 'var(--border)' }}
             >
               <span
-                className="text-[8.5px] font-mono tracking-wider uppercase opacity-50 select-none"
+                className="text-[8.5px] font-mono tracking-wider uppercase opacity-50 select-none lg:hidden"
                 style={{ color: 'var(--muted)' }}
               >
                 Tap to flip back
               </span>
-              {project.links?.live ? (
-                <Button
-                  size="xs"
-                  variant="accent"
-                  rightIcon={true}
-                  href={project.links.live}
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label="Visit project"
-                  className="font-mono text-[9.5px]"
-                >
-                  Visit
-                </Button>
-              ) : project.links?.figma ? (
-                <Button
-                  size="xs"
-                  variant="accent"
-                  rightIcon={true}
-                  href={project.links.figma}
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label="View Prototype"
-                  className="font-mono text-[9.5px]"
-                >
-                  Proto
-                </Button>
-              ) : project.links?.github ? (
-                <Button
-                  size="xs"
-                  variant="accent"
-                  rightIcon={true}
-                  href={project.links.github}
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label="View Repository"
-                  className="font-mono text-[9.5px]"
-                >
-                  Repo
-                </Button>
-              ) : null}
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                {project.links?.github && (
+                  <Button
+                    size="xs"
+                    variant="accent"
+                    rightIcon={true}
+                    href={project.links.github}
+                    onClick={(e) => e.stopPropagation()}
+                    aria-label={`View ${project.title} repository`}
+                    className="font-mono text-[9px] px-2 py-0.5"
+                  >
+                    Repo
+                  </Button>
+                )}
+                {project.links?.figma && (
+                  <Button
+                    size="xs"
+                    variant="accent"
+                    rightIcon={true}
+                    href={project.links.figma}
+                    onClick={(e) => e.stopPropagation()}
+                    aria-label={`View ${project.title} Figma prototype`}
+                    className="font-mono text-[9px] px-2 py-0.5"
+                  >
+                    Proto
+                  </Button>
+                )}
+                {project.links?.live && (
+                  <Button
+                    size="xs"
+                    variant="accent"
+                    rightIcon={true}
+                    href={project.links.live}
+                    onClick={(e) => e.stopPropagation()}
+                    aria-label={`Visit ${project.title} live site`}
+                    className="font-mono text-[9px] px-2 py-0.5"
+                  >
+                    Visit
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
