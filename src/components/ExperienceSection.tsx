@@ -23,8 +23,10 @@ function formatHighlight(text: string) {
 }
 
 // ── Sensitivity & Timing Controls ───────────────────────────────────────────
-const DISTANCE_MULTIPLIER = 1.55; // Extended scroll travel for generous last panel hold
-const SCRUB_SMOOTHING = 0.8;      // Inertia smoothing on scroll scrub
+const DISTANCE_MULTIPLIER = 1.55; // Extended scroll travel for desktop
+const SCRUB_SMOOTHING_DESKTOP = 0.8; // Inertia smoothing on desktop scroll scrub
+const SCRUB_SMOOTHING_MOBILE = 0.25; // Responsive, lag-free scrub on touch devices
+const MOBILE_PINNED_HOLD = 300;      // Aligned mobile scroll hold distance (px)
 
 export default function ExperienceSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -38,26 +40,26 @@ export default function ExperienceSection() {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(section);
+
+    // ── Desktop Viewports (>= 1024px) ────────────────────────────────────────
+    mm.add('(min-width: 1024px)', () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top top',
           end: () => `+=${section.offsetHeight * 3 * DISTANCE_MULTIPLIER}`,
           pin: true,
-          scrub: SCRUB_SMOOTHING,
+          scrub: SCRUB_SMOOTHING_DESKTOP,
           invalidateOnRefresh: true,
           onEnter: () => {
-            // Initiate Panel 1 count up when section pins into full view
             setPanel1Visible(true);
           },
           onLeaveBack: () => {
-            // Reset counters when scrolling back above section
             setPanel1Visible(false);
             setPanel2Visible(false);
           },
           onUpdate: (self) => {
-            // Track active panel index based on timeline progress
             const progress = self.progress;
             if (progress < 0.20) {
               setActivePanelIndex(1);
@@ -92,9 +94,71 @@ export default function ExperienceSection() {
         })
         // 5. Final rock-solid stationary hold on Panel 3 before unpinning to Projects
         .to({}, { duration: 2.0 });
-    }, section);
+    });
 
-    return () => ctx.revert();
+    // ── Tablet & Mobile Viewports (< 1024px) ──────────────────────────────────
+    mm.add('(max-width: 1023.98px)', () => {
+      // Active scroll distance across the 3 panels
+      const getActiveScroll = () => Math.max(1200, section.offsetHeight * 2.2);
+      // Duration of transitions and intermediate holds
+      const activeDuration = 2.8;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${getActiveScroll() + MOBILE_PINNED_HOLD}`,
+          pin: true,
+          scrub: SCRUB_SMOOTHING_MOBILE,
+          invalidateOnRefresh: true,
+          onEnter: () => {
+            setPanel1Visible(true);
+          },
+          onLeaveBack: () => {
+            setPanel1Visible(false);
+            setPanel2Visible(false);
+          },
+          onUpdate: (self) => {
+            const progress = self.progress;
+            if (progress < 0.22) {
+              setActivePanelIndex(1);
+              if (progress > 0.01) setPanel1Visible(true);
+            } else if (progress < 0.65) {
+              setActivePanelIndex(2);
+              setPanel2Visible(true);
+            } else {
+              setActivePanelIndex(3);
+              setPanel2Visible(true);
+            }
+          },
+        },
+      });
+
+      // Calculate final panel hold duration so it maps exactly to MOBILE_PINNED_HOLD (500px)
+      const finalHoldDuration = activeDuration * (MOBILE_PINNED_HOLD / getActiveScroll());
+
+      tl
+        // 1. Brief pause on Panel 1 (Intro)
+        .to({}, { duration: 0.3 })
+        // 2. Transition from Panel 1 -> Panel 2
+        .to(track, {
+          xPercent: -(100 / 3),
+          duration: 0.9,
+          ease: 'power2.inOut',
+        })
+        // 3. Pause on Panel 2 (Gositus)
+        .to({}, { duration: 0.7 })
+        // 4. Transition from Panel 2 -> Panel 3 (KPSG Group)
+        .to(track, {
+          xPercent: -(200 / 3),
+          duration: 0.9,
+          ease: 'power2.inOut',
+        })
+        // 5. Final hold on Panel 3: exactly aligned with Projects (500px)
+        .to({}, { duration: finalHoldDuration });
+    });
+
+    return () => mm.revert();
   }, []);
 
   const gositus = EXPERIENCE_DATA[0];

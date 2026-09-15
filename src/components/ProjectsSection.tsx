@@ -40,6 +40,8 @@ const FAN_COORDINATES = [
 // ── Scroll & Timing Controls ──────────────────────────────────────────────
 // Total scroll distance in pixels that the Projects section stays pinned.
 const TOTAL_PINNED_SCROLL = 4600;
+// Aligned mobile scroll hold distance (px) before continuing to Contact section
+const MOBILE_PINNED_HOLD = 300;
 
 // Timeline Keyframe Milestones (in seconds):
 // 0.0s -> 1.2s: Phase 1 - Fan out
@@ -322,7 +324,7 @@ export default function ProjectsSection() {
         ScrollTrigger.create({
           trigger: mobileStage,
           start: 'top top',
-          end: '+=700',
+          end: `+=${MOBILE_PINNED_HOLD}`,
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,

@@ -30,9 +30,12 @@ export function useLenis() {
   useEffect(() => {
     // ── 1. Create Lenis instance ──────────────────────────────────────────────
     const lenis = new Lenis({
-      // Duration of the smooth deceleration (seconds).  Tune to taste.
-      duration: 1.2,
+      // Duration of the smooth deceleration (seconds). Slightly increased for smoother glide.
+      duration: 1.4,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      // Reduce scroll sensitivity and speed across the page
+      wheelMultiplier: 0.5,
+      touchMultiplier: 0.85,
       // Disable built-in RAF; we tick manually via gsap.ticker (see below).
       autoRaf: false,
     });
