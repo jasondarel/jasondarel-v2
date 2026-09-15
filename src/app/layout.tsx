@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   title: "Jason Darel — Full-Stack Developer",
   description:
     "Portfolio & interactive scroll experiments powered by Next.js, Lenis, and GSAP.",
+  icons: {
+    icon: "/logojd.png",
+    shortcut: "/logojd.png",
+    apple: "/logojd.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
