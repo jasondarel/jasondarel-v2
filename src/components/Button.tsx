@@ -96,7 +96,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
 
     const baseClasses = `
       group inline-flex items-center justify-center rounded-full border transition-all duration-200 ease-out
-      hover:-translate-y-0.5 cursor-pointer select-none
+      hover:-translate-y-0.5 cursor-pointer select-none no-underline
       disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed
       ${variantConfig} ${sizeConfig.container} ${className}
     `.trim();
@@ -116,7 +116,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     );
 
     if ('href' in props && props.href !== undefined) {
-      const { href, target = '_blank', rel = 'noopener noreferrer', onClick, ...anchorProps } = props as ButtonAsAnchorProps;
+      const { href, target = '_blank', rel = 'noopener noreferrer', onClick, style, ...anchorProps } = props as ButtonAsAnchorProps;
       return (
         <a
           ref={ref as React.Ref<HTMLAnchorElement>}
@@ -124,6 +124,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
           target={target}
           rel={target === '_blank' ? rel : undefined}
           className={baseClasses}
+          style={style}
           onClick={onClick}
           {...anchorProps}
         >
@@ -132,13 +133,14 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       );
     }
 
-    const { type = 'button', onClick, disabled, ...buttonProps } = props as ButtonAsButtonProps;
+    const { type = 'button', onClick, disabled, style, ...buttonProps } = props as ButtonAsButtonProps;
     return (
       <button
         ref={ref as React.Ref<HTMLButtonElement>}
         type={type}
         disabled={disabled}
         className={baseClasses}
+        style={style}
         onClick={onClick}
         {...buttonProps}
       >

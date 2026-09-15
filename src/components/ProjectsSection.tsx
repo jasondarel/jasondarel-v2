@@ -3,10 +3,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { PROJECTS_DATA } from '@/constants/projects';
+import { ProjectItem, PROJECTS_DATA } from '@/constants/projects';
 import ProjectCard from '@/components/ProjectCard';
+import ProjectModal from '@/components/ProjectModal';
 import ContactSection from '@/components/ContactSection';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,6 +73,15 @@ export default function ProjectsSection() {
   const contactOverlayRef = useRef<HTMLDivElement>(null);
   const contactSectionRef = useRef<HTMLDivElement>(null);
   const [isDealt, setIsDealt] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+
+  const handleOpenModal = (project: ProjectItem) => {
+    setSelectedProject(project);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProject(null);
+  };
 
   // Mobile horizontal snap carousel state & refs
   const [mobileActiveIndex, setMobileActiveIndex] = useState(0);
@@ -86,13 +95,21 @@ export default function ProjectsSection() {
       mobileScrollRaf.current = null;
       const container = mobileCarouselRef.current;
       if (!container) return;
-      const firstChild = container.firstElementChild as HTMLElement | null;
-      if (!firstChild) return;
-      const secondChild = firstChild.nextElementSibling as HTMLElement | null;
-      const step = secondChild ? secondChild.offsetLeft - firstChild.offsetLeft : firstChild.offsetWidth + 16;
-      if (step <= 0) return;
-      const index = Math.round(container.scrollLeft / step);
-      const clamped = Math.max(0, Math.min(index, PROJECTS_DATA.length - 1));
+      const containerCenter = container.scrollLeft + container.clientWidth / 2;
+      const children = Array.from(container.children) as HTMLElement[];
+      let closestIdx = 0;
+      let minDistance = Infinity;
+
+      children.forEach((child, idx) => {
+        const childCenter = child.offsetLeft + child.offsetWidth / 2;
+        const dist = Math.abs(containerCenter - childCenter);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestIdx = idx;
+        }
+      });
+
+      const clamped = Math.max(0, Math.min(closestIdx, PROJECTS_DATA.length - 1));
       setMobileActiveIndex((prev) => (prev !== clamped ? clamped : prev));
     });
   };
@@ -101,19 +118,17 @@ export default function ProjectsSection() {
     const container = mobileCarouselRef.current;
     if (!container) return;
     const clamped = Math.max(0, Math.min(index, PROJECTS_DATA.length - 1));
-    const firstChild = container.firstElementChild as HTMLElement | null;
-    if (!firstChild) return;
-    const secondChild = firstChild.nextElementSibling as HTMLElement | null;
-    const step = secondChild ? secondChild.offsetLeft - firstChild.offsetLeft : firstChild.offsetWidth + 16;
-    container.scrollTo({
-      left: clamped * step,
-      behavior: 'smooth',
-    });
+    const targetChild = container.children[clamped] as HTMLElement | null;
+    if (targetChild) {
+      targetChild.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+      setMobileActiveIndex(clamped);
+    }
   };
 
-  const handleMobileNav = (direction: number) => {
-    scrollToMobileCard(mobileActiveIndex + direction);
-  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -352,10 +367,10 @@ export default function ProjectsSection() {
               style={{ color: 'var(--muted)' }}
             >
               <span className="hidden lg:inline">
-                Scroll to deal and fan the deck. Hover any card to inspect the details.
+                Scroll to deal and fan the deck. Click any card to inspect full details.
               </span>
               <span className="lg:hidden">
-                Swipe to browse the deck. Tap any card to inspect the details.
+                Swipe to browse the deck. Tap any card to inspect full details.
               </span>
             </p>
           </div>
@@ -393,7 +408,11 @@ export default function ProjectsSection() {
                       : 'none',
                   }}
                 >
-                  <ProjectCard project={project} interactive={isDealt} />
+                  <ProjectCard
+                    project={project}
+                    interactive={isDealt}
+                    onOpenModal={handleOpenModal}
+                  />
                 </div>
               </div>
             );
@@ -463,7 +482,7 @@ export default function ProjectsSection() {
               Projects<span className="opacity-40">.</span>
             </h2>
             <p className="text-[11px] md:text-xs font-mono mt-1" style={{ color: 'var(--muted)' }}>
-              Swipe to browse • Tap to flip
+              Swipe to browse • Tap to inspect
             </p>
           </div>
 
@@ -489,7 +508,7 @@ export default function ProjectsSection() {
         <div
           ref={mobileCarouselRef}
           onScroll={handleMobileScroll}
-          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory px-2 md:px-6 py-4 my-auto touch-pan-x"
+          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory px-[calc(50%-135px)] sm:px-[calc(50%-145px)] md:px-[calc(50%-160px)] py-4 my-auto touch-pan-x"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -499,22 +518,20 @@ export default function ProjectsSection() {
           {PROJECTS_DATA.map((project) => (
             <div
               key={project.id}
-              className="snap-start flex-shrink-0"
+              className="snap-center flex-shrink-0"
             >
-              <ProjectCard project={project} />
+              <ProjectCard project={project} onOpenModal={handleOpenModal} forceFlipped={true} />
             </div>
           ))}
-          {/* End spacer for right-edge breathing room */}
-          <div className="w-4 md:w-8 flex-shrink-0" aria-hidden="true" />
         </div>
 
-        {/* ── Bottom Controls: Dash Indicators & Arrow Buttons ────────────── */}
+        {/* ── Bottom Controls: Centered Dash Progress Indicators ────────── */}
         <div
-          className="flex items-center justify-between w-full max-w-lg md:max-w-4xl mx-auto pt-3 border-t flex-shrink-0"
+          className="flex items-center justify-center w-full max-w-lg md:max-w-4xl mx-auto pt-3 border-t flex-shrink-0"
           style={{ borderColor: 'var(--border)' }}
         >
           {/* Dash Progress Indicators */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 py-1">
             {PROJECTS_DATA.map((_, idx) => (
               <button
                 key={idx}
@@ -529,38 +546,6 @@ export default function ProjectsSection() {
               />
             ))}
           </div>
-
-          {/* Prev / Next Nav Buttons */}
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => handleMobileNav(-1)}
-              disabled={mobileActiveIndex === 0}
-              aria-label="Previous project card"
-              className="w-7 h-7 md:w-8 md:h-8 rounded-full border flex items-center justify-center transition-all active:scale-95 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
-              style={{
-                borderColor: 'var(--border)',
-                background: 'var(--surface-1)',
-                color: 'var(--accent)',
-              }}
-            >
-              <ChevronLeft className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => handleMobileNav(1)}
-              disabled={mobileActiveIndex === PROJECTS_DATA.length - 1}
-              aria-label="Next project card"
-              className="w-7 h-7 md:w-8 md:h-8 rounded-full border flex items-center justify-center transition-all active:scale-95 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
-              style={{
-                borderColor: 'var(--border)',
-                background: 'var(--surface-1)',
-                color: 'var(--accent)',
-              }}
-            >
-              <ChevronRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            </button>
-          </div>
         </div>
       </section>
 
@@ -568,6 +553,13 @@ export default function ProjectsSection() {
       <div className="lg:hidden">
         <ContactSection />
       </div>
+
+      {/* ── 7. Project Full Details Modal ─────────────────────────────── */}
+      <ProjectModal
+        project={selectedProject}
+        isOpen={!!selectedProject}
+        onClose={handleCloseModal}
+      />
 
       {/* Hardware-Accelerated Floating Levitation CSS */}
       <style jsx global>{`

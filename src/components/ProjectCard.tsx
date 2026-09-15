@@ -12,6 +12,7 @@ interface ProjectCardProps {
   style?: React.CSSProperties;
   forceFlipped?: boolean;
   interactive?: boolean;
+  onOpenModal?: (project: ProjectItem) => void;
 }
 
 function ProjectImagePreview({
@@ -158,16 +159,20 @@ function ProjectCard({
   style = {},
   forceFlipped = false,
   interactive = true,
+  onOpenModal,
 }: ProjectCardProps) {
-  const [isFlipped, setIsFlipped] = useState(forceFlipped);
+  const [internalFlipped, setInternalFlipped] = useState(forceFlipped);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  // Sync isFlipped with forceFlipped
+  const isFlipped = forceFlipped || internalFlipped;
 
   // Reset flip state when card becomes uninteractable (official React pattern without cascading effect renders)
   const [prevInteractive, setPrevInteractive] = useState(interactive);
   if (prevInteractive !== interactive) {
     setPrevInteractive(interactive);
-    if (!interactive) {
-      setIsFlipped(false);
+    if (!interactive && !forceFlipped) {
+      setInternalFlipped(false);
     }
   }
 
@@ -179,17 +184,18 @@ function ProjectCard({
   };
 
   const handlePointerEnter = (e: React.PointerEvent) => {
-    if (!interactive) return;
+    if (!interactive || forceFlipped) return;
     // Only desktop mouse hover should trigger pointerenter flip
     if (e.pointerType === 'mouse') {
-      setIsFlipped(true);
+      setInternalFlipped(true);
     }
   };
 
   const handlePointerLeave = (e: React.PointerEvent) => {
+    if (forceFlipped) return;
     // Only desktop mouse hover should trigger pointerleave unflip
     if (e.pointerType === 'mouse') {
-      setIsFlipped(false);
+      setInternalFlipped(false);
     }
   };
 
@@ -201,12 +207,32 @@ function ProjectCard({
       // If pointer moved more than 8px, it was a swipe/drag gesture, not an intentional tap
       if (dx > 8 || dy > 8) return;
     }
-    setIsFlipped((prev) => !prev);
+
+    if (onOpenModal) {
+      if (forceFlipped) {
+        onOpenModal(project);
+        return;
+      }
+      // On desktop / standard cards with touch:
+      const isTouch =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      if (isTouch && !isFlipped) {
+        setInternalFlipped(true);
+        return;
+      }
+      onOpenModal(project);
+      return;
+    }
+
+    if (!forceFlipped) {
+      setInternalFlipped((prev) => !prev);
+    }
   };
 
   // When flipped via mouse, track global pointer movement to reliably unflip whenever cursor leaves the card
   useEffect(() => {
-    if (!isFlipped) return;
+    if (!internalFlipped || forceFlipped) return;
 
     const handleGlobalPointerMove = (e: PointerEvent) => {
       // Touch devices tap to toggle flip; do not auto-unflip on touch move
@@ -220,12 +246,12 @@ function ProjectCard({
         e.clientY <= rect.bottom;
 
       if (!isInside) {
-        setIsFlipped(false);
+        setInternalFlipped(false);
       }
     };
 
     const handleWindowLeave = () => {
-      setIsFlipped(false);
+      setInternalFlipped(false);
     };
 
     window.addEventListener('pointermove', handleGlobalPointerMove, { passive: true });
@@ -237,10 +263,10 @@ function ProjectCard({
       document.removeEventListener('mouseleave', handleWindowLeave);
       window.removeEventListener('blur', handleWindowLeave);
     };
-  }, [isFlipped]);
+  }, [internalFlipped, forceFlipped]);
 
-  // If interactive is disabled, keep card back visible
-  const activeFlipped = interactive && isFlipped;
+  // If interactive is disabled, keep card back visible (unless forceFlipped)
+  const activeFlipped = forceFlipped || (interactive && isFlipped);
 
   return (
     <div
@@ -258,7 +284,7 @@ function ProjectCard({
     >
       {/* ── 3D Flip Container ──────────────────────────────────────────────── */}
       <div
-        className="relative w-full h-full rounded-2xl transition-transform duration-700 [transform-style:preserve-3d]"
+        className={`relative w-full h-full rounded-2xl ${forceFlipped ? '' : 'transition-transform duration-700'} [transform-style:preserve-3d]`}
         style={{
           transform: activeFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
         }}
@@ -362,7 +388,7 @@ function ProjectCard({
           <div>
             {/* Top Bar: Card metadata */}
             <div className="flex items-center justify-between pb-1.5 lg:pb-1 mb-1.5 lg:mb-1 border-b" style={{ borderColor: 'var(--border)' }}>
-              <span className="text-[11px] md:text-xs lg:text-[10px] font-mono tracking-wider uppercase font-semibold truncate max-w-[180px] md:max-w-[220px] lg:max-w-[130px]" style={{ color: 'var(--muted)' }}>
+              <span className="text-[11px] md:text-xs lg:text-[10px] font-mono tracking-wider uppercase font-semibold truncate max-w-[130px] md:max-w-[170px] lg:max-w-[95px]" style={{ color: 'var(--muted)' }}>
                 {project.category}
               </span>
               <span className="text-xs md:text-sm lg:text-[10.5px] font-mono font-bold" style={{ color: 'var(--accent)' }}>
@@ -423,20 +449,14 @@ function ProjectCard({
 
             {/* Bottom Links */}
             <div
-              className="relative z-20 pointer-events-auto flex items-center justify-between lg:justify-end pt-1 border-t text-[9.5px] font-mono"
+              className="relative z-20 pointer-events-auto flex items-center justify-end pt-1 border-t text-[9.5px] font-mono"
               style={{ borderColor: 'var(--border)' }}
             >
-              <span
-                className="text-[8.5px] font-mono tracking-wider uppercase opacity-50 select-none lg:hidden"
-                style={{ color: 'var(--muted)' }}
-              >
-                Tap to flip back
-              </span>
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 {project.links?.github && (
                   <Button
                     size="xs"
-                    variant="accent"
+                    variant="default"
                     rightIcon={true}
                     href={project.links.github}
                     onClick={(e) => e.stopPropagation()}
@@ -449,7 +469,7 @@ function ProjectCard({
                 {project.links?.figma && (
                   <Button
                     size="xs"
-                    variant="accent"
+                    variant="default"
                     rightIcon={true}
                     href={project.links.figma}
                     onClick={(e) => e.stopPropagation()}
@@ -462,7 +482,7 @@ function ProjectCard({
                 {project.links?.live && (
                   <Button
                     size="xs"
-                    variant="accent"
+                    variant="default"
                     rightIcon={true}
                     href={project.links.live}
                     onClick={(e) => e.stopPropagation()}
