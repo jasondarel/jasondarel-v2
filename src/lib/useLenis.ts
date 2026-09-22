@@ -28,6 +28,21 @@ export function useLenis() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
+    // ── 0. Prevent browser from restoring scroll position on reload ────────────
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    ScrollTrigger.clearScrollMemory('manual');
+    window.scrollTo(0, 0);
+
+    const handleBeforeUnload = () => {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     // ── 1. Create Lenis instance ──────────────────────────────────────────────
     const lenis = new Lenis({
       // Duration of the smooth deceleration (seconds). Slightly increased for smoother glide.
@@ -46,6 +61,14 @@ export function useLenis() {
     lenisRef.current = lenis;
     window.__lenis = lenis;
 
+    // Immediately enforce top position for Lenis and triggers
+    lenis.scrollTo(0, { immediate: true });
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      lenis.scrollTo(0, { immediate: true });
+      ScrollTrigger.refresh();
+    });
+
     // ── 2. Sync ScrollTrigger with Lenis ─────────────────────────────────────
     // Each time Lenis scrolls, notify ScrollTrigger so pinned sections
     // update their progress correctly.
@@ -63,6 +86,7 @@ export function useLenis() {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       gsap.ticker.remove(onTick);
       lenis.destroy();
       window.__lenis = null;

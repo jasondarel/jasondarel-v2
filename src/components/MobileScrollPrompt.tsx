@@ -40,7 +40,7 @@ export default function MobileScrollPrompt() {
       aria-hidden={hasScrolled}
     >
       <div
-        className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border shadow-sm backdrop-blur-md"
+        className="hero-fade-up hero-fade-up-6 flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border shadow-sm backdrop-blur-md"
         style={{
           background: 'color-mix(in srgb, var(--surface-0) 90%, transparent)',
           borderColor: 'var(--border)',

@@ -283,5 +283,56 @@ html.lenis, html.lenis body {
   transform: translateY(0);
 }
 
+/* ── Hero Entrance Fade-Up Animations (Top-to-Bottom Cascade) ──────────────── */
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-fade-up {
+  opacity: 0;
+  animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+/* Top-to-bottom staggered delays */
+.hero-fade-up-1 {
+  animation-delay: 0.1s;
+}
+
+.hero-fade-up-2 {
+  animation-delay: 0.22s;
+}
+
+.hero-fade-up-3 {
+  animation-delay: 0.36s;
+}
+
+.hero-fade-up-4 {
+  animation-delay: 0.50s;
+}
+
+.hero-fade-up-5 {
+  animation-delay: 0.64s;
+}
+
+.hero-fade-up-6 {
+  animation-delay: 0.78s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-up {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
 
 

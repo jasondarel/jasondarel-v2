@@ -1,6 +1,7 @@
 'use client';
 
 import { useLenis } from '@/lib/useLenis';
+import IntroSection from '@/components/IntroSection';
 import AboutSection from '@/components/AboutSection';
 import SkillsSection from '@/components/SkillsSection';
 import ExperienceSection from '@/components/ExperienceSection';
@@ -35,74 +36,7 @@ export default function Home() {
       <MobileScrollPrompt />
 
       {/* ── 1. INTRO HERO ─────────────────────────────────────────────────── */}
-      <section
-        className="relative flex h-screen flex-col items-center justify-center px-6 text-center select-none"
-        style={{ background: 'var(--surface-0)' }}
-        aria-label="Intro section"
-      >
-        {/* Subtle Top Header Meta */}
-        <div className="absolute top-8 left-8 right-8 flex items-center justify-between pointer-events-none">
-          <span
-            className="text-xs uppercase tracking-[0.3em] font-mono"
-            style={{ color: 'var(--muted)' }}
-          >
-            Portfolio &amp; Archive
-          </span>
-          <span
-            className="text-xs font-mono"
-            style={{ color: 'var(--muted)' }}
-          >
-            2026
-          </span>
-        </div>
-
-        {/* Center Intro Block */}
-        <div className="max-w-4xl flex flex-col items-center">
-          <p
-            className="mb-4 text-xs font-mono uppercase tracking-[0.35em]"
-            style={{ color: 'var(--muted)' }}
-          >
-            Hello, I am
-          </p>
-
-          <h1
-            className="text-6xl sm:text-8xl md:text-9xl font-black leading-[0.9] tracking-tighter mb-5"
-            style={{ color: 'var(--accent)' }}
-          >
-            Jason Darel
-          </h1>
-
-          <p
-            className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight mb-4"
-            style={{ color: 'var(--foreground)' }}
-          >
-            Full-Stack Developer
-          </p>
-
-          <p
-            className="max-w-xl text-sm sm:text-base font-normal leading-relaxed"
-            style={{ color: 'var(--muted)' }}
-          >
-            Crafting minimal, high-performance web applications, scalable architectures, and interactive digital experiences.
-          </p>
-        </div>
-
-        {/* Bottom Minimalist Scroll Icon */}
-        <div
-          className="absolute bottom-8 hidden sm:flex flex-col items-center pointer-events-none"
-          aria-label="Scroll down indicator"
-        >
-          <div
-            className="w-6 h-10 rounded-full border-2 flex justify-center pt-2 opacity-60"
-            style={{ borderColor: 'var(--muted)' }}
-          >
-            <span
-              className="w-1.5 h-2.5 rounded-full animate-scroll-wheel"
-              style={{ background: 'var(--muted)' }}
-            />
-          </div>
-        </div>
-      </section>
+      <IntroSection />
 
       {/* ── 2. ABOUT ME PINNED SECTION ───────────────────────────────────── */}
       {/*

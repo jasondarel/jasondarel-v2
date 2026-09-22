@@ -166,7 +166,6 @@ export default function ProjectsSection() {
         gsap.set(blurOverlayRef.current, {
           opacity: 0,
           backdropFilter: 'blur(0px)',
-          WebkitBackdropFilter: 'blur(0px)',
         });
       }
 
@@ -276,7 +275,6 @@ export default function ProjectsSection() {
           {
             opacity: 1,
             backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
             duration: BLUR_DURATION,
             ease: 'power2.inOut',
           },
@@ -358,7 +356,6 @@ export default function ProjectsSection() {
         gsap.set(mobileBlurOverlayRef.current, {
           opacity: 0,
           backdropFilter: 'blur(0px)',
-          WebkitBackdropFilter: 'blur(0px)',
         });
       }
 
@@ -399,8 +396,8 @@ export default function ProjectsSection() {
       if (mobileBlurOverlayRef.current) {
         mobileTl.fromTo(
           mobileBlurOverlayRef.current,
-          { opacity: 0, backdropFilter: 'blur(0px)', WebkitBackdropFilter: 'blur(0px)' },
-          { opacity: 1, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', ease: 'power2.inOut' },
+          { opacity: 0, backdropFilter: 'blur(0px)' },
+          { opacity: 1, backdropFilter: 'blur(24px)', ease: 'power2.inOut' },
           0.3
         );
       }
