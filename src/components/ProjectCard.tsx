@@ -68,6 +68,8 @@ function ProjectImagePreview({
                 ? 'COMMERCE'
                 : type === 'pomodoro'
                 ? 'POMODORO'
+                : type === 'space'
+                ? '3D EXPLORER'
                 : 'WEB APP'}
             </span>
           </div>
@@ -114,6 +116,18 @@ function ProjectImagePreview({
                 <span style={{ color: 'var(--muted)' }}>⇄</span>
                 <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--foreground)' }}>
                   Catalogue
+                </span>
+              </div>
+            )}
+
+            {type === 'space' && (
+              <div className="flex items-center gap-1.5 text-[9px] font-mono">
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+                <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+                  3D Cosmos
+                </span>
+                <span className="px-1.5 py-0.5 rounded border font-semibold" style={{ background: 'var(--surface-0)', borderColor: 'var(--border)', color: 'var(--foreground)' }}>
+                  Three.js
                 </span>
               </div>
             )}

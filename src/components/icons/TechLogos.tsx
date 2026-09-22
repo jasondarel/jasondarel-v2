@@ -98,6 +98,15 @@ export const TechLogos: Record<string, React.FC<LogoProps>> = {
     </svg>
   ),
 
+  threejs: ({ size = 24, className, ...props }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <path
+        fill="currentColor"
+        d="M11.996 0L0 20.803l2.673 2.674 9.323-9.323 9.323 9.323 2.674-2.674zm0 6.012l6.66 11.536-1.92 1.92-4.74-4.74-4.74 4.74-1.92-1.92z"
+      />
+    </svg>
+  ),
+
   // ── Backend ───────────────────────────────────────────────────────────────
   nodejs: ({ size = 24, className, ...props }) => (
     <svg width={size} height={size} viewBox="0 0 128 128" fill="none" className={className} {...props}>
@@ -534,3 +543,4 @@ TechLogos.css3 = TechLogos.css;
 TechLogos.html5 = TechLogos.html;
 TechLogos.js = TechLogos.javascript;
 TechLogos.ts = TechLogos.typescript;
+TechLogos.three = TechLogos.threejs;

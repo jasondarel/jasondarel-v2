@@ -20,8 +20,8 @@ const GRID_COORDINATES = [
   { x: 110, y: -146, rotation: 0 }, // Card 2: Row 1, Col 2 (BoothEase)
   { x: 330, y: -146, rotation: 0 }, // Card 3: Row 1, Col 3 (CodeWave)
   // Row 2 (y = 146)
-  { x: -330, y: 146, rotation: 0 }, // Card 4: Row 2, Col 0 (GymMe)
-  { x: -110, y: 146, rotation: 0 }, // Card 5: Row 2, Col 1 (Fiomodoro)
+  { x: -330, y: 146, rotation: 0 }, // Card 4: Row 2, Col 0 (Fiomodoro)
+  { x: -110, y: 146, rotation: 0 }, // Card 5: Row 2, Col 1 (Universo)
   { x: 110, y: 146, rotation: 0 }, // Card 6: Row 2, Col 2 (Calm)
   { x: 330, y: 146, rotation: 0 }, // Card 7: Row 2, Col 3 (StaySeeker)
 ];

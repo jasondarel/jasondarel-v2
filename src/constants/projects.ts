@@ -13,7 +13,7 @@ export interface ProjectItem {
   year?: string;
   category: string;
   cardIndex: string;
-  imageType: 'booth' | 'food' | 'code' | 'ai' | 'store' | 'pomodoro' | 'figma';
+  imageType: 'booth' | 'food' | 'code' | 'ai' | 'store' | 'pomodoro' | 'figma' | 'space';
   imgSrc?: string;
   images?: string[];
   tags: string[];
@@ -181,32 +181,35 @@ export const PROJECTS_DATA: ProjectItem[] = [
     },
   },
 
-  // ── 6. GymMe
+  // ── 6. Universo
   {
-    id: 'gymme',
-    title: 'GymMe',
-    description: 'Fitness supplement e-commerce store with integrated order management.',
+    id: 'universo',
+    title: 'Universo',
+    description: 'Interactive 3D space exploration web app featuring stylized celestial bodies and cosmic navigation.',
     longDescription:
-      'GymMe is a fitness supplement web shop built with C# and ASP.NET. Users can browse products by category, filter by fitness goal, add items to their shopping cart, and place orders through a step-by-step checkout flow. The back-end also includes basic admin functionality for managing product stock and reviewing customer orders.',
+      'Universo is an interactive, purely front-end 3D space exploration application built with React, Three.js, and React Three Fiber. Embracing an artistic, stylized aesthetic over realistic planetary simulation, users can freely navigate a vibrant mini-cosmos to discover procedural celestial bodies, glowing nebulae, a gravitational black hole, and deep space stations. The experience blends smooth click-to-focus camera flight animations, dynamic celestial tracking, dual-mode controls (OrbitControls and WASD free-flight), post-processing bloom, and ambient cosmic audio.',
     features: [
-      'Product catalog with category filtering and real-time stock availability',
-      'Shopping cart with item adjustments and checkout summary',
-      'Backend built with C# and ASP.NET handling order processing and sessions',
-      'Admin dashboard to add, edit, or update supplement inventory and view orders',
+      'Interactive 3D viewport powered by React Three Fiber with OrbitControls and WASD free-flight navigation',
+      'Curated stylized celestial objects including procedural planets, luminous nebulae, a black hole, and sci-fi Easter eggs',
+      'Smooth camera fly-to animations with click-to-focus and dynamic tracking for moving celestial bodies',
+      'Collapsible Object Navigator and animated Info Panels displaying contextual physical metadata and fun facts',
+      'Visual post-processing pipeline featuring bloom glow, atmospheric shells, and ambient cosmic audio with sound effects',
     ],
-    role: 'Back-End Developer',
-    year: '2024',
-    category: 'COMMERCE BACKEND',
+    role: 'Front-End & 3D Developer',
+    year: '2026',
+    category: '3D SPACE EXPLORATION',
     cardIndex: '06',
-    imageType: 'store',
-    imgSrc: '/images/gymme.png',
-    tags: ['Back-End Developer', 'C#', 'ASP.NET'],
+    imageType: 'space',
+    imgSrc: '/images/universo.png',
+    images: ['/images/universo.png', '/images/universo1.png', '/images/universo2.png'],
+    tags: ['Front-End Developer', 'React', 'Three.js', 'React Three Fiber', 'Tailwind CSS'],
     techLogos: [
-      { name: 'C#', logoKey: 'csharp' },
-      { name: 'ASP.NET', logoKey: 'aspnet' },
+      { name: 'React', logoKey: 'react' },
+      { name: 'Three.js', logoKey: 'threejs' },
+      { name: 'Tailwind CSS', logoKey: 'tailwind' },
     ],
     links: {
-      github: 'https://github.com/jasondarel/GymMe',
+      github: 'https://github.com/jasondarel/Universo',
     },
   },
 
