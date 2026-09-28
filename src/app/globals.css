@@ -102,9 +102,13 @@ body {
 }
 
 /* ── Reset Anchor and Button Default Styling ───────────────────────────────── */
-a, button {
-  color: inherit;
-  text-decoration: none;
+/* Kept in @layer base so utilities (e.g. hover:underline) can override it.
+   Unlayered rules outrank every @layer, which would kill all link underlines. */
+@layer base {
+  a, button {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 /* ── Hide Scrollbar (Chrome, Safari, Edge, Opera) ───────────────────────────── */

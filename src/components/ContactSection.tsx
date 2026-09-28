@@ -86,6 +86,18 @@ const SOCIAL_LINKS = [
   },
 ];
 
+const EMAIL_ADDRESS = 'jdarel21@gmail.com';
+
+/** Human-readable phone number, formatted for display. */
+const PHONE_DISPLAY = '+62 878 8742 0032';
+
+/** Digits-only phone number (country code, no "+") for wa.me links. */
+const PHONE_DIGITS = '6287887420032';
+
+const PHONE_WHATSAPP_URL = `https://wa.me/${PHONE_DIGITS}`;
+
+type CopyField = 'email' | 'phone' | null;
+
 export interface ContactSectionProps {
   isOverlay?: boolean;
   className?: string;
@@ -95,8 +107,8 @@ export interface ContactSectionProps {
 
 const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
   ({ isOverlay = false, className = '', style, id = 'contact' }, ref) => {
-    const [copied, setCopied] = useState(false);
-    const emailAddress = 'jdarel21@gmail.com';
+    const [copiedField, setCopiedField] = useState<CopyField>(null);
+    const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const localRef = useRef<HTMLElement | null>(null);
 
     const setRefs = (node: HTMLElement | null) => {
@@ -165,16 +177,21 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
       return () => mm.revert();
     }, [isOverlay]);
 
-    const handleCopyEmail = async () => {
+    useEffect(() => {
+      return () => {
+        if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      };
+    }, []);
+
+    const handleCopy = async (value: string, field: Exclude<CopyField, null>) => {
       try {
-        await navigator.clipboard.writeText(emailAddress);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        await navigator.clipboard.writeText(value);
       } catch {
-        // Fallback
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        // Clipboard unavailable (e.g. insecure context) — still confirm the intent
       }
+      setCopiedField(field);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = setTimeout(() => setCopiedField(null), 2000);
     };
 
     const handleScrollToTop = () => {
@@ -187,8 +204,8 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         ref={setRefs}
         id={id}
         className={`relative flex flex-col justify-between overflow-hidden select-none ${isOverlay
-            ? 'w-full h-full px-5 sm:px-12 md:px-16 py-6 sm:py-10 md:py-12'
-            : 'w-full min-h-screen min-h-[100dvh] border-t px-5 sm:px-12 md:px-16 py-8 sm:py-12 md:py-16'
+          ? 'w-full h-full px-5 sm:px-12 md:px-16 py-6 sm:py-10 md:py-12'
+          : 'w-full min-h-screen min-h-[100dvh] border-t px-5 sm:px-12 md:px-16 py-8 sm:py-12 md:py-16'
           } ${className}`}
         style={{
           background: isOverlay ? 'transparent' : 'var(--surface-0)',
@@ -272,34 +289,65 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
                 style={{ color: 'var(--muted)' }}
               >
                 <Mail className="w-3.5 h-3.5" />
-                Email
+                Contact
               </span>
               <div className="flex items-center gap-1 mb-0.5 sm:mb-1">
                 <a
-                  href={`mailto:${emailAddress}`}
-                  className="text-base sm:text-xl font-medium tracking-tight transition-colors hover:opacity-80 break-all sm:break-normal"
+                  href={`mailto:${EMAIL_ADDRESS}`}
+                  className="text-base sm:text-xl font-medium tracking-tight transition-colors duration-200 hover:opacity-80 underline decoration-transparent underline-offset-4 hover:decoration-foreground break-all sm:break-normal"
                   style={{ color: 'var(--foreground)' }}
                 >
-                  {emailAddress}
+                  {EMAIL_ADDRESS}
                 </a>
 
                 {/* Always visible so it stays reachable on touch devices */}
                 <Button
                   variant="ghost"
                   size="xs"
-                  onClick={handleCopyEmail}
+                  onClick={() => handleCopy(EMAIL_ADDRESS, 'email')}
                   leftIcon={
-                    copied ? (
+                    copiedField === 'email' ? (
                       <Check className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
                     ) : (
                       <Copy className="w-3.5 h-3.5" style={{ color: 'var(--muted)' }} />
                     )
                   }
-                  title={copied ? 'Copied!' : 'Copy email address'}
-                  aria-label={copied ? 'Email address copied' : 'Copy email address'}
+                  title={copiedField === 'email' ? 'Copied!' : 'Copy email address'}
+                  aria-label={copiedField === 'email' ? 'Email address copied' : 'Copy email address'}
                 />
               </div>
-              <p className="text-[11px] sm:text-xs font-mono" style={{ color: 'var(--muted)' }}>
+
+              {/* Phone — tapping the number opens a WhatsApp chat */}
+              <div className="flex items-center gap-1 mt-2 sm:mt-3">
+                <a
+                  href={PHONE_WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-base sm:text-xl font-medium tracking-tight transition-colors duration-200 hover:opacity-80 underline decoration-transparent underline-offset-4 hover:decoration-foreground"
+                  style={{ color: 'var(--foreground)' }}
+                  title="Open WhatsApp chat"
+                  aria-label={`Open WhatsApp chat with Jason at ${PHONE_DISPLAY}`}
+                >
+                  {PHONE_DISPLAY}
+                </a>
+
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => handleCopy(PHONE_DISPLAY, 'phone')}
+                  leftIcon={
+                    copiedField === 'phone' ? (
+                      <Check className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" style={{ color: 'var(--muted)' }} />
+                    )
+                  }
+                  title={copiedField === 'phone' ? 'Copied!' : 'Copy phone number'}
+                  aria-label={copiedField === 'phone' ? 'Phone number copied' : 'Copy phone number'}
+                />
+              </div>
+
+              <p className="text-[11px] sm:text-xs font-mono mt-2 sm:mt-3" style={{ color: 'var(--muted)' }}>
                 Open for full-time roles &amp; select contracts
               </p>
             </div>
@@ -326,7 +374,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
                       style={{ color: 'var(--foreground)' }}
                     >
                       <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" style={{ color: 'var(--muted)' }} />
-                      <span className="group-hover:underline underline-offset-4">{social.name}</span>
+                      <span className="underline decoration-transparent underline-offset-4 transition-colors duration-200 group-hover:decoration-foreground">{social.name}</span>
                       <ArrowUpRight
                         className="w-3.5 h-3.5 opacity-60 transition-transform group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                         style={{ color: 'var(--muted)' }}
