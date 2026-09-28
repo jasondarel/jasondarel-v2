@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useLenis } from '@/lib/useLenis';
 import IntroSection from '@/components/IntroSection';
 import AboutSection from '@/components/AboutSection';
@@ -8,17 +9,18 @@ import ExperienceSection from '@/components/ExperienceSection';
 import ProjectsSection from '@/components/ProjectsSection';
 import FadeToTopOverlay from '@/components/FadeToTopOverlay';
 import MobileScrollPrompt from '@/components/MobileScrollPrompt';
+import LoadingScreen from '@/components/LoadingScreen';
 
 /**
  * Home (App.tsx equivalent)
  *
  * Page layout in order:
- *   1. Intro            — normal scroll, full viewport height
- *   2. AboutSection     — pinned scroll with 'About Me' text fade in/out animation
- *   3. SkillsSection    — pins + bottom-up flooding color reveal across Frontend, Backend, Tools
- *   4. ExperienceSection — pins + scrolls experience panels left-to-right with center scroll lock
- *   5. ProjectsSection  — multi-layered parallax depth stream with differential scroll speeds
- *   6. Outro            — normal scroll, full viewport height
+ *   1. LoadingScreen    — slim top progress bar on initial load
+ *   2. Intro            — normal scroll, full viewport height
+ *   3. AboutSection     — pinned scroll with 'About Me' text fade in/out animation
+ *   4. SkillsSection    — pins + bottom-up flooding color reveal across Frontend, Backend, Tools
+ *   5. ExperienceSection — pins + scrolls experience panels left-to-right with center scroll lock
+ *   6. ProjectsSection  — multi-layered parallax depth stream with differential scroll speeds
  *
  * useLenis() is called at the page root so Lenis wraps the entire document.
  * All GSAP ScrollTrigger logic lives inside each section component.
@@ -27,44 +29,54 @@ export default function Home() {
   // ── Initialise Lenis smooth scroll + GSAP ticker integration ──────────────
   useLenis();
 
+  const [loaded, setLoaded] = useState(false);
+
   return (
-    <main>
-      {/* ── Global Fade-to-Top Overlay ─────────────────────────────────────── */}
-      <FadeToTopOverlay />
+    <>
+      {/* ── Loading Screen (full-viewport overlay, fades out) ─────────────── */}
+      {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
 
-      {/* ── Mobile Floating "Scroll Slowly" Widget ─────────────────────────── */}
-      <MobileScrollPrompt />
+      {/* Content mounts only after overlay fades — keeps hero-fade-up fresh */}
+      {loaded && (
+      <main>
+        {/* ── Global Fade-to-Top Overlay ─────────────────────────────────── */}
+        <FadeToTopOverlay />
 
-      {/* ── 1. INTRO HERO ─────────────────────────────────────────────────── */}
-      <IntroSection />
+        {/* ── Mobile Floating "Scroll Slowly" Widget ─────────────────────── */}
+        <MobileScrollPrompt />
 
-      {/* ── 2. ABOUT ME PINNED SECTION ───────────────────────────────────── */}
-      {/*
-       * Pinned section with 'About Me' text fading in from left and fading out to right.
-       * See src/components/AboutSection.tsx for ScrollTrigger config.
-       */}
-      <AboutSection />
+        {/* ── 1. INTRO HERO ─────────────────────────────────────────────── */}
+        <IntroSection />
 
-      {/* ── 3. SKILLS SECTION (FLOODING COLOR REVEAL) ────────────────────── */}
-      {/*
-       * Flooding bottom-up reveal with inverted color scheme across Frontend, Backend, Tools.
-       * See src/components/SkillsSection.tsx for ScrollTrigger config.
-       */}
-      <SkillsSection />
+        {/* ── 2. ABOUT ME PINNED SECTION ───────────────────────────────── */}
+        {/*
+         * Pinned section with 'About Me' text fading in from left and fading out to right.
+         * See src/components/AboutSection.tsx for ScrollTrigger config.
+         */}
+        <AboutSection />
 
-      {/* ── 4. EXPERIENCE HORIZONTAL PIN SECTION ──────────────────────────── */}
-      {/*
-       * Pinned 3-panel experience timeline with center-panel scroll lock.
-       * See src/components/ExperienceSection.tsx for ScrollTrigger config.
-       */}
-      <ExperienceSection />
+        {/* ── 3. SKILLS SECTION (FLOODING COLOR REVEAL) ────────────────── */}
+        {/*
+         * Flooding bottom-up reveal with inverted color scheme across Frontend, Backend, Tools.
+         * See src/components/SkillsSection.tsx for ScrollTrigger config.
+         */}
+        <SkillsSection />
 
-      {/* ── 5. PROJECTS & OVERLAPPING CONTACT SECTION ───────────────────── */}
-      {/*
-       * Pinned poker-deck deal into 4x2 grid, full-page frosted blur, and overlapping Contact section.
-       * See src/components/ProjectsSection.tsx for ScrollTrigger config.
-       */ }
-      <ProjectsSection />
-    </main>
+        {/* ── 4. EXPERIENCE HORIZONTAL PIN SECTION ──────────────────────── */}
+        {/*
+         * Pinned 3-panel experience timeline with center-panel scroll lock.
+         * See src/components/ExperienceSection.tsx for ScrollTrigger config.
+         */}
+        <ExperienceSection />
+
+        {/* ── 5. PROJECTS & OVERLAPPING CONTACT SECTION ───────────────── */}
+        {/*
+         * Pinned poker-deck deal into 4x2 grid, full-page frosted blur, and overlapping Contact section.
+         * See src/components/ProjectsSection.tsx for ScrollTrigger config.
+         */}
+        <ProjectsSection />
+      </main>
+      )}
+    </>
   );
 }
