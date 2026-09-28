@@ -426,7 +426,7 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
         {/* ── Subtle Background Typography Watermark (Reference: "roku") ─────── */}
         <div
           data-contact-watermark
-          className="absolute bottom-2 sm:bottom-0 md:-bottom-6 right-3 sm:right-8 pointer-events-none select-none overflow-hidden leading-none z-0"
+          className="absolute bottom-2 sm:bottom-0 md:-bottom-6 right-0 pointer-events-none select-none overflow-hidden leading-none z-0 max-w-full"
           aria-hidden="true"
         >
           <span
