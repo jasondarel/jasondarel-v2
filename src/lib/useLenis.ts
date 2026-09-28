@@ -35,14 +35,6 @@ export function useLenis() {
     ScrollTrigger.clearScrollMemory('manual');
     window.scrollTo(0, 0);
 
-    const handleBeforeUnload = () => {
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
-      window.scrollTo(0, 0);
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
     // ── 1. Create Lenis instance ──────────────────────────────────────────────
     const lenis = new Lenis({
       // Duration of the smooth deceleration (seconds). Slightly increased for smoother glide.
@@ -86,7 +78,6 @@ export function useLenis() {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
       gsap.ticker.remove(onTick);
       lenis.destroy();
       window.__lenis = null;

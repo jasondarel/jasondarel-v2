@@ -95,8 +95,10 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     }
 
     const baseClasses = `
-      group inline-flex items-center justify-center rounded-full border transition-all duration-200 ease-out
+      group inline-flex items-center justify-center rounded-full border
+      transition-transform transition-colors duration-200 ease-out
       hover:-translate-y-0.5 cursor-pointer select-none no-underline
+      outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2
       disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed
       ${variantConfig} ${sizeConfig.container} ${className}
     `.trim();

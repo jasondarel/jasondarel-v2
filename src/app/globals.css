@@ -326,6 +326,10 @@ html.lenis, html.lenis body {
   animation-delay: 0.78s;
 }
 
+.hero-fade-up-7 {
+  animation-delay: 0.9s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-fade-up {
     opacity: 1 !important;

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUp, ArrowUpRight, Copy, Check, Mail, MapPin, Globe } from 'lucide-react';
+import { ArrowUp, ArrowUpRight, Copy, Check, Mail, MapPin, Globe, FileDown } from 'lucide-react';
 import Button from '@/components/Button';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -213,6 +213,16 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
 
           {/* ── Social Icons Row (Directly below headline) ─────────────────────── */}
           <div data-contact-animate className="flex flex-wrap items-center gap-2 sm:gap-2.5 md:gap-3 mb-4 sm:mb-8 md:mb-12">
+            {/* Primary CTA — recruiters land here first */}
+            <Button
+              variant="accent"
+              href="https://drive.google.com/uc?export=download&id=1ZbPlU8KSWB_ijlTM3wQPWEyPbGbP45I2"
+              leftIcon={<FileDown className="w-4 h-4 sm:w-5 sm:h-5" />}
+              aria-label="Download Jason's CV (PDF)"
+            >
+              Download CV
+            </Button>
+
             {SOCIAL_LINKS.map((social) => {
               const Icon = social.icon;
               return (
@@ -227,30 +237,6 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
                 </Button>
               );
             })}
-
-            {/* Quick Copy Email Action Pill */}
-            <Button
-              onClick={handleCopyEmail}
-              leftIcon={
-                copied ? (
-                  <Check className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: 'var(--accent)' }} />
-                ) : (
-                  <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              }
-              rightIcon={
-                copied ? undefined : (
-                  <Copy className="w-3.5 h-3.5" style={{ color: 'var(--muted)' }} />
-                )
-              }
-              aria-label="Copy email address"
-            >
-              {copied ? (
-                <span style={{ color: 'var(--accent)' }}>Copied Email!</span>
-              ) : (
-                'Copy Email'
-              )}
-            </Button>
           </div>
 
           {/* ── 3 Reference Columns: LOCATION / CONTACT / SOCIAL ───────────────── */}
@@ -288,17 +274,31 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
                 <Mail className="w-3.5 h-3.5" />
                 Email
               </span>
-              <a
-                href={`mailto:${emailAddress}`}
-                className="group inline-flex items-center gap-1.5 text-base sm:text-xl font-medium tracking-tight mb-0.5 sm:mb-1 transition-colors hover:opacity-80 break-all sm:break-normal"
-                style={{ color: 'var(--foreground)' }}
-              >
-                <span>{emailAddress}</span>
-                <ArrowUpRight
-                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 flex-shrink-0"
-                  style={{ color: 'var(--muted)' }}
+              <div className="flex items-center gap-1 mb-0.5 sm:mb-1">
+                <a
+                  href={`mailto:${emailAddress}`}
+                  className="text-base sm:text-xl font-medium tracking-tight transition-colors hover:opacity-80 break-all sm:break-normal"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  {emailAddress}
+                </a>
+
+                {/* Always visible so it stays reachable on touch devices */}
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={handleCopyEmail}
+                  leftIcon={
+                    copied ? (
+                      <Check className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" style={{ color: 'var(--muted)' }} />
+                    )
+                  }
+                  title={copied ? 'Copied!' : 'Copy email address'}
+                  aria-label={copied ? 'Email address copied' : 'Copy email address'}
                 />
-              </a>
+              </div>
               <p className="text-[11px] sm:text-xs font-mono" style={{ color: 'var(--muted)' }}>
                 Open for full-time roles &amp; select contracts
               </p>

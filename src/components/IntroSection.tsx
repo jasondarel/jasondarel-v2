@@ -1,6 +1,10 @@
 'use client';
 
 import React from 'react';
+import { FileDown } from 'lucide-react';
+import Button from '@/components/Button';
+
+const CV_URL = 'https://drive.google.com/uc?export=download&id=1ZbPlU8KSWB_ijlTM3wQPWEyPbGbP45I2';
 
 /**
  * IntroSection
@@ -12,7 +16,8 @@ import React from 'react';
  *  3. Name heading ("Jason Darel")
  *  4. Role title ("Full-Stack Developer")
  *  5. Bio paragraph ("Crafting minimal, high-performance web applications...")
- *  6. Bottom Minimalist Scroll Indicator
+ *  6. Primary CTA (icon-only CV download button)
+ *  7. Bottom Minimalist Scroll Indicator
  */
 export default function IntroSection() {
   return (
@@ -70,11 +75,22 @@ export default function IntroSection() {
         >
           Crafting minimal, high-performance web applications, scalable architectures, and interactive digital experiences.
         </p>
+
+        {/* 6. Primary CTA — icon-only CV download, continues the centered axis */}
+        <div className="hero-fade-up hero-fade-up-6 mt-7 sm:mt-8">
+          <Button
+            href={CV_URL}
+            size="md"
+            leftIcon={<FileDown className="w-4 h-4 sm:w-5 sm:h-5" />}
+            title="Download CV (PDF)"
+            aria-label="Download Jason's CV (PDF)"
+          />
+        </div>
       </div>
 
-      {/* 6. Bottom Minimalist Scroll Icon */}
+      {/* 7. Bottom Minimalist Scroll Icon */}
       <div
-        className="hero-fade-up hero-fade-up-6 absolute bottom-8 hidden sm:flex flex-col items-center pointer-events-none"
+        className="hero-fade-up hero-fade-up-7 absolute bottom-8 hidden sm:flex flex-col items-center pointer-events-none"
         aria-label="Scroll down indicator"
       >
         <div
