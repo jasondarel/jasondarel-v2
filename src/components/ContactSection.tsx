@@ -444,4 +444,4 @@ const ContactSection = forwardRef<HTMLDivElement, ContactSectionProps>(
   });
 
 ContactSection.displayName = 'ContactSection';
-export default ContactSection;
+export default React.memo(ContactSection);

@@ -6,6 +6,17 @@ import { ProjectItem } from '@/constants/projects';
 import { TechLogos } from '@/components/icons/TechLogos';
 import Button from '@/components/Button';
 
+// Last known mouse position, shared by all cards. Wheel events carry the cursor
+// position too, so this stays fresh while the user scrolls without moving the mouse.
+let lastMouse: { x: number; y: number } | null = null;
+if (typeof window !== 'undefined') {
+  const track = (e: MouseEvent) => {
+    lastMouse = { x: e.clientX, y: e.clientY };
+  };
+  window.addEventListener('pointermove', (e) => e.pointerType === 'mouse' && track(e), { passive: true });
+  window.addEventListener('wheel', track, { passive: true });
+}
+
 interface ProjectCardProps {
   project: ProjectItem;
   className?: string;
@@ -243,6 +254,25 @@ function ProjectCard({
       setInternalFlipped((prev) => !prev);
     }
   };
+
+  // Cursor may already rest on the card when it becomes interactive. pointer-events
+  // flips none → auto without a mouse move, so pointerenter never fires; check manually.
+  useEffect(() => {
+    if (!interactive || forceFlipped) return;
+    const frame = requestAnimationFrame(() => {
+      if (!lastMouse || !cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      if (
+        lastMouse.x >= rect.left &&
+        lastMouse.x <= rect.right &&
+        lastMouse.y >= rect.top &&
+        lastMouse.y <= rect.bottom
+      ) {
+        setInternalFlipped(true);
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [interactive, forceFlipped]);
 
   // When flipped via mouse, track global pointer movement to reliably unflip whenever cursor leaves the card
   useEffect(() => {

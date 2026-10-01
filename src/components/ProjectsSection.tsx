@@ -81,10 +81,6 @@ export default function ProjectsSection() {
   const [isDealt, setIsDealt] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
-  const handleOpenModal = (project: ProjectItem) => {
-    setSelectedProject(project);
-  };
-
   const handleCloseModal = () => {
     setSelectedProject(null);
   };
@@ -161,14 +157,6 @@ export default function ProjectsSection() {
         });
       });
 
-      // Initial state for full-page blur overlay
-      if (blurOverlayRef.current) {
-        gsap.set(blurOverlayRef.current, {
-          opacity: 0,
-          backdropFilter: 'blur(0px)',
-        });
-      }
-
       // Initial state for contact animatable elements
       const contactElements = contactSectionRef.current
         ? contactSectionRef.current.querySelectorAll('[data-contact-animate]')
@@ -191,14 +179,21 @@ export default function ProjectsSection() {
       }
 
       // ── 2. Pinned Scroll Timeline ───────────────────────────────────────
+      // Last applied values — skip React/DOM work on frames where nothing changed
+      let lastDealt: boolean | null = null;
+      let lastContactActive: boolean | null = null;
       const updateInteractiveState = (currentTime: number) => {
         // 1. Enable hover flip while stationary in grid, until AFTER blur starts
         const dealt = currentTime >= DEAL_END_TIME && currentTime < CARDS_UNINTERACTABLE_TIME;
-        setIsDealt((prev) => (prev !== dealt ? dealt : prev));
+        if (dealt !== lastDealt) {
+          lastDealt = dealt;
+          setIsDealt(dealt);
+        }
 
         // 2. Enable contact section pointer-events once contact has faded in
         const contactActive = currentTime >= CONTACT_ACTIVE_TIME;
-        if (contactOverlayRef.current) {
+        if (contactActive !== lastContactActive && contactOverlayRef.current) {
+          lastContactActive = contactActive;
           contactOverlayRef.current.style.pointerEvents = contactActive ? 'auto' : 'none';
         }
       };
@@ -268,13 +263,13 @@ export default function ProjectsSection() {
       tl.to({}, { duration: 2.1 }, DEAL_END_TIME);
 
       // ── Phase 4: Full-Page Blur Transition ───────────────────────────────
-      // 1. Full-screen backdrop overlay blurs the entire visible viewport
+      // 1. Tint overlay fades in. No backdrop-filter: a full-viewport animated
+      //    backdrop blur re-blurs every frame and is redundant with the card blur below.
       if (blurOverlayRef.current) {
         tl.to(
           blurOverlayRef.current,
           {
             opacity: 1,
-            backdropFilter: 'blur(24px)',
             duration: BLUR_DURATION,
             ease: 'power2.inOut',
           },
@@ -351,14 +346,6 @@ export default function ProjectsSection() {
       const mobileStage = mobileStageRef.current;
       if (!mobileStage) return;
 
-      // Initial state for mobile blur overlay
-      if (mobileBlurOverlayRef.current) {
-        gsap.set(mobileBlurOverlayRef.current, {
-          opacity: 0,
-          backdropFilter: 'blur(0px)',
-        });
-      }
-
       // Initial state for mobile contact elements
       const mobileContactElements = mobileContactSectionRef.current
         ? mobileContactSectionRef.current.querySelectorAll('[data-contact-animate]')
@@ -392,12 +379,13 @@ export default function ProjectsSection() {
         },
       });
 
-      // Blur + dim the carousel stage (starts at 30% progress)
+      // Fade the opaque cover over the carousel stage (starts at 30% progress).
+      // Opacity-only: backdrop-filter blur is too heavy for mobile GPUs.
       if (mobileBlurOverlayRef.current) {
         mobileTl.fromTo(
           mobileBlurOverlayRef.current,
-          { opacity: 0, backdropFilter: 'blur(0px)' },
-          { opacity: 1, backdropFilter: 'blur(24px)', ease: 'power2.inOut' },
+          { opacity: 0 },
+          { opacity: 1, ease: 'power2.inOut' },
           0.3
         );
       }
@@ -475,7 +463,7 @@ export default function ProjectsSection() {
         {/* Card Anchor Center — items-center places this at the true middle of the full-screen viewport */}
         <div
           ref={cardsAnchorRef}
-          className="relative z-10 w-0 h-0 scale-[0.85] lg:scale-100 xl:scale-105 transition-transform duration-300 will-change-[filter,opacity]"
+          className="relative z-10 w-0 h-0 scale-[0.85] lg:scale-100 xl:scale-105 will-change-[filter,opacity]"
         >
           {PROJECTS_DATA.map((project, index) => {
             return (
@@ -497,7 +485,7 @@ export default function ProjectsSection() {
                   <ProjectCard
                     project={project}
                     interactive={isDealt}
-                    onOpenModal={handleOpenModal}
+                    onOpenModal={setSelectedProject}
                   />
                 </div>
               </div>
@@ -508,7 +496,7 @@ export default function ProjectsSection() {
         {/* ── Center-Bottom Dynamic Stage Status HUD ── */}
         <div
           ref={scrollIndicatorRef}
-          className="absolute left-1/2 -translate-x-1/2 bottom-7 lg:bottom-9 flex items-center pointer-events-none z-20 select-none transition-all duration-300"
+          className="absolute left-1/2 -translate-x-1/2 bottom-7 lg:bottom-9 flex items-center pointer-events-none z-20 select-none"
           aria-label={isDealt ? 'Hover to flip cards' : 'Scroll to deal cards'}
         >
           <div
@@ -643,7 +631,7 @@ export default function ProjectsSection() {
               className="snap-center flex-shrink-0"
               style={{ touchAction: 'pan-x pan-y' }}
             >
-              <ProjectCard project={project} onOpenModal={handleOpenModal} forceFlipped={true} />
+              <ProjectCard project={project} onOpenModal={setSelectedProject} forceFlipped={true} />
             </div>
           ))}
         </div>
@@ -676,7 +664,7 @@ export default function ProjectsSection() {
           className="absolute inset-0 w-full h-full z-25 pointer-events-none"
           style={{
             opacity: 0,
-            background: 'color-mix(in srgb, var(--surface-0) 82%, transparent)',
+            background: 'var(--surface-0)',
           }}
           aria-hidden="true"
         />
