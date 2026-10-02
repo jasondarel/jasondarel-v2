@@ -1,0 +1,43 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run lint -- --max-warnings=0
+
+  commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check commit messages
+        env:
+          FROM: ${{ github.event.pull_request.base.sha || github.event.before }}
+          TO: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          # first or force push: old tip isn't in the clone, so check only the newest commit
+          git cat-file -e "$FROM^{commit}" 2>/dev/null || FROM="$TO~1"
+          git log --format=%s "$FROM..$TO" > "$RUNNER_TEMP/subjects"
+          # same patterns as ~/.githooks/commit-msg, keep in sync
+          if grep -vE \
+            -e '^(feat|fix|refactor|perf|style|docs|test|build|ci|chore|revert)(\([a-z0-9._/-]+\))?!?: .+' \
+            -e '^(Merge|Revert|fixup!|squash!|amend!) ' \
+            "$RUNNER_TEMP/subjects"; then
+            echo "::error::Commit messages above must follow <type>: <description>"
+            exit 1
+          fi
